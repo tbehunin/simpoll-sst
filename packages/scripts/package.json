@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-template/scripts",
+  "name": "@simpoll-sst/scripts",
   "version": "0.0.0",
   "dependencies": {
-    "@monorepo-template/core": "*",
+    "@simpoll-sst/core": "*",
     "sst": "*"
   },
   "scripts": {

@@ -1,8 +1,8 @@
 {
-  "name": "@monorepo-template/functions",
+  "name": "@simpoll-sst/functions",
   "version": "0.0.0",
   "dependencies": {
-    "@monorepo-template/core": "*",
+    "@simpoll-sst/core": "*",
     "sst": "*"
   },
   "devDependencies": {
