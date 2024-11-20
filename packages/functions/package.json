@@ -4,7 +4,9 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.691.0",
     "@aws-sdk/lib-dynamodb": "^3.691.0",
+    "@fastify/aws-lambda": "^5.0.0",
     "@simpoll-sst/core": "*",
+    "fastify": "^5.1.0",
     "sst": "*",
     "uuid": "^11.0.3"
   },

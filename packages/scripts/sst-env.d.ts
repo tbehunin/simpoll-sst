@@ -10,6 +10,10 @@ declare module "sst" {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
+    "GraphQLApi": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
+    }
     "IdentityPool": {
       "id": string
       "type": "sst.aws.CognitoIdentityPool"
