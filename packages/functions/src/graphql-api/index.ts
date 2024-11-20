@@ -17,7 +17,7 @@ export const init = () => {
 
   app.register(mercurius, {
     schema,
-    resolvers
+    resolvers,
   });
 
   return app;

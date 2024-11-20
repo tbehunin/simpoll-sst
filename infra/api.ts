@@ -20,7 +20,7 @@ api.route("GET /notes", "packages/functions/src/list.main");
 api.route("PUT /notes/{id}", "packages/functions/src/update.main");
 api.route("DELETE /notes/{id}", "packages/functions/src/delete.main");
 
-// Create the API
+// Create the GraphQL api
 export const graphql = new sst.aws.ApiGatewayV2("GraphQLApi", {
   transform: {
     route: {
@@ -30,4 +30,5 @@ export const graphql = new sst.aws.ApiGatewayV2("GraphQLApi", {
     }
   }
 });
+graphql.route("GET /graphql", "packages/functions/src/graphql-api/handler.main");
 graphql.route("POST /graphql", "packages/functions/src/graphql-api/handler.main");
