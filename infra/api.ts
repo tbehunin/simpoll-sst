@@ -30,4 +30,4 @@ export const graphql = new sst.aws.ApiGatewayV2("GraphQLApi", {
     }
   }
 });
-graphql.route("GET /graphql", "packages/functions/src/graphql-api/handler.main");
+graphql.route("POST /graphql", "packages/functions/src/graphql-api/handler.main");

@@ -7,6 +7,8 @@
     "@fastify/aws-lambda": "^5.0.0",
     "@simpoll-sst/core": "*",
     "fastify": "^5.1.0",
+    "graphql": "^16.9.0",
+    "mercurius": "^15.1.0",
     "sst": "*",
     "uuid": "^11.0.3"
   },
