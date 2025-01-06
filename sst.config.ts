@@ -9,6 +9,7 @@ export default $config({
     };
   },
   async run() {
+    // await import ('./infra/devCmd');
     await import("./infra/storage");
     await import("./infra/api");
     const auth = await import("./infra/auth");

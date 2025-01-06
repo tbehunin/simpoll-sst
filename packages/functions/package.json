@@ -1,6 +1,11 @@
 {
   "name": "@simpoll-sst/functions",
   "version": "0.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run build\" \"NO_BUN=true AWS_PROFILE=simpoll-sst npx sst dev\"",
+    "generate": "graphql-codegen --watch",
+    "build": "npm run generate"
+  },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.691.0",
     "@aws-sdk/lib-dynamodb": "^3.691.0",
@@ -13,7 +18,14 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.3",
+    "@graphql-codegen/typescript": "^4.1.2",
+    "@graphql-codegen/typescript-resolvers": "^4.4.1",
+    "@luckycatfactory/esbuild-graphql-loader": "^3.8.1",
+    "@parcel/watcher": "^2.5.0",
     "@types/aws-lambda": "^8.10.145",
-    "@types/uuid": "^10.0.0"
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^9.1.0",
+    "graphql-tag": "^2.12.6"
   }
 }

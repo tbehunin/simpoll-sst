@@ -25,6 +25,12 @@ export const graphql = new sst.aws.ApiGatewayV2("GraphQLApi", {
   transform: {
     route: {
       handler: {
+        nodejs: {
+          plugins: 'infra/plugins.mjs',
+          esbuild: {
+            sourcemap: true,
+          }
+        },
         link: [table],
       },
     }

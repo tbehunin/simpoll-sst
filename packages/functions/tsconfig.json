@@ -1,7 +1,10 @@
 {
   "extends": "@tsconfig/node20/tsconfig.json",
   "compilerOptions": {
+    "outDir": "dist",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "esModuleInterop": true,
   },
+  "files": ["src/graphql-api/graphql.d.ts"]
 }
