@@ -1,4 +1,10 @@
 import { builder } from './builder';
-import './types/giraffe';
+import './common';
+import './interfaces';
+import './types';
+import './queries';
+import './mutations';
 
-export const schema = builder.toSchema({});
+builder.queryType({});
+builder.mutationType({});
+export const schema = builder.toSchema();
