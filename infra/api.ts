@@ -32,3 +32,16 @@ export const graphql = new sst.aws.ApiGatewayV2("GraphQL", {
 });
 graphql.route("POST /graphql", "packages/functions/src/graphql/handler.main");
 graphql.route("GET /graphql", "packages/functions/src/graphql/handler.main");
+
+
+// Seed the table for local development
+export const seedApi = new sst.aws.ApiGatewayV2("Seed", {
+  transform: {
+    route: {
+      handler: {
+        link: [table],
+      },
+    }
+  }
+});
+seedApi.route("POST /seed", "packages/functions/src/seed/handler.main");

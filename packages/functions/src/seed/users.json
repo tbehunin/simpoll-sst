@@ -1,0 +1,20 @@
+[
+  {
+    "pk": "User#user1",
+    "sk": "Profile",
+    "username": "tdawg",
+    "fullName": "Todd Behunin",
+    "email": "todd@email.com",
+    "bio": "nerd",
+    "private": false
+  },
+  {
+    "pk": "User#user2",
+    "sk": "Profile",
+    "username": "ash",
+    "fullName": "Ashlee Behunin",
+    "email": "ashlee@email.com",
+    "bio": "queen",
+    "private": true
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000001",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 1,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 0,
+          "users": []
+        },
+        {
+          "votes": 1,
+          "users": ["user2"]
+        }
+      ]
+    }
+  },
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000002",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 0,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 0,
+          "users": []
+        },
+        {
+          "votes": 0,
+          "users": []
+        }
+      ]
+    }
+  },
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000003",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 0,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 0,
+          "users": []
+        },
+        {
+          "votes": 0,
+          "users": []
+        }
+      ]
+    }
+  },
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000004",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 0,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 0,
+          "users": []
+        },
+        {
+          "votes": 0,
+          "users": []
+        }
+      ]
+    }
+  },
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000005",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 0,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 0,
+          "users": []
+        },
+        {
+          "votes": 0,
+          "users": []
+        }
+      ]
+    }
+  },
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000006",
+    "sk": "Results",
+    "type": "MultipleChoice",
+    "totalVotes": 1,
+    "voteData": {
+      "choices": [
+        {
+          "votes": 1,
+          "users": ["user1"]
+        },
+        {
+          "votes": 0,
+          "users": []
+        }
+      ]
+    }
+  }
+]

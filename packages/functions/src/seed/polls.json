@@ -1,0 +1,114 @@
+[
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000001",
+        "sk": "Details",
+        "gsipk1": "User#user1#SelfPoll#Private",
+        "gsipk2": "User#user1#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user1",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Private",
+        "type": "MultipleChoice",
+        "title": "private poll 1",
+        "multiSelect": true,
+        "choices": [{ "text": "foo1" }, { "text": "foo1" }],
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [
+            "user2"
+        ],
+        "votePrivacy": "Open"
+    },
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000002",
+        "sk": "Details",
+        "gsipk1": "User#user1#SelfPoll#Public",
+        "gsipk2": "User#user1#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user1",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Public",
+        "type": "MultipleChoice",
+        "title": "public poll 2",
+        "multiSelect": true,
+        "choices": [{ "text": "foo2", "media": { "type": "Image", "value": "https://image2.com"} }, { "text": "foo2", "media": { "type": "Image", "value": "https://image2.com"} }],
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [],
+        "votePrivacy": "Anonymous"
+    },
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000003",
+        "sk": "Details",
+        "gsipk1": "User#user2#SelfPoll#Private",
+        "gsipk2": "User#user2#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user2",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Private",
+        "type": "MultipleChoice",
+        "title": "private poll 3",
+        "multiSelect": true,
+        "choices": [{ "text": "foo3", "media": { "type": "Video", "value": "https://video3.com"} }, { "text": "foo3", "media": { "type": "Video", "value": "https://video3.com"} }],
+        "backgroundMedia": {
+            "type": "IMAGE",
+            "url": "https://google.com"
+        },
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [
+            "user1"
+        ],
+        "votePrivacy": "Private"
+    },
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000004",
+        "sk": "Details",
+        "gsipk1": "User#user2#SelfPoll#Public",
+        "gsipk2": "User#user2#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user2",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Public",
+        "type": "MultipleChoice",
+        "title": "public poll 4",
+        "multiSelect": true,
+        "choices": [{ "text": "foo4", "media": { "type": "Giphy", "value": "https://giphy4.com"} }, { "text": "foo4", "media": { "type": "Giphy", "value": "https://giphy4.com"} }],
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [],
+        "votePrivacy": "Anonymous"
+    },
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000005",
+        "sk": "Details",
+        "gsipk1": "User#user2#SelfPoll#Private",
+        "gsipk2": "User#user2#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user2",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Private",
+        "type": "MultipleChoice",
+        "title": "private poll 5",
+        "multiSelect": true,
+        "choices": [{ "media": { "type": "Giphy", "value": "https://giphy5.com"} }, { "media": { "type": "Giphy", "value": "https://giphy5.com"} }],
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [
+            "user3"
+        ],
+        "votePrivacy": "Open"
+    },
+    {
+        "pk": "Poll#00000000-0000-0000-0000-000000000006",
+        "sk": "Details",
+        "gsipk1": "User#user2#SelfPoll#Public",
+        "gsipk2": "User#user2#SelfPoll",
+        "gsisk2": "2023-01-02T08:00:00.000Z",
+        "userId": "user2",
+        "ct": "2023-01-01T08:00:00.000Z",
+        "scope": "Public",
+        "type": "MultipleChoice",
+        "title": "public poll 6",
+        "multiSelect": true,
+        "choices": [{ "text": "foo4" }, { "media": { "type": "Giphy", "value": "https://giphy6.com"} }],
+        "expireTimestamp": "2023-01-02T08:00:00.000Z",
+        "sharedWith": [],
+        "votePrivacy": "Anonymous"
+    }
+]

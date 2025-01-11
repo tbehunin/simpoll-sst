@@ -18,9 +18,13 @@ declare module "sst" {
       "id": string
       "type": "sst.aws.CognitoIdentityPool"
     }
-    "Notes": {
+    "PollsTable": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "Seed": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
     }
     "Uploads": {
       "name": string

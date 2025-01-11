@@ -1,0 +1,8 @@
+[
+  {
+    "pk": "Poll#00000000-0000-0000-0000-000000000004",
+    "sk": "Comment#2023-01-01T08:01:00.000Z#user1",
+    "comment": "this is a comment",
+    "createTimestamp": "2023-01-01T08:01:00.000Z"
+  }
+]
