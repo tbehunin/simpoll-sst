@@ -8,13 +8,22 @@ import { dbClient } from "../../../core/src/data/dbClient";
 
 
 export const main = Util.handler(async (event) => {
-  const items = polls
+  const now = new Date().toISOString();
+  const nowPlus1Min = new Date(Date.now() + 60000).toISOString();
+  const items = polls.map((poll) => ({
+      ...poll,
+      ct: now,
+    }))
     // @ts-ignore
-    .concat(pollVotes)
-    // @ts-ignore
-    .concat(results)
+    .concat(pollVotes.map((pollVote) => ({
+      ...pollVote,
+      gsisk2: nowPlus1Min,
+      voteTimestamp: nowPlus1Min,
+    })))
     // @ts-ignore
     .concat(comments)
+    // @ts-ignore
+    .concat(results)
     // @ts-ignore
     .concat(users);
 
