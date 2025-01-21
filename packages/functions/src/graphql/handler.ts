@@ -6,4 +6,11 @@ import { schema } from './schema';
 //   return JSON.stringify(foo);
 // });
 
-export const main = awsLambdaRequestHandler({ schema });
+export const main = awsLambdaRequestHandler({
+  schema,
+  context: async ({ event, context }) => {
+    return {
+      currentUserId: 'user1', // TODO: wire up from auth
+    };
+  },
+});

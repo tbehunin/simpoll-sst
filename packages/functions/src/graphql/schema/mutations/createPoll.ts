@@ -2,8 +2,8 @@ import { builder } from "../builder";
 import { Poll } from "../../../../../core/src/models";
 import { votePrivacy } from "../common/enums";
 import { poll } from "../interfaces/poll";
-import { deleteMePolls } from "../queries/publicPolls";
 import { multipleChoiceInput } from "../types/multipleChoicePoll";
+import { deleteMePolls } from "../../../../../core/src/data/deletemePolls";
 
 export const createPoll = builder.mutationField('createPoll', (t) =>
   t.field({

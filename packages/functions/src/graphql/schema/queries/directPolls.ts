@@ -1,7 +1,8 @@
 import { builder } from "../builder";
-import { Poll, PollStatus, VoteStatus } from "../../../../../core/src/models";
+import { AuthorType, PollScope, PollStatus, VoteStatus } from "../../../../../core/src/models";
 import { poll } from "../interfaces/poll";
-import { deleteMePolls } from "./publicPolls";
+import { pollService } from "../../../../../core/src/services/pollService";
+import { ContextType } from "../../context";
 
 export const directPolls = builder.queryField('directPolls', (t) =>
   t.field({
@@ -20,6 +21,12 @@ export const directPollsInput = builder.inputType('DirectPollsInput', {
   }),
 });
 
-export const directPollsResolver = (a: any, b: any, c: any, d: any): Poll[] => {
-  return deleteMePolls;
-};
+export const directPollsResolver = (_root: any, args: { input?: { voteStatus?: VoteStatus | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
+  return pollService.queryPolls({
+    userId: context.currentUserId,
+    authorType: AuthorType.Friend,
+    scope: PollScope.Private,
+    voteStatus: args.input?.voteStatus,
+    pollStatus: args.input?.pollStatus,
+  });
+}

@@ -1,7 +1,8 @@
 import { builder } from "../builder";
-import { Poll, PollScope } from "../../../../../core/src/models";
+import { AuthorType, PollScope, PollStatus, VoteStatus } from "../../../../../core/src/models";
 import { poll } from "../interfaces/poll";
-import { deleteMePolls } from "./publicPolls";
+import { ContextType } from "../../context";
+import { pollService } from "../../../../../core/src/services/pollService";
 
 export const ballot = builder.queryField('ballot', (t) =>
   t.field({
@@ -19,6 +20,12 @@ export const ballotInput = builder.inputType('BallotInput', {
   }),
 });
 
-export const ballotResolver = (a: any, b: any, c: any, d: any): Poll[] => {
-  return deleteMePolls;
+export const ballotResolver = (_root: any, args: { input?: { pollScope?: PollScope | null } | null }, context: ContextType) => {
+  return pollService.queryPolls({
+    userId: context.currentUserId,
+    authorType: AuthorType.Friend,
+    scope: args.input?.pollScope,
+    voteStatus: VoteStatus.Unvoted,
+    pollStatus: PollStatus.Open,
+  });
 };
