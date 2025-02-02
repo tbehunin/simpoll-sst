@@ -2,8 +2,7 @@ import { builder } from "../builder";
 import { Poll } from "../../../../../core/src/models";
 import { pollService } from "../../../../../core/src/services/pollService";
 import { pollScope, pollType, votePrivacy } from "../common/enums";
-
-const MAX_DATE = '9999-12-31T23:59:59.999Z';
+import { MAX_DATE } from "../../../../../core/src/common/constants";
 
 export const poll = builder.loadableInterfaceRef<Poll, string>('Poll', {
   load: (ids) => pollService.getPollsByIds(ids),
