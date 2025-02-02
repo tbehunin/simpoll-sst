@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import { PollScope, PollType, VotePrivacy, MediaType, PollStatus, VoteStatus } from "../../../../../core/src/models";
+import { PollScope, PollType, VotePrivacy, MediaType, PollStatus } from "../../../../../core/src/common/types";
 
 export const pollScope = builder.enumType(PollScope, {
   name: 'PollScope',
@@ -15,7 +15,4 @@ export const votePrivacy = builder.enumType(VotePrivacy, {
 });
 export const mediaType = builder.enumType(MediaType, {
   name: 'MediaType',
-});
-export const voteStatus = builder.enumType(VoteStatus, {
-  name: 'VoteStatus',
 });

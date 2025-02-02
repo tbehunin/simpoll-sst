@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import { AuthorType, PollScope, PollStatus, VoteStatus } from "../../../../../core/src/models";
+import { RoleType, PollScope, PollStatus } from "../../../../../core/src/common/types";
 import { pollService } from "../../../../../core/src/services/pollService";
 import { poll } from "../interfaces/poll";
 import { ContextType } from "../../context";
@@ -16,17 +16,17 @@ export const publicPolls = builder.queryField('publicPolls', (t) =>
 
 export const publicPollsInput = builder.inputType('PublicPollsInput', {
   fields: (t) => ({
-    voteStatus: t.field({ type: VoteStatus, required: false }),
+    voted: t.boolean({ required: false }),
     pollStatus: t.field({ type: PollStatus, required: false }),
   }),
 });
 
-export const publicPollsResolver = (_root: any, args: { input?: { voteStatus?: VoteStatus | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
+export const publicPollsResolver = (_root: any, args: { input?: { voted?: boolean | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
   return pollService.queryPolls({
     userId: context.currentUserId,
-    authorType: AuthorType.Friend,
+    roleType: RoleType.Voter,
     scope: PollScope.Public,
-    voteStatus: args.input?.voteStatus,
-    pollStatus: args.input?.pollStatus,
+    voted: args.input?.voted || undefined,
+    pollStatus: args.input?.pollStatus || undefined,
   });
 };

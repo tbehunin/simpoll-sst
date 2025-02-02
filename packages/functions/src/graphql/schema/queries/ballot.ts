@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import { AuthorType, PollScope, PollStatus, VoteStatus } from "../../../../../core/src/models";
+import { RoleType, PollScope, PollStatus } from "../../../../../core/src/common/types";
 import { poll } from "../interfaces/poll";
 import { ContextType } from "../../context";
 import { pollService } from "../../../../../core/src/services/pollService";
@@ -23,9 +23,9 @@ export const ballotInput = builder.inputType('BallotInput', {
 export const ballotResolver = (_root: any, args: { input?: { pollScope?: PollScope | null } | null }, context: ContextType) => {
   return pollService.queryPolls({
     userId: context.currentUserId,
-    authorType: AuthorType.Friend,
-    scope: args.input?.pollScope,
-    voteStatus: VoteStatus.Unvoted,
+    roleType: RoleType.Voter,
+    scope: args.input?.pollScope || undefined,
+    voted: false,
     pollStatus: PollStatus.Open,
   });
 };

@@ -1,4 +1,5 @@
-import { MultipleChoicePoll, Poll, PollScope, PollType, VotePrivacy } from "../models";
+import { PollScope, PollType, VotePrivacy } from "../common/types";
+import { MultipleChoicePoll, Poll } from "../models";
 
 // todo: delete this file after testing
 export const deleteMePolls: Poll[] = [

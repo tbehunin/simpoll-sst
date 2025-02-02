@@ -1,8 +1,9 @@
 import { builder } from "../builder";
-import { Choice, ChoiceResult, MediaAsset, MultipleChoicePoll, MultipleChoiceResult, PollType } from "../../../../../core/src/models";
+import { Choice, ChoiceResult, MediaAsset, MultipleChoicePoll, MultipleChoiceResult } from "../../../../../core/src/models";
 import { mediaType } from "../common/enums";
 import { poll } from "../interfaces/poll";
 import { pollResult } from "../interfaces/pollResult";
+import { PollType } from "../../../../../core/src/common/types";
 
 export const multipleChoicePoll = builder.objectRef<MultipleChoicePoll>('MultipleChoicePoll').implement({
   interfaces: [poll],

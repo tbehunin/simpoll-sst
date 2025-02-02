@@ -1,42 +1,4 @@
-export enum PollType {
-  MultipleChoice = 'MULTIPLE_CHOICE',
-  Rank = 'RANK',
-  Rate = 'RATE',
-  OpenText = 'OPEN_TEXT',
-  Street = 'STREET',
-};
-
-export enum AuthorType {
-  Self = 'SELF',
-  Friend = 'FRIEND'
-};
-
-export enum PollScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-};
-
-export enum VoteStatus {
-  Voted = 'VOTED',
-  Unvoted = 'UNVOTED'
-};
-
-export enum PollStatus {
-  Open = 'OPEN',
-  Closed = 'CLOSED',
-};
-
-export enum VotePrivacy {
-  Anonymous = 'ANONYMOUS',
-  Open = 'OPEN',
-  Private = 'PRIVATE',
-};
-
-export enum MediaType {
-  Video = 'VIDEO',
-  Image = 'IMAGE',
-  Giphy = 'GIPHY',
-};
+import { MediaType, PollScope, PollType, VotePrivacy } from "./common/types";
 
 export type PollBase = {
   pollId: string
@@ -108,7 +70,7 @@ export type VoteBase = {
   userId: string
   type: PollType
   pollScope: PollScope
-  voteStatus: VoteStatus
+  voted: boolean
   expireTimestamp: string
   voteTimestamp?: string
 };

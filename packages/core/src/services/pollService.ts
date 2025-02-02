@@ -1,20 +1,41 @@
-import { deleteMePolls } from "../data/deletemePolls";
-import { AuthorType, Poll, PollScope, PollStatus, VoteStatus } from "../models";
+import { PollType, QueryPollsRequest } from "../common/types";
+import { pollDetailsDao } from "../data/pollDetailsDao";
+import { pollQueryDao } from "../data/pollQueryDao";
+import { PollDetailDoc } from "../data/types";
+import { MultipleChoicePoll, Poll, PollBase } from "../models";
 
-export type QueryPollsRequest = {
-  userId: string,
-  authorType: AuthorType,
-  scope?: PollScope | null,
-  voteStatus?: VoteStatus | null,
-  pollStatus?: PollStatus | null,
+const mapToModel = (pollDetailDocs: PollDetailDoc[]): Poll[] => {
+  return pollDetailDocs.map((pollDetailDoc) => {
+    const { pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, ...rest } = pollDetailDoc;
+
+    const base: PollBase = {
+      pollId: pk.split('#')[1],
+      userId,
+      ct,
+      scope,
+      type,
+      title,
+      expireTimestamp,
+      votePrivacy,
+      sharedWith,
+    };
+    switch (type) {
+      case PollType.MultipleChoice:
+        const { multiSelect, choices } = rest;
+        const result: MultipleChoicePoll = { ...base, multiSelect, choices };
+        return result;
+    }
+    throw new Error(`Unknown poll type: ${type}`);
+  });
 };
+
 export const pollService = {
-  queryPolls: (request: QueryPollsRequest): Promise<string[]> => {
-    console.log('*** DATA ACCESS: queryPolls');
-    return Promise.resolve(['123']);
+  queryPolls: async (request: QueryPollsRequest): Promise<string[]> => {
+    const result = await pollQueryDao.query(request);
+    return result;
   },
-  getPollsByIds: (pollIds: string[]): Promise<Poll[]> => {
-    console.log('*** DATA ACCESS: getPollsByIds', pollIds);
-    return Promise.resolve(deleteMePolls);
+  getPollsByIds: async (pollIds: string[]): Promise<Poll[]> => {
+    const result = await pollDetailsDao.batchGet(pollIds);
+    return mapToModel(result);
   },
 };
