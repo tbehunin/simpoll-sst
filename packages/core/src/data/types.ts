@@ -21,6 +21,15 @@ export type MultipleChoiceDetailDoc = PollDetailDocBase & {
 };
 export type PollDetailDoc = MultipleChoiceDetailDoc; // | RankDetailDoc | etc;
 
+export type UserDoc = {
+  pk: string
+  sk: string
+  username: string
+  fullName: string
+  email: string
+  bio: string
+};
+
 export type PollVoteDoc = {
   pk: string
   sk: string

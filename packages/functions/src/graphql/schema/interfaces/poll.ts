@@ -3,13 +3,18 @@ import { Poll } from "../../../../../core/src/models";
 import { pollService } from "../../../../../core/src/services/pollService";
 import { pollScope, pollType, votePrivacy } from "../common/enums";
 import { MAX_DATE } from "../../../../../core/src/common/constants";
+import { user } from "../types/user";
 
 export const poll = builder.loadableInterfaceRef<Poll, string>('Poll', {
-  load: (ids) => pollService.getPollsByIds(ids),
+  load: (ids: string[]) => pollService.getPollsByIds(ids),
 }).implement({
   fields: (t) => ({
     pollId: t.exposeID('pollId'),
     userId: t.exposeID('userId'),
+    user: t.field({
+      type: user,
+      resolve: (parent) => parent.userId,
+    }),
     ct: t.exposeString('ct'),
     scope: t.expose('scope', { type: pollScope }),
     type: t.expose('type', { type: pollType }),

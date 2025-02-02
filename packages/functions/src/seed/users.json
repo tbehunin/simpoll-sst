@@ -5,8 +5,7 @@
     "username": "tdawg",
     "fullName": "Todd Behunin",
     "email": "todd@email.com",
-    "bio": "nerd",
-    "private": false
+    "bio": "nerd"
   },
   {
     "pk": "User#user2",
@@ -14,7 +13,6 @@
     "username": "ash",
     "fullName": "Ashlee Behunin",
     "email": "ashlee@email.com",
-    "bio": "queen",
-    "private": true
+    "bio": "queen"
   }
 ]
