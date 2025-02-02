@@ -6,6 +6,11 @@ export default $config({
       name: "simpoll-sst",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          profile: "simpoll-sst",
+        },
+      },
     };
   },
   async run() {

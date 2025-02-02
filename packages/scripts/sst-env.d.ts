@@ -10,13 +10,21 @@ declare module "sst" {
       "type": "sst.aws.ApiGatewayV2"
       "url": string
     }
+    "GraphQL": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
+    }
     "IdentityPool": {
       "id": string
       "type": "sst.aws.CognitoIdentityPool"
     }
-    "Notes": {
+    "PollsTable": {
       "name": string
       "type": "sst.aws.Dynamo"
+    }
+    "Seed": {
+      "type": "sst.aws.ApiGatewayV2"
+      "url": string
     }
     "Uploads": {
       "name": string
