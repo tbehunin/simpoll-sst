@@ -6,7 +6,16 @@ import { MAX_DATE } from "../../../../../core/src/common/constants";
 import { user } from "../types/user";
 
 export const poll = builder.loadableInterfaceRef<Poll, string>('Poll', {
-  load: (ids: string[]) => pollService.getPollsByIds(ids),
+  load: async (pollIds: string[]) => {
+    const polls = await pollService.getPollsByIds(pollIds);
+
+    // The order of objects returned from Dynamo isn't guaranteed to be the same order as the order of id's passed in
+    // so make sure that order is maintained before returning (a requirement to use DataLoader).
+    return pollIds.map((pollId) => {
+      const poll = polls.find(poll => poll.pollId === pollId);
+      return poll ? poll : new Error(`Poll with id ${pollId} not found`);
+    });
+  },
 }).implement({
   fields: (t) => ({
     pollId: t.exposeID('pollId'),
