@@ -1,7 +1,7 @@
 import { builder } from "../builder";
-import { Poll } from "../../../../../core/src/models";
+import { PollDetail } from "../../../../../core/src/models";
 import { votePrivacy } from "../common/enums";
-import { poll } from "../interfaces/poll";
+import { poll } from "../types/poll";
 import { multipleChoiceInput } from "../types/multipleChoicePoll";
 import { deleteMePolls } from "../../../../../core/src/data/deletemePolls";
 
@@ -25,7 +25,7 @@ export const createPollInput = builder.inputType('CreatePollInput', {
   }),
 });
 
- const resolver = async (a: any, b: any, c: any, d: any): Promise<Poll> => {
+ const resolver = async (a: any, b: any, c: any, d: any): Promise<PollDetail> => {
    return deleteMePolls[0];
  };
  

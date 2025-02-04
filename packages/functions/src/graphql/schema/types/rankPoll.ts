@@ -1,20 +1,15 @@
 import { builder } from "../builder";
-import { RankPoll, RankResult } from "../../../../../core/src/models";
-import { poll } from "../interfaces/poll";
-import { pollResult } from "../interfaces/pollResult";
-import { PollType } from "../../../../../core/src/common/types";
+import { RankDetail, RankResult } from "../../../../../core/src/models";
+import { pollType } from "../common/enums";
 
-export const rankPoll = builder.objectRef<RankPoll>('RankPoll').implement({
-  interfaces: [poll],
-  isTypeOf: (obj: any) => obj.type === PollType.Rank,
+export const rankDetail = builder.objectRef<RankDetail>('RankDetail').implement({
   fields: (t) => ({
+    type: t.expose('type', { type: pollType }),
     foo: t.exposeString('foo'),
-    results: t.expose('results', { type: rankResult, nullable: true }),
   }),
 });
 
 export const rankResult = builder.objectRef<RankResult>('RankResult').implement({
-  interfaces: [pollResult],
   fields: (t) => ({
     ranks: t.exposeString('foo'),
   }),

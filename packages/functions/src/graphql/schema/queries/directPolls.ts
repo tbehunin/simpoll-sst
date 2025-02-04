@@ -1,6 +1,6 @@
 import { builder } from "../builder";
 import { RoleType, PollScope, PollStatus } from "../../../../../core/src/common/types";
-import { poll } from "../interfaces/poll";
+import { poll } from "../types/poll";
 import { pollService } from "../../../../../core/src/services/pollService";
 import { ContextType } from "../../context";
 

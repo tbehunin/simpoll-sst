@@ -1,6 +1,6 @@
 import { MediaType, PollScope, PollType, VotePrivacy } from "./common/types";
 
-export type PollBase = {
+export type Poll = {
   pollId: string
   userId: string
   ct: string
@@ -10,6 +10,8 @@ export type PollBase = {
   expireTimestamp: string
   votePrivacy: VotePrivacy
   sharedWith: string[]
+  details: PollDetail
+  results?: PollResult
 };
 
 export type MediaAsset = {
@@ -22,20 +24,21 @@ export type Choice = {
   media?: MediaAsset
 };
 
-export type MultipleChoicePoll = PollBase & {
+export type PollDetailBase = {
+  type: PollType
+};
+
+export type MultipleChoiceDetail = PollDetailBase & {
   multiSelect: boolean
   choices: Choice[]
-  results?: MultipleChoiceResult
 };
 
 
-export type RankPoll = PollBase & {
-  // TBD
+export type RankDetail = PollDetailBase & {
   foo: string
-  results?: RankResult
 };
 
-export type Poll = MultipleChoicePoll | RankPoll; // | RatePoll | OpenTextPoll | StreetPoll;
+export type PollDetail = MultipleChoiceDetail | RankDetail; // | RatePoll | OpenTextPoll | StreetPoll;
 
 export type User = {
   userId: string
@@ -46,6 +49,8 @@ export type User = {
 };
 
 export type PollResultBase = {
+  pollId: string
+  type: PollType
   totalVotes: number
 };
 
@@ -56,14 +61,13 @@ export interface ChoiceResult {
 
 export type MultipleChoiceResult = PollResultBase & {
   choices: ChoiceResult[]
-  selectedIndex: number[]
 };
 
 export type RankResult = PollResultBase & {
   foo: string
 };
 
-export type Result = MultipleChoiceResult | RankResult; // | RateResult | OpenTextResult | StreetResult;
+export type PollResult = MultipleChoiceResult | RankResult; // | RateResult | OpenTextResult | StreetResult;
 
 export type VoteBase = {
   pollId: string

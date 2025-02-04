@@ -3,9 +3,11 @@ import { Poll } from "../../../../../core/src/models";
 import { pollService } from "../../../../../core/src/services/pollService";
 import { pollScope, pollType, votePrivacy } from "../common/enums";
 import { MAX_DATE } from "../../../../../core/src/common/constants";
-import { user } from "../types/user";
+import { user } from "./user";
+import { pollDetail } from "../unions/pollDetail";
+import { pollResult } from "../unions/pollResult";
 
-export const poll = builder.loadableInterfaceRef<Poll, string>('Poll', {
+export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
   load: async (pollIds: string[]) => {
     const polls = await pollService.getPollsByIds(pollIds);
 
@@ -35,5 +37,14 @@ export const poll = builder.loadableInterfaceRef<Poll, string>('Poll', {
     }),
     votePrivacy: t.expose('votePrivacy', { type: votePrivacy }),
     sharedWith: t.exposeStringList('sharedWith'),
+    details: t.field({
+      type: pollDetail,
+      resolve: (parent: Poll) => parent.details,
+    }),
+    results: t.field({
+      type: pollResult,
+      nullable: true,
+      resolve: (parent: Poll) => parent.pollId,
+    }),
   }),
 });

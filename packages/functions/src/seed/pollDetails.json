@@ -11,7 +11,7 @@
         "type": "MultipleChoice",
         "title": "private poll 1",
         "multiSelect": true,
-        "choices": [{ "text": "foo1" }, { "text": "foo1" }],
+        "choices": [{ "text": "foo1.1" }, { "text": "foo1.2" }],
         "expireTimestamp": "2023-01-02T08:00:00.000Z",
         "sharedWith": [
             "user2"
@@ -30,7 +30,7 @@
         "type": "MultipleChoice",
         "title": "public poll 2",
         "multiSelect": true,
-        "choices": [{ "text": "foo2", "media": { "type": "Image", "value": "https://image2.com"} }, { "text": "foo2", "media": { "type": "Image", "value": "https://image2.com"} }],
+        "choices": [{ "text": "foo2.1", "media": { "type": "Image", "value": "https://image2.com"} }, { "text": "foo2.2", "media": { "type": "Image", "value": "https://image2.com"} }],
         "expireTimestamp": "2023-01-02T08:00:00.000Z",
         "sharedWith": [],
         "votePrivacy": "Anonymous"
@@ -47,7 +47,7 @@
         "type": "MultipleChoice",
         "title": "private poll 3",
         "multiSelect": true,
-        "choices": [{ "text": "foo3", "media": { "type": "Video", "value": "https://video3.com"} }, { "text": "foo3", "media": { "type": "Video", "value": "https://video3.com"} }],
+        "choices": [{ "text": "foo3.1", "media": { "type": "Video", "value": "https://video3.com"} }, { "text": "foo3.2", "media": { "type": "Video", "value": "https://video3.com"} }],
         "backgroundMedia": {
             "type": "IMAGE",
             "url": "https://google.com"
@@ -70,7 +70,7 @@
         "type": "MultipleChoice",
         "title": "public poll 4",
         "multiSelect": true,
-        "choices": [{ "text": "foo4", "media": { "type": "Giphy", "value": "https://giphy4.com"} }, { "text": "foo4", "media": { "type": "Giphy", "value": "https://giphy4.com"} }],
+        "choices": [{ "text": "foo4.1", "media": { "type": "Giphy", "value": "https://giphy4.com"} }, { "text": "foo4.2", "media": { "type": "Giphy", "value": "https://giphy4.com"} }],
         "expireTimestamp": "2023-01-02T08:00:00.000Z",
         "sharedWith": [],
         "votePrivacy": "Anonymous"
@@ -87,7 +87,7 @@
         "type": "MultipleChoice",
         "title": "private poll 5",
         "multiSelect": true,
-        "choices": [{ "media": { "type": "Giphy", "value": "https://giphy5.com"} }, { "media": { "type": "Giphy", "value": "https://giphy5.com"} }],
+        "choices": [{ "text": "foo5.1", "media": { "type": "Giphy", "value": "https://giphy5.com"} }, { "text": "foo5.2", "media": { "type": "Giphy", "value": "https://giphy5.com"} }],
         "expireTimestamp": "2023-01-02T08:00:00.000Z",
         "sharedWith": [
             "user3"
@@ -106,7 +106,7 @@
         "type": "MultipleChoice",
         "title": "public poll 6",
         "multiSelect": true,
-        "choices": [{ "text": "foo4" }, { "media": { "type": "Giphy", "value": "https://giphy6.com"} }],
+        "choices": [{ "text": "foo6.1" }, { "text": "foo6.2", "media": { "type": "Giphy", "value": "https://giphy6.com"} }],
         "expireTimestamp": "2023-01-02T08:00:00.000Z",
         "sharedWith": [],
         "votePrivacy": "Anonymous"

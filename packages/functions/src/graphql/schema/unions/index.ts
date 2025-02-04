@@ -1,2 +1,2 @@
-import './poll';
+import './pollDetail';
 import './pollResult';

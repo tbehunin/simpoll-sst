@@ -38,7 +38,7 @@ export const dbClient = {
     //console.log('query result', result);
     return (result || {}).Items;
   },
-  batchGet: async (keys: DbId[]) => {
+  batchGet: async (keys: DbId[], logMsg: string = '') => {
     const params = {
       RequestItems: {
         [TableName]: {
@@ -46,7 +46,7 @@ export const dbClient = {
         },
       },
     };
-    console.log('*** DATA ACCESS: BatchGetCommand ***', params);
+    console.log('*** DATA ACCESS: BatchGetCommand ***', logMsg, JSON.stringify(params));
     const result = await dynamoDb.send(new BatchGetCommand(params));
     return result?.Responses?.[TableName] || [];
   },

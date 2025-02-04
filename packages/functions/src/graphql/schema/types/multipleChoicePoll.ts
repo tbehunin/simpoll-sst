@@ -1,17 +1,12 @@
 import { builder } from "../builder";
-import { Choice, ChoiceResult, MediaAsset, MultipleChoicePoll, MultipleChoiceResult } from "../../../../../core/src/models";
-import { mediaType } from "../common/enums";
-import { poll } from "../interfaces/poll";
-import { pollResult } from "../interfaces/pollResult";
-import { PollType } from "../../../../../core/src/common/types";
+import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult } from "../../../../../core/src/models";
+import { mediaType, pollType } from "../common/enums";
 
-export const multipleChoicePoll = builder.objectRef<MultipleChoicePoll>('MultipleChoicePoll').implement({
-  interfaces: [poll],
-  isTypeOf: (obj: any)=> obj.type === PollType.MultipleChoice,
+export const multipleChoiceDetail = builder.objectRef<MultipleChoiceDetail>('MultipleChoiceDetail').implement({
   fields: (t) => ({
+    type: t.expose('type', { type: pollType }),
     multiSelect: t.exposeBoolean('multiSelect'),
     choices: t.expose('choices', { type: [choice] }),
-    results: t.expose('results', { type: multipleChoiceResult, nullable: true }),
   }),
 });
 
@@ -30,10 +25,8 @@ export const mediaAsset = builder.objectRef<MediaAsset>('MediaAsset').implement(
 });
 
 export const multipleChoiceResult = builder.objectRef<MultipleChoiceResult>('MultipleChoiceResult').implement({
-  interfaces: [pollResult],
   fields: (t) => ({
     choices: t.expose('choices', { type: [choiceResult] }),
-    selectedIndex: t.exposeIntList('selectedIndex'),
   }),
 });
 

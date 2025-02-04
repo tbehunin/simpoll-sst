@@ -19,7 +19,7 @@ const mapToDoc = (rawData: Record<string, any>[] | undefined): PollDetailDoc[] =
 export const pollDetailsDao = {
   batchGet: async (pollIds: string[]): Promise<PollDetailDoc[]> => {
     const keys: DbId[] = pollIds.map((pollId) => ({ pk: `Poll#${pollId}`, sk: 'Details' }));
-    const rawData = await dbClient.batchGet(keys);
+    const rawData = await dbClient.batchGet(keys, 'PollDetails');
     return mapToDoc(rawData);
   }
 };

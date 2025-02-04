@@ -1,7 +1,7 @@
 import { builder } from "../builder";
 import { RoleType, PollScope, PollStatus } from "../../../../../core/src/common/types";
 import { pollService } from "../../../../../core/src/services/pollService";
-import { poll } from "../interfaces/poll";
+import { poll } from "../types/poll";
 import { ContextType } from "../../context";
 
 export const publicPolls = builder.queryField('publicPolls', (t) =>

@@ -30,6 +30,24 @@ export type UserDoc = {
   bio: string
 };
 
+export type PollResultDocBase = {
+  pk: string
+  sk: string
+  type: PollType
+  totalVotes: number
+};
+
+export type ChoiceResultDoc = {
+  votes: number
+  users: string[]
+};
+
+export type MultipleChoiceResultDoc = PollResultDocBase & {
+  choices: ChoiceResultDoc[]
+};
+
+export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
+
 export type PollVoteDoc = {
   pk: string
   sk: string
