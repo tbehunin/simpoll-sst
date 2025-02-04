@@ -12,6 +12,7 @@ export type Poll = {
   sharedWith: string[]
   details: PollDetail
   results?: PollResult
+  vote?: PollVote
 };
 
 export type MediaAsset = {
@@ -69,7 +70,7 @@ export type RankResult = PollResultBase & {
 
 export type PollResult = MultipleChoiceResult | RankResult; // | RateResult | OpenTextResult | StreetResult;
 
-export type VoteBase = {
+export type PollVoteBase = {
   pollId: string
   userId: string
   type: PollType
@@ -79,15 +80,15 @@ export type VoteBase = {
   voteTimestamp?: string
 };
 
-export type MultipleChoiceVote = VoteBase & {
+export type MultipleChoiceVote = PollVoteBase & {
   selectedIndex?: number[]
 };
 
-export type RankVote = VoteBase & {
+export type RankVote = PollVoteBase & {
   // TBD
 };
 
-export type Vote = MultipleChoiceVote | RankVote; // | RateVote | OpenTextVote | StreetVote;
+export type PollVote = MultipleChoiceVote | RankVote; // | RateVote | OpenTextVote | StreetVote;
 
 export type CreatePollBase = {
   userId: string

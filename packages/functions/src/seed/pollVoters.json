@@ -1,7 +1,7 @@
 [
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000001",
-    "sk": "User#user2",
+    "sk": "Voter#User#user2",
     "type": "MultipleChoice",
     "gsipk1": "User#user2#Voter#Private",
     "gsipk2": "User#user2#Voter",
@@ -14,7 +14,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000003",
-    "sk": "User#user1",
+    "sk": "Voter#User#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Private",
     "gsipk2": "User#user1#Voter",
@@ -23,7 +23,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000004",
-    "sk": "User#user1",
+    "sk": "Voter#User#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Public",
     "gsipk2": "User#user1#Voter",
@@ -32,7 +32,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000005",
-    "sk": "User#user3",
+    "sk": "Voter#User#user3",
     "type": "MultipleChoice",
     "gsipk1": "User#user3#Voter#Private",
     "gsipk2": "User#user3#Voter",
@@ -41,7 +41,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000006",
-    "sk": "User#user1",
+    "sk": "Voter#User#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Public",
     "gsipk2": "User#user1#Voter",
