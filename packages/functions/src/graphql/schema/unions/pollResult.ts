@@ -3,7 +3,7 @@ import { builder } from "../builder";
 import { multipleChoiceResult } from "../types/multipleChoicePoll";
 import { rankResult } from "../types/rankPoll";
 
-export const pollResult = builder.loadableUnion<string, typeof multipleChoiceResult | typeof rankResult>('PollResult', {
+export const pollResult = builder.loadableUnion('PollResult', {
   types: [multipleChoiceResult, rankResult],
   resolveType: (obj) => `${obj.type}Result`,
   load: async (pollIds: string[]) => {
@@ -13,7 +13,7 @@ export const pollResult = builder.loadableUnion<string, typeof multipleChoiceRes
     // so make sure that order is maintained before returning (a requirement to use DataLoader).
     return pollIds.map((pollId) => {
       const poll = polls.find(poll => poll.pollId === pollId);
-      return poll ? poll : new Error(`Poll with id ${pollId} not found`);
+      return poll ? poll : null;
     });
   },
 });

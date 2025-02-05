@@ -13,7 +13,7 @@ export const pollVoter = builder.loadableUnion('PollVoter', {
     // so make sure that order is maintained before returning (a requirement to use DataLoader).
     return pollVoterIds.map((pollVoterId) => {
       const pollVoter = pollVoters.find(poll => generatePollVoterId(poll.pollId, poll.userId) === pollVoterId);
-      return pollVoter ? pollVoter : null; //new Error(`PollVoter with id ${pollVoterId} not found`);
+      return pollVoter ? pollVoter : null;
     });
   },
 });
