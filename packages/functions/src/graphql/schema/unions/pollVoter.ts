@@ -3,7 +3,7 @@ import { builder } from "../builder";
 import { multipleChoiceVoter } from "../types/multipleChoicePoll";
 import { rankVoter } from "../types/rankPoll";
 
-export const pollVoter = builder.loadableUnion<string, typeof multipleChoiceVoter | typeof rankVoter, string>('PollVoter', {
+export const pollVoter = builder.loadableUnion('PollVoter', {
   types: [multipleChoiceVoter, rankVoter],
   resolveType: (obj) => `${obj.type}Voter`,
   load: async (pollVoterIds: string[]) => {
