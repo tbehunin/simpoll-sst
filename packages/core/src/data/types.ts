@@ -15,11 +15,17 @@ export type PollDetailDocBase = {
   sharedWith: string[]
   votePrivacy: VotePrivacy
 };
-export type MultipleChoiceDetailDoc = PollDetailDocBase & {
+
+export type MultipleChoiceDetail = {
   multiSelect: boolean
   choices: { text: string }[]
 };
+
+export type MultipleChoiceDetailDoc = PollDetailDocBase & MultipleChoiceDetail;
+
 export type PollDetailDoc = MultipleChoiceDetailDoc; // | RankDetailDoc | etc;
+
+export type PollDetail = MultipleChoiceDetail; //| RankDetail; // | etc;
 
 export type UserDoc = {
   pk: string
@@ -60,7 +66,7 @@ export type PollVoterDocBase = {
 };
 
 export type MultipleChoiceVoterDoc = PollVoterDocBase & {
-  selectedIndex: number[]
+  selectedIndex?: number[]
 };
 
 export type PollVoterDoc = MultipleChoiceVoterDoc; // | RankVoterDoc | etc;

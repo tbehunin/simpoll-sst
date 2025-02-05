@@ -23,5 +23,5 @@ export const pollVotersDao = {
     });
     const rawData = await dbClient.batchGet(keys, 'PollVoters');
     return mapToDoc(rawData);
-  }
+  },
 };

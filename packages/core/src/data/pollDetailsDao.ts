@@ -21,5 +21,5 @@ export const pollDetailsDao = {
     const keys: DbId[] = pollIds.map((pollId) => ({ pk: `Poll#${pollId}`, sk: 'Details' }));
     const rawData = await dbClient.batchGet(keys, 'PollDetails');
     return mapToDoc(rawData);
-  }
+  },
 };
