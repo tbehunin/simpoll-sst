@@ -6,6 +6,7 @@ import { MAX_DATE } from "../../../../../core/src/common/constants";
 import { user } from "./user";
 import { pollDetail } from "../unions/pollDetail";
 import { pollResult } from "../unions/pollResult";
+import { generatePollVoterId, pollVoter } from "../unions/pollVoter";
 
 export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
   load: async (pollIds: string[]) => {
@@ -44,7 +45,26 @@ export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
     results: t.field({
       type: pollResult,
       nullable: true,
-      resolve: (parent: Poll) => parent.pollId,
+      resolve: async (poll, args, context) => {
+        // Only return results (the pollId) when:
+        // - The poll is expired
+        // - The user is the author of the poll
+        // - The user voted on the poll already
+        const now = new Date().toISOString();
+        if (poll.expireTimestamp < now || poll.userId === context.currentUserId) {
+          return poll.pollId;
+        }
+        const voter = await pollVoter.getDataloader(context).load(generatePollVoterId(poll.pollId, context.currentUserId));
+        return voter && voter.voted ? poll.pollId : null;
+      },
+    }),
+    vote: t.field({
+      type: pollVoter,
+      nullable: true,
+      resolve: (poll, args, context) => {
+        // Generate the "pollVoterId" for the current user and poll
+        return generatePollVoterId(poll.pollId, context.currentUserId);
+      },
     }),
   }),
 });

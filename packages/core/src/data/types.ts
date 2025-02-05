@@ -48,7 +48,7 @@ export type MultipleChoiceResultDoc = PollResultDocBase & {
 
 export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
 
-export type PollVoteDoc = {
+export type PollVoterDocBase = {
   pk: string
   sk: string
   type: PollType
@@ -58,3 +58,9 @@ export type PollVoteDoc = {
   gsisk2: string
   voteTimestamp?: string
 };
+
+export type MultipleChoiceVoterDoc = PollVoterDocBase & {
+  selectedIndex: number[]
+};
+
+export type PollVoterDoc = MultipleChoiceVoterDoc; // | RankVoterDoc | etc;

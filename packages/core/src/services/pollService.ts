@@ -1,9 +1,10 @@
-import { PollType, QueryPollsRequest } from "../common/types";
+import { PollScope, PollType, QueryPollsRequest } from "../common/types";
 import { pollDetailsDao } from "../data/pollDetailsDao";
 import { pollQueryDao } from "../data/pollQueryDao";
 import { pollResultsDao } from "../data/pollResultsDao";
-import { PollDetailDoc, PollResultDoc } from "../data/types";
-import { MultipleChoiceDetail, PollDetail, Poll, PollResult, MultipleChoiceResult } from "../models";
+import { pollVotersDao } from "../data/pollVotersDao";
+import { PollDetailDoc, PollResultDoc, PollVoterDoc } from "../data/types";
+import { MultipleChoiceDetail, PollDetail, Poll, PollResult, MultipleChoiceResult, PollVoter } from "../models";
 
 const mapToPoll = (pollDetailDocs: PollDetailDoc[]): Poll[] => {
   return pollDetailDocs.map((pollDetailDoc) => {
@@ -53,6 +54,28 @@ const mapToPollResult = (pollResultDocs: PollResultDoc[]): PollResult[] => {
   });
 };
 
+const mapToPollVoter = (pollVoterDocs: PollVoterDoc[]): PollVoter[] => {
+  return pollVoterDocs.map(({ pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp, ...rest }) => {
+    const base = { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp };
+    switch (type) {
+      case PollType.MultipleChoice:
+        const { selectedIndex } = rest;
+        const result: PollVoter = {
+          pollId: pk.split('#')[1],
+          userId: sk.split('#')[1],
+          type,
+          pollScope: gsipk1.split('#')[3] === 'Public' ? PollScope.Public : PollScope.Private,
+          voted: gsisk1.split('#')[1] === 'Y',
+          expireTimestamp: gsisk1.split('#')[2],
+          selectedIndex,
+          voteTimestamp,
+        };
+        return result;
+    }
+    throw new Error(`Unknown poll type: ${type}`);
+  });
+};
+
 export const pollService = {
   queryPolls: async (request: QueryPollsRequest): Promise<string[]> => {
     const result = await pollQueryDao.query(request);
@@ -65,5 +88,9 @@ export const pollService = {
   getPollResultsByIds: async (pollIds: string[]): Promise<PollResult[]> => {
     const result = await pollResultsDao.batchGet(pollIds);
     return mapToPollResult(result);
+  },
+  getPollVotersByIds: async (pollVoterIds: string[]): Promise<PollVoter[]> => {
+    const result = await pollVotersDao.batchGet(pollVoterIds);
+    return mapToPollVoter(result);
   }
 };
