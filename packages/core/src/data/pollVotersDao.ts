@@ -1,19 +1,27 @@
 import { PollType } from "../common/types";
-import { PollDetailDoc, PollDetailDocBase } from "./types";
+import { dbClient, DbId } from "./dbClient";
+import { PollVoterDoc, PollVoterDocBase } from "./types";
 
-const mapToDoc = (rawData: Record<string, any>[] | undefined): PollDetailDoc[] => {
+const mapToDoc = (rawData: Record<string, any>[] | undefined): PollVoterDoc[] => {
   if (!rawData) return [];
-  return rawData.map(({ pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, ...rest }) => {
-    const base: PollDetailDocBase = { pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy};
+  return rawData.map(({ pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp, ...rest }) => {
+    const base: PollVoterDocBase = { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp };
     switch (type) {
       case PollType.MultipleChoice:
-        const { multiSelect, choices } = rest;
-        return { ...base, multiSelect, choices };
+        const { selectedIndex } = rest;
+        return { ...base, selectedIndex };
     }
     throw new Error(`Unknown poll type: ${type}`);
   });
 };
 
 export const pollVotersDao = {
-  // todo
+  batchGet: async (pollVoterIds: string[]): Promise<PollVoterDoc[]> => {
+    const keys: DbId[] = pollVoterIds.map((pollVoterId) => {
+      const idSplit = pollVoterId.split(':');
+      return { pk: `Poll#${idSplit[0]}`, sk: `Voter#${idSplit[1]}` };
+    });
+    const rawData = await dbClient.batchGet(keys, 'PollVoters');
+    return mapToDoc(rawData);
+  },
 };

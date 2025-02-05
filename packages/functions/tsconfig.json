@@ -3,5 +3,8 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "paths": {
+      "@simpoll-sst/core/*": ["../core/src/*"],
+    }
   },
 }

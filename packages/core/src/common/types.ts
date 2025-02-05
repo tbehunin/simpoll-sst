@@ -32,11 +32,3 @@ export enum MediaType {
   Image = 'Image',
   Giphy = 'Giphy',
 };
-
-export type QueryPollsRequest = {
-  userId: string,
-  roleType: RoleType,
-  scope?: PollScope,
-  voted?: boolean,
-  pollStatus?: PollStatus,
-};

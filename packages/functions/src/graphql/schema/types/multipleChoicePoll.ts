@@ -1,5 +1,5 @@
 import { builder } from "../builder";
-import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult } from "../../../../../core/src/models";
+import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from "../../../../../core/src/models";
 import { mediaType, pollType } from "../common/enums";
 
 export const multipleChoiceDetail = builder.objectRef<MultipleChoiceDetail>('MultipleChoiceDetail').implement({
@@ -41,5 +41,12 @@ export const multipleChoiceInput = builder.inputType('MultipleChoiceInput', {
   fields: (t) => ({
     multiSelect: t.boolean(),
     choices: t.stringList(),
+  }),
+});
+
+export const multipleChoiceVoter = builder.objectRef<MultipleChoiceVoter>('MultipleChoiceVoter').implement({
+  fields: (t) => ({
+    selectedIndex: t.exposeIntList('selectedIndex', { nullable: true  }),
+    voteTimestamp: t.exposeString('voteTimestamp', { nullable: true }),
   }),
 });

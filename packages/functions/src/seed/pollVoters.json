@@ -1,20 +1,18 @@
 [
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000001",
-    "sk": "User#user2",
+    "sk": "Voter#user2",
     "type": "MultipleChoice",
     "gsipk1": "User#user2#Voter#Private",
     "gsipk2": "User#user2#Voter",
     "gsisk1": "Voted#Y#2023-01-02T08:00:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
-    "vote": {
-      "selectedIndex": [1]
-    },
+    "selectedIndex": [1],
     "voteTimestamp": "2023-01-01T08:01:00.000Z"
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000003",
-    "sk": "User#user1",
+    "sk": "Voter#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Private",
     "gsipk2": "User#user1#Voter",
@@ -23,7 +21,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000004",
-    "sk": "User#user1",
+    "sk": "Voter#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Public",
     "gsipk2": "User#user1#Voter",
@@ -32,7 +30,7 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000005",
-    "sk": "User#user3",
+    "sk": "Voter#user3",
     "type": "MultipleChoice",
     "gsipk1": "User#user3#Voter#Private",
     "gsipk2": "User#user3#Voter",
@@ -41,15 +39,13 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000006",
-    "sk": "User#user1",
+    "sk": "Voter#user1",
     "type": "MultipleChoice",
     "gsipk1": "User#user1#Voter#Public",
     "gsipk2": "User#user1#Voter",
     "gsisk1": "Voted#Y#2023-01-01T08:01:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
-    "vote": {
-      "selectedIndex": [0]
-    },
+    "selectedIndex": [0],
     "voteTimestamp": "2023-01-01T08:01:00.000Z"
   }
 ]
