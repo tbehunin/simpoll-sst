@@ -8,7 +8,7 @@ import { pollDetail } from '../unions/pollDetail';
 import { pollResult } from '../unions/pollResult';
 import { generatePollVoterId, pollVoter } from '../unions/pollVoter';
 
-export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
+export const poll = builder.loadableObject('Poll', {
   load: async (pollIds: string[]) => {
     const polls = await pollService.getPollsByIds(pollIds);
 
@@ -19,7 +19,6 @@ export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
       return poll ? poll : new Error(`Poll with id ${pollId} not found`);
     });
   },
-}).implement({
   fields: (t) => ({
     pollId: t.exposeID('pollId'),
     userId: t.exposeID('userId'),
