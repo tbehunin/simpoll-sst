@@ -1,8 +1,8 @@
-import { PollType } from "../common/types";
-import { PollDetailDoc, PollResultDoc, PollVoterDoc } from "../data/types";
-import { generateExpireTimestamp, generatePollScope } from "./utils";
-import { MultipleChoiceDetail, PollDetail } from "../models";
-import { CreatePoll } from "./types";
+import { PollType } from '../common/types';
+import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
+import { generateExpireTimestamp, generatePollScope } from './utils';
+import { MultipleChoiceDetail, PollDetail } from '../models';
+import { CreatePoll } from './types';
 
 const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePoll): PollDetailDoc => {
   const scope = generatePollScope(request.sharedWith);

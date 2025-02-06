@@ -2,8 +2,8 @@ import {
   APIGatewayProxyEventV2,
   APIGatewayProxyResult,
   Context,
-} from "aws-lambda";
-import { createYoga, YogaServerOptions } from "graphql-yoga";
+} from 'aws-lambda';
+import { createYoga, YogaServerOptions } from 'graphql-yoga';
 
 type ServerContext = {
   event: APIGatewayProxyEventV2;
@@ -32,7 +32,7 @@ export function awsLambdaRequestHandler<UserContext extends {}>(
       method: event.requestContext.http.method,
       headers: event.headers as HeadersInit,
       body: event.body
-        ? Buffer.from(event.body, event.isBase64Encoded ? "base64" : "utf8")
+        ? Buffer.from(event.body, event.isBase64Encoded ? 'base64' : 'utf8')
         : undefined,
     };
 

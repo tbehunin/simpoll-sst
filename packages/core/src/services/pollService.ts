@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { PollScope, PollType } from "../common/types";
-import { pollDetailsDao } from "../data/pollDetailsDao";
-import { pollQueryDao } from "../data/pollQueryDao";
-import { pollResultsDao } from "../data/pollResultsDao";
-import { pollVotersDao } from "../data/pollVotersDao";
-import { MultipleChoiceDetail, PollDetail, Poll, PollResult, MultipleChoiceResult, PollVoter } from "../models";
+import { PollScope, PollType } from '../common/types';
+import { pollDetailsDao } from '../data/pollDetailsDao';
+import { pollQueryDao } from '../data/pollQueryDao';
+import { pollResultsDao } from '../data/pollResultsDao';
+import { pollVotersDao } from '../data/pollVotersDao';
+import { MultipleChoiceDetail, PollDetail, Poll, PollResult, MultipleChoiceResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
 import { CreatePoll, QueryPollsRequest } from './types';
 import { docBuilder } from './docBuilder';

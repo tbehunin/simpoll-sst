@@ -1,11 +1,10 @@
-import { Util } from "@simpoll-sst/core/util";
-import pollDetails from "./pollDetails.json";
-import pollVoters from "./pollVoters.json";
-import results from "./pollResults.json";
-import comments from "./comments.json";
-import users from "./users.json";
-import { dbClient } from "../../../core/src/data/dbClient";
-
+import { Util } from '@simpoll-sst/core/util';
+import { dbClient } from '@simpoll-sst/core/data/dbClient';
+import pollDetails from './pollDetails.json';
+import pollVoters from './pollVoters.json';
+import results from './pollResults.json';
+import comments from './comments.json';
+import users from './users.json';
 
 export const main = Util.handler(async (event) => {
   const now = new Date().toISOString();

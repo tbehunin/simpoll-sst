@@ -1,6 +1,6 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand } from "@aws-sdk/lib-dynamodb";
-import { Resource } from "sst";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand } from '@aws-sdk/lib-dynamodb';
+import { Resource } from 'sst';
 
 export type QueryParams = {
   IndexName: string

@@ -1,6 +1,6 @@
-import { builder } from "../builder";
-import { User } from "../../../../../core/src/models";
-import { userService } from "../../../../../core/src/services/userService";
+import { User } from '@simpoll-sst/core/models';
+import { userService } from '@simpoll-sst/core/services/userService';
+import { builder } from '../builder';
 
 export const user = builder.loadableObjectRef<User, string>('User', {
   load: async (userIds: string[]) => {

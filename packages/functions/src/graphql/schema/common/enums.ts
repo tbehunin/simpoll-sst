@@ -1,5 +1,5 @@
-import { builder } from "../builder";
-import { PollScope, PollType, VotePrivacy, MediaType, PollStatus } from "../../../../../core/src/common/types";
+import { PollScope, PollType, VotePrivacy, MediaType, PollStatus } from '@simpoll-sst/core/common/types';
+import { builder } from '../builder';
 
 export const pollScope = builder.enumType(PollScope, {
   name: 'PollScope',

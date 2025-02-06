@@ -1,6 +1,6 @@
-import { UserDoc } from "../data/types";
-import { usersDao } from "../data/usersDao";
-import { User } from "../models";
+import { UserDoc } from '../data/types';
+import { usersDao } from '../data/usersDao';
+import { User } from '../models';
 
 const mapToModel = (userDocs: UserDoc[]): User[] => {
   return userDocs.map((userDoc) => {

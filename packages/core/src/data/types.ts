@@ -1,4 +1,4 @@
-import { PollScope, PollType, VotePrivacy } from "../common/types";
+import { PollScope, PollType, VotePrivacy } from '../common/types';
 
 export type PollDetailDocBase = {
   pk: string

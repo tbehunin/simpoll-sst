@@ -1,4 +1,4 @@
-import { MediaType, PollScope, PollType, VotePrivacy } from "./common/types";
+import { MediaType, PollScope, PollType, VotePrivacy } from './common/types';
 
 export type Poll = {
   pollId: string

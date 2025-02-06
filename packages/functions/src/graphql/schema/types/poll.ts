@@ -1,12 +1,12 @@
-import { builder } from "../builder";
-import { Poll } from "../../../../../core/src/models";
-import { pollService } from "../../../../../core/src/services/pollService";
-import { pollScope, pollType, votePrivacy } from "../common/enums";
-import { MAX_DATE } from "../../../../../core/src/common/constants";
-import { user } from "./user";
-import { pollDetail } from "../unions/pollDetail";
-import { pollResult } from "../unions/pollResult";
-import { generatePollVoterId, pollVoter } from "../unions/pollVoter";
+import { Poll } from '@simpoll-sst/core/models';
+import { pollService } from '@simpoll-sst/core/services/pollService';
+import { MAX_DATE } from '@simpoll-sst/core/common/constants';
+import { builder } from '../builder';
+import { pollScope, pollType, votePrivacy } from '../common/enums';
+import { user } from './user';
+import { pollDetail } from '../unions/pollDetail';
+import { pollResult } from '../unions/pollResult';
+import { generatePollVoterId, pollVoter } from '../unions/pollVoter';
 
 export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
   load: async (pollIds: string[]) => {
@@ -62,7 +62,7 @@ export const poll = builder.loadableObjectRef<Poll, string>('Poll', {
       type: pollVoter,
       nullable: true,
       resolve: (poll, args, context) => {
-        // Generate the "pollVoterId" for the current user and poll
+        // Generate the 'pollVoterId' for the current user and poll
         return generatePollVoterId(poll.pollId, context.currentUserId);
       },
     }),

@@ -1,6 +1,6 @@
-import { builder } from "../builder";
-import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from "../../../../../core/src/models";
-import { mediaType, pollType } from "../common/enums";
+import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from '@simpoll-sst/core/models';
+import { builder } from '../builder';
+import { mediaType, pollType } from '../common/enums';
 
 export const multipleChoiceDetail = builder.objectRef<MultipleChoiceDetail>('MultipleChoiceDetail').implement({
   fields: (t) => ({

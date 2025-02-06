@@ -1,5 +1,5 @@
-import { dbClient, DbId } from "./dbClient";
-import { UserDoc } from "./types";
+import { dbClient, DbId } from './dbClient';
+import { UserDoc } from './types';
 
 export const usersDao = {
   batchGet: async (userIds: string[]): Promise<UserDoc[]> => {

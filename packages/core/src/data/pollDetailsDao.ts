@@ -1,6 +1,6 @@
-import { PollType } from "../common/types";
-import { dbClient, DbId } from "./dbClient";
-import { MultipleChoiceDetailDoc, PollDetailDoc, PollDetailDocBase } from "./types";
+import { PollType } from '../common/types';
+import { dbClient, DbId } from './dbClient';
+import { MultipleChoiceDetailDoc, PollDetailDoc, PollDetailDocBase } from './types';
 
 const mapToDoc = (rawData: Record<string, any>[] | undefined): PollDetailDoc[] => {
   if (!rawData) return [];

@@ -1,7 +1,7 @@
-import { pollService } from "../../../../../core/src/services/pollService";
-import { builder } from "../builder";
-import { multipleChoiceVoter } from "../types/multipleChoicePoll";
-import { rankVoter } from "../types/rankPoll";
+import { pollService } from '@simpoll-sst/core/services/pollService';
+import { builder } from '../builder';
+import { multipleChoiceVoter } from '../types/multipleChoicePoll';
+import { rankVoter } from '../types/rankPoll';
 
 export const pollVoter = builder.loadableUnion('PollVoter', {
   types: [multipleChoiceVoter, rankVoter],

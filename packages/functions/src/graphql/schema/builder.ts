@@ -1,6 +1,6 @@
-import SchemaBuilder from "@pothos/core";
+import SchemaBuilder from '@pothos/core';
 import DataloaderPlugin from '@pothos/plugin-dataloader';
-import { ContextType } from "../context";
+import { ContextType } from '../context';
 
 export const builder = new SchemaBuilder<{
   Context: ContextType,

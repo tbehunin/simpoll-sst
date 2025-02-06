@@ -1,12 +1,12 @@
-import { builder } from "../builder";
-import { pollType, votePrivacy } from "../common/enums";
-import { poll } from "../types/poll";
-import { multipleChoiceInput } from "../types/multipleChoicePoll";
-import { pollService } from "@simpoll-sst/core/services/pollService";
-import { CreatePoll } from "@simpoll-sst/core/services/types";
-import { PollScope, PollType, VotePrivacy } from "@simpoll-sst/core/common/types";
-import { PollDetail } from "@simpoll-sst/core/models";
-import { generatePollScope } from "@simpoll-sst/core/services/utils";
+import { pollService } from '@simpoll-sst/core/services/pollService';
+import { CreatePoll } from '@simpoll-sst/core/services/types';
+import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/types';
+import { PollDetail } from '@simpoll-sst/core/models';
+import { generatePollScope } from '@simpoll-sst/core/services/utils';
+import { builder } from '../builder';
+import { pollType, votePrivacy } from '../common/enums';
+import { poll } from '../types/poll';
+import { multipleChoiceInput } from '../types/multipleChoicePoll';
 
 export const createPoll = builder.mutationField('createPoll', (t) =>
   t.field({

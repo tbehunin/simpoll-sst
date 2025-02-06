@@ -1,4 +1,4 @@
-import { Context, APIGatewayProxyEvent } from "aws-lambda";
+import { Context, APIGatewayProxyEvent } from 'aws-lambda';
 
 export module Util {
   export function handler(

@@ -1,5 +1,5 @@
-import { PollScope, PollStatus, PollType, RoleType, VotePrivacy } from "../common/types";
-import { PollDetail } from "../models";
+import { PollScope, PollStatus, PollType, RoleType, VotePrivacy } from '../common/types';
+import { PollDetail } from '../models';
 
 export type QueryPollsRequest = {
   userId: string,
