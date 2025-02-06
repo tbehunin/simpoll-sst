@@ -9,7 +9,7 @@ export type QueryPollsRequest = {
   pollStatus?: PollStatus,
 };
 
-export type CreatePoll = {
+export type CreatePollRequest = {
   userId: string
   type: PollType
   title: string

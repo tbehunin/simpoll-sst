@@ -2,9 +2,9 @@ import { PollType } from '../common/types';
 import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
 import { generateExpireTimestamp, generatePollScope } from './utils';
 import { MultipleChoiceDetail, PollDetail } from '../models';
-import { CreatePoll } from './types';
+import { CreatePollRequest } from './types';
 
-const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePoll): PollDetailDoc => {
+const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest): PollDetailDoc => {
   const scope = generatePollScope(request.sharedWith);
   const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
   let details: PollDetail;
@@ -34,7 +34,7 @@ const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: C
   };
 };
 
-const buildPollResultDoc = (pollId: string, request: CreatePoll): PollResultDoc => {
+const buildPollResultDoc = (pollId: string, request: CreatePollRequest): PollResultDoc => {
   let details: PollDetail;
   switch (request.type) {
     case PollType.MultipleChoice:
@@ -52,7 +52,7 @@ const buildPollResultDoc = (pollId: string, request: CreatePoll): PollResultDoc 
   };
 };
 
-const buildPollVoterDocs = (pollId: string, request: CreatePoll): PollVoterDoc[] => {
+const buildPollVoterDocs = (pollId: string, request: CreatePollRequest): PollVoterDoc[] => {
   if (request.sharedWith.length === 0) {
     return [];
   }

@@ -6,7 +6,7 @@ import { pollResultsDao } from '../data/pollResultsDao';
 import { pollVotersDao } from '../data/pollVotersDao';
 import { MultipleChoiceDetail, PollDetail, Poll, PollResult, MultipleChoiceResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
-import { CreatePoll, QueryPollsRequest } from './types';
+import { CreatePollRequest, QueryPollsRequest } from './types';
 import { docBuilder } from './docBuilder';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
@@ -87,7 +87,7 @@ const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter[]> 
   });
 };
 
-const createPoll = async (request: CreatePoll): Promise<string> => {
+const createPoll = async (request: CreatePollRequest): Promise<string> => {
   const pollId = uuidv4();
   const now = new Date().toISOString();
   const pollDetailDoc = docBuilder.buildPollDetailDoc(pollId, now, request);
