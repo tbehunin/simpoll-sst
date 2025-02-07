@@ -16,6 +16,12 @@ const mapToDoc = (rawData: Record<string, any>[] | undefined): PollVoterDoc[] =>
 };
 
 export const pollVotersDao = {
+  get: async (pollVoterId: string): Promise<PollVoterDoc> => {
+    const idSplit = pollVoterId.split(':');
+    const rawData = await dbClient.get({ pk: `Poll#${idSplit[0]}`, sk: `Voter#${idSplit[1]}` }, 'PollVoters');
+    const [result] = mapToDoc(rawData ? [rawData] : undefined);
+    return result;
+  },
   batchGet: async (pollVoterIds: string[]): Promise<PollVoterDoc[]> => {
     const keys: DbId[] = pollVoterIds.map((pollVoterId) => {
       const idSplit = pollVoterId.split(':');

@@ -1,5 +1,5 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { Resource } from 'sst';
 
 export type QueryParams = {
@@ -17,6 +17,14 @@ const TableName = Resource.PollsTable.name;
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const dbClient = {
+  write: async (item: any) => {
+    const params = {
+      TableName,
+      Item: item,
+    };
+    console.log('*** DATA ACCESS: PutCommand ***', params);
+    await dynamoDb.send(new PutCommand(params));
+  },
   batchWrite: async (items: any[]) => {
     const params = {
       RequestItems: {
@@ -50,4 +58,13 @@ export const dbClient = {
     const result = await dynamoDb.send(new BatchGetCommand(params));
     return result?.Responses?.[TableName] || [];
   },
+  get: async (key: DbId, logMsg: string = '') => {
+    const params = {
+      TableName,
+      Key: key,
+    };
+    console.log('*** DATA ACCESS: GetCommand ***', logMsg, JSON.stringify(params));
+    const result = await dynamoDb.send(new GetCommand(params));
+    return result.Item;
+  }
 };
