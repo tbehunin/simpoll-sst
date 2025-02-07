@@ -6,7 +6,8 @@ import { pollScope, pollType, votePrivacy } from '../common/enums';
 import { user } from './user';
 import { pollDetail } from '../unions/pollDetail';
 import { pollResult } from '../unions/pollResult';
-import { generatePollVoterId, pollVoter } from '../unions/pollVoter';
+import { pollVoter } from '../unions/pollVoter';
+import { generatePollVoterId } from '@simpoll-sst/core/services/utils';
 
 export const poll = builder.loadableObject('Poll', {
   load: async (pollIds: string[]) => {

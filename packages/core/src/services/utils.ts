@@ -6,3 +6,5 @@ export const generatePollScope = (sharedWith: string[]): PollScope =>
 
 export const generateExpireTimestamp = (expireTimestamp: string | undefined): string =>
   expireTimestamp || MAX_DATE;
+
+export const generatePollVoterId = (pollId: string, userId: string) => `${pollId}:${userId}`;

@@ -1,4 +1,5 @@
 import { pollService } from '@simpoll-sst/core/services/pollService';
+import { generatePollVoterId } from '@simpoll-sst/core/services/utils';
 import { builder } from '../builder';
 import { multipleChoiceVoter } from '../types/multipleChoicePoll';
 import { rankVoter } from '../types/rankPoll';
@@ -17,5 +18,3 @@ export const pollVoter = builder.loadableUnion('PollVoter', {
     });
   },
 });
-
-export const generatePollVoterId = (pollId: string, userId: string) => `${pollId}:${userId}`;
