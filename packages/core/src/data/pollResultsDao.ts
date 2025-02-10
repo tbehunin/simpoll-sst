@@ -8,7 +8,6 @@ export const pollResultsDao = {
     const rawData = await dbClient.batchGet(keys, 'PollResults');
 
     if (!rawData) return [];
-
     return rawData.map(({ type }) => pollTypeMapper.get(type).mapToPollResultDoc(rawData));
   },
 };
