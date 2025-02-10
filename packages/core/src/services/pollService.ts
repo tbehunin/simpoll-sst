@@ -1,15 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
-import { PollScope, PollType } from '../common/types';
 import { pollDetailsDao } from '../data/pollDetailsDao';
 import { pollQueryDao } from '../data/pollQueryDao';
 import { pollResultsDao } from '../data/pollResultsDao';
 import { pollVotersDao } from '../data/pollVotersDao';
-import { MultipleChoiceDetail, Poll, PollResult, PollVoter, MultipleChoiceVote } from '../models';
+import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
-import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
+import { CreatePollRequest, QueryPollsRequest } from './types';
 import { docBuilder } from './docBuilder';
-import { generatePollVoterId } from './utils';
-import { mapper } from './mapper';
+import { pollTypeMapper } from './mappers/pollTypeMapper';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await pollQueryDao.query(request);
@@ -18,17 +16,17 @@ const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
 
 const getPollsByIds = async (pollIds: string[]): Promise<Poll[]> => {
   const result = await pollDetailsDao.batchGet(pollIds);
-  return result.map((pollDetailDoc) => mapper.mapToPoll(pollDetailDoc));
+  return result.map((pollDetailDoc) => pollTypeMapper.get(pollDetailDoc.type).mapToPoll(pollDetailDoc));
 };
 
 const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult[]> => {
   const result = await pollResultsDao.batchGet(pollIds);
-  return result.map((pollResultDoc) => mapper.mapToPollResult(pollResultDoc));
+  return result.map((pollResultDoc) => pollTypeMapper.get(pollResultDoc.type).mapToPollResult(pollResultDoc));
 };
 
 const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter[]> => {
   const result = await pollVotersDao.batchGet(pollVoterIds);
-  return result.map((pollVoterDoc) => mapper.mapToPollVoter(pollVoterDoc));
+  return result.map((pollVoterDoc) => pollTypeMapper.get(pollVoterDoc.type).mapToPollVoter(pollVoterDoc));
 };
 
 const createPoll = async (request: CreatePollRequest): Promise<string> => {

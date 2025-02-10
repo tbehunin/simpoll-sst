@@ -25,8 +25,6 @@ export type MultipleChoiceDetailDoc = PollDetailDocBase & MultipleChoiceDetail;
 
 export type PollDetailDoc = MultipleChoiceDetailDoc; // | RankDetailDoc | etc;
 
-export type PollDetail = MultipleChoiceDetail; //| RankDetail; // | etc;
-
 export type UserDoc = {
   pk: string
   sk: string

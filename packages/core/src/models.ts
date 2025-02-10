@@ -11,8 +11,6 @@ export type Poll = {
   votePrivacy: VotePrivacy
   sharedWith: string[]
   details: PollDetail
-  results?: PollResult
-  vote?: PollVoter
 };
 
 export type MediaAsset = {
