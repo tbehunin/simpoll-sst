@@ -7,7 +7,7 @@ import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
 import { CreatePollRequest, QueryPollsRequest } from './types';
 import { docBuilder } from './docBuilder';
-import { pollTypeMapper } from './mappers/pollTypeMapper';
+import { pollTypeMapper } from '../mappers/pollTypeMapper';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await pollQueryDao.query(request);

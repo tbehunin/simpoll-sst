@@ -1,19 +1,10 @@
-import { PollType } from '../common/types';
+import { pollTypeMapper } from '../mappers/pollTypeMapper';
 import { dbClient, DbId } from './dbClient';
-import { MultipleChoiceDetailDoc, PollDetailDoc, PollDetailDocBase } from './types';
+import { PollDetailDoc } from './types';
 
 const mapToDoc = (rawData: Record<string, any>[] | undefined): PollDetailDoc[] => {
   if (!rawData) return [];
-  return rawData.map(({ pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, ...rest }) => {
-    const base: PollDetailDocBase = { pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy};
-    switch (type) {
-      case PollType.MultipleChoice:
-        const { multiSelect, choices } = rest;
-        const result: MultipleChoiceDetailDoc = { ...base, multiSelect, choices };
-        return result;
-    }
-    throw new Error(`Unknown poll type: ${type}`);
-  });
+  return rawData.map(({ type }) => pollTypeMapper.get(type).mapToPollDetailDoc(rawData));
 };
 
 export const pollDetailsDao = {

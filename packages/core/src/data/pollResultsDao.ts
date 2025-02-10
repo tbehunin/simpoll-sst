@@ -1,25 +1,14 @@
-import { PollType } from '../common/types';
+import { pollTypeMapper } from '../mappers/pollTypeMapper';
 import { dbClient, DbId } from './dbClient';
-import { MultipleChoiceResultDoc, PollResultDoc, PollResultDocBase } from './types';
-
-const mapToDoc = (rawData: Record<string, any>[] | undefined): PollResultDoc[] => {
-  if (!rawData) return [];
-  return rawData.map(({ pk, sk, type, totalVotes, ...rest }) => {
-    const base: PollResultDocBase = { pk, sk, type, totalVotes };
-    switch (type) {
-      case PollType.MultipleChoice:
-        const { choices } = rest;
-        const result: MultipleChoiceResultDoc = { ...base, choices };
-        return result;
-    }
-    throw new Error(`Unknown poll type: ${type}`);
-  });
-};
+import { PollResultDoc } from './types';
 
 export const pollResultsDao = {
   batchGet: async (pollIds: string[]): Promise<PollResultDoc[]> => {
     const keys: DbId[] = pollIds.map((pollId) => ({ pk: `Poll#${pollId}`, sk: 'Results' }));
     const rawData = await dbClient.batchGet(keys, 'PollResults');
-    return mapToDoc(rawData);
+
+    if (!rawData) return [];
+
+    return rawData.map(({ type }) => pollTypeMapper.get(type).mapToPollResultDoc(rawData));
   },
 };
