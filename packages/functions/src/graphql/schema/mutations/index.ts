@@ -1,1 +1,2 @@
 import './createPoll';
+import './vote';

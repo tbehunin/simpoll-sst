@@ -83,7 +83,7 @@ export type MultipleChoiceVoter = PollVoterBase & {
 };
 
 export type RankVoter = PollVoterBase & {
-  bar: string
+  bar?: string
 };
 
 export type PollVoter = MultipleChoiceVoter | RankVoter; // | RateVote | OpenTextVote | StreetVote;
@@ -100,3 +100,13 @@ export type CreateMultipleChoicePoll = CreatePollBase & {
   multiSelect: boolean
   choices: string[]
 };
+
+export type MultipleChoiceVote = {
+  selectedIndex: number[]
+};
+
+export type RankVote = {
+  bar: string
+};
+
+export type PollVote = MultipleChoiceVote | RankVote; // | RateVote | OpenTextVote | StreetVote;

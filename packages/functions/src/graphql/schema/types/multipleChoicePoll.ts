@@ -44,6 +44,12 @@ export const multipleChoiceInput = builder.inputType('MultipleChoiceInput', {
   }),
 });
 
+export const multipleChoiceVoteInput = builder.inputType('MultipleChoiceVoteInput', {
+  fields: (t) => ({
+    selectedIndex: t.intList(),
+  }),
+});
+
 export const multipleChoiceVoter = builder.objectRef<MultipleChoiceVoter>('MultipleChoiceVoter').implement({
   fields: (t) => ({
     selectedIndex: t.exposeIntList('selectedIndex', { nullable: true  }),

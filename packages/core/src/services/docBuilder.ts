@@ -1,8 +1,8 @@
 import { PollType } from '../common/types';
 import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
 import { generateExpireTimestamp, generatePollScope } from './utils';
-import { MultipleChoiceDetail, PollDetail } from '../models';
-import { CreatePollRequest } from './types';
+import { MultipleChoiceDetail, MultipleChoiceVote, Poll, PollDetail } from '../models';
+import { CreatePollRequest, VoteRequest } from './types';
 
 const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest): PollDetailDoc => {
   const scope = generatePollScope(request.sharedWith);
@@ -68,8 +68,31 @@ const buildPollVoterDocs = (pollId: string, request: CreatePollRequest): PollVot
   }));
 };
 
+const buildPollVoterDoc = (poll: Poll, voteRequest: VoteRequest): PollVoterDoc => {
+  const expireTimestamp = generateExpireTimestamp(poll.expireTimestamp);
+  const pollVoterDoc = {
+    pk: `Poll#${poll.pollId}`,
+    sk: `Voter#${voteRequest.userId}`,
+    type: poll.type,
+    gsipk1: `User#${voteRequest.userId}#Voter#${poll.scope}`,
+    gsipk2: `Poll#${voteRequest.userId}#Voter`,
+    gsisk1: `Voted:Y#${expireTimestamp}`,
+    gsisk2: expireTimestamp,
+    voteTimestamp: new Date().toISOString(),
+  };
+  switch (poll.type) {
+    case PollType.MultipleChoice:
+      return {
+        ...pollVoterDoc,
+        selectedIndex: (voteRequest.vote as MultipleChoiceVote).selectedIndex,
+      };
+  }
+  throw new Error(`Unknown poll type: ${poll.type}`);
+};
+
 export const docBuilder = {
   buildPollDetailDoc,
   buildPollResultDoc,
   buildPollVoterDocs,
+  buildPollVoterDoc,
 };
