@@ -32,3 +32,12 @@ export enum MediaType {
   Image = 'Image',
   Giphy = 'Giphy',
 };
+
+export type MediaAsset = {
+  type: MediaType
+  value: string
+};
+
+export type PollDetailBase = {
+  type: PollType
+};

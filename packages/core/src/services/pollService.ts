@@ -5,31 +5,33 @@ import { pollResultsDao } from '../data/pollResultsDao';
 import { pollVotersDao } from '../data/pollVotersDao';
 import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
-import { CreatePollRequest, QueryPollsRequest } from './types';
+import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
 import { docBuilder } from './docBuilder';
 import { pollTypeMapper } from '../mappers/pollTypeMapper';
+import { PollScope, PollType } from '../common/types';
+import { generatePollVoterId } from './utils';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await pollQueryDao.query(request);
   return result;
 };
 
-const getPollsByIds = async (pollIds: string[]): Promise<Poll[]> => {
-  const result = await pollDetailsDao.batchGet(pollIds);
-  return result.map((pollDetailDoc) => pollTypeMapper.get(pollDetailDoc.type).mapToPoll(pollDetailDoc));
+const getPollsByIds = async <Detail, Result, Voter>(pollIds: string[]): Promise<Poll<Detail>[]> => {
+  const result = await pollDetailsDao.batchGet<Detail>(pollIds);
+  return result.map((pollDetailDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollDetailDoc.type).mapToPoll(pollDetailDoc));
 };
 
-const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult[]> => {
-  const result = await pollResultsDao.batchGet(pollIds);
-  return result.map((pollResultDoc) => pollTypeMapper.get(pollResultDoc.type).mapToPollResult(pollResultDoc));
+const getPollResultsByIds = async <Detail, Result, Voter>(pollIds: string[]): Promise<PollResult<Result>[]> => {
+  const result = await pollResultsDao.batchGet<Detail, Result, Voter>(pollIds);
+  return result.map((pollResultDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollResultDoc.type).mapToPollResult(pollResultDoc));
 };
 
-const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter[]> => {
-  const result = await pollVotersDao.batchGet(pollVoterIds);
-  return result.map((pollVoterDoc) => pollTypeMapper.get(pollVoterDoc.type).mapToPollVoter(pollVoterDoc));
+const getPollVotersByIds = async <Detail, Result, Voter>(pollVoterIds: string[]): Promise<PollVoter<Voter>[]> => {
+  const result = await pollVotersDao.batchGet<Voter>(pollVoterIds);
+  return result.map((pollVoterDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollVoterDoc.type).mapToPollVoter(pollVoterDoc));
 };
 
-const createPoll = async (request: CreatePollRequest): Promise<string> => {
+const createPoll = async <T>(request: CreatePollRequest<T>): Promise<string> => {
   const pollId = uuidv4();
   const now = new Date().toISOString();
   const pollDetailDoc = docBuilder.buildPollDetailDoc(pollId, now, request);
@@ -39,9 +41,10 @@ const createPoll = async (request: CreatePollRequest): Promise<string> => {
   return pollId;
 };
 
-const vote = async (request: VoteRequest): Promise<void> => {
+const vote = async <T>(request: VoteRequest<T>): Promise<void> => {
   const now = new Date().toISOString();
   const doc = await pollDetailsDao.get(request.pollId);
+  const mapper = pollTypeMapper.get(doc.type);
   const poll = mapper.mapToPoll(doc);
 
   // Validate:
@@ -67,9 +70,7 @@ const vote = async (request: VoteRequest): Promise<void> => {
   }
   switch (poll.type) {
     case PollType.MultipleChoice:
-      if (!(poll.details as MultipleChoiceDetail).multiSelect && (request.vote as MultipleChoiceVote).selectedIndex.length > 1) {
-        throw new Error('Multiple choice poll is not multi-select');
-      }
+      
       break;
     default:
       throw new Error(`Unknown poll type: ${poll.type}`);

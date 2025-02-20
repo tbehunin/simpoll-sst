@@ -1,23 +1,14 @@
-import { PollType } from '../common/types';
 import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
 import { generateExpireTimestamp, generatePollScope } from './utils';
-import { MultipleChoiceDetail, MultipleChoiceVote, Poll, PollDetail } from '../models';
+import { Poll } from '../models';
 import { CreatePollRequest, VoteRequest } from './types';
+import { pollTypeMapper } from '../mappers/pollTypeMapper';
 
-const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest): PollDetailDoc => {
+const buildPollDetailDoc = <T>(pollId: string, createdTimestamp: string, request: CreatePollRequest<T>): PollDetailDoc<T> => {
   const scope = generatePollScope(request.sharedWith);
   const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
-  let details: PollDetail;
-  switch (request.type) {
-    case PollType.MultipleChoice:
-      details = request.details as MultipleChoiceDetail;
-      break;
-    default:
-      throw new Error(`Unknown poll type: ${request.type}`);
-  }
   
   return {
-    ...details,
     pk: `Poll#${pollId}`,
     sk: 'Details',
     gsipk1: `User#${request.userId}#Author#${scope}`,
@@ -31,28 +22,21 @@ const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: C
     expireTimestamp,
     sharedWith: request.sharedWith,
     votePrivacy: request.votePrivacy,
+    details: pollTypeMapper.get(request.type).parseDetails(request) as T,
   };
 };
 
-const buildPollResultDoc = (pollId: string, request: CreatePollRequest): PollResultDoc => {
-  let details: PollDetail;
-  switch (request.type) {
-    case PollType.MultipleChoice:
-      details = request.details as MultipleChoiceDetail;
-      break;
-    default:
-      throw new Error(`Unknown poll type: ${request.type}`);
-  }
+const buildPollResultDoc = <T>(pollId: string, request: CreatePollRequest<T>): PollResultDoc<T> => {
   return {
     pk: `Poll#${pollId}`,
     sk: 'Results',
     type: request.type,
     totalVotes: 0,
-    choices: details.choices.map(() => ({ votes: 0, users: [] })), // todo: hardcoded for multiple choice
+    results: pollTypeMapper.get(request.type).buildResults(request) as T,
   };
 };
 
-const buildPollVoterDocs = (pollId: string, request: CreatePollRequest): PollVoterDoc[] => {
+const buildPollVoterDocs = <T>(pollId: string, request: CreatePollRequest<T>): PollVoterDoc<T>[] => {
   if (request.sharedWith.length === 0) {
     return [];
   }
@@ -68,7 +52,7 @@ const buildPollVoterDocs = (pollId: string, request: CreatePollRequest): PollVot
   }));
 };
 
-const buildPollVoterDoc = (poll: Poll, voteRequest: VoteRequest): PollVoterDoc => {
+const buildPollVoterDoc = <Detail, Voter>(poll: Poll<Detail>, voteRequest: VoteRequest<Voter>): PollVoterDoc<Voter> => {
   const expireTimestamp = generateExpireTimestamp(poll.expireTimestamp);
   const pollVoterDoc = {
     pk: `Poll#${poll.pollId}`,
@@ -80,14 +64,10 @@ const buildPollVoterDoc = (poll: Poll, voteRequest: VoteRequest): PollVoterDoc =
     gsisk2: expireTimestamp,
     voteTimestamp: new Date().toISOString(),
   };
-  switch (poll.type) {
-    case PollType.MultipleChoice:
-      return {
-        ...pollVoterDoc,
-        selectedIndex: (voteRequest.vote as MultipleChoiceVote).selectedIndex,
-      };
-  }
-  throw new Error(`Unknown poll type: ${poll.type}`);
+  return {
+    ...pollVoterDoc,
+    vote: pollTypeMapper.get(poll.type).parseVote(voteRequest) as Voter,
+  };
 };
 
 export const docBuilder = {

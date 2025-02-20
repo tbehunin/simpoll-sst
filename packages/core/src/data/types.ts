@@ -1,6 +1,6 @@
 import { PollScope, PollType, VotePrivacy } from '../common/types';
 
-export type PollDetailDocBase = {
+export interface PollDetailDocBase {
   pk: string
   sk: string
   gsipk1: string
@@ -16,14 +16,9 @@ export type PollDetailDocBase = {
   votePrivacy: VotePrivacy
 };
 
-export type MultipleChoiceDetail = {
-  multiSelect: boolean
-  choices: { text: string }[]
+export type PollDetailDoc<T> = PollDetailDocBase & {
+  details: T
 };
-
-export type MultipleChoiceDetailDoc = PollDetailDocBase & MultipleChoiceDetail;
-
-export type PollDetailDoc = MultipleChoiceDetailDoc; // | RankDetailDoc | etc;
 
 export type UserDoc = {
   pk: string
@@ -34,25 +29,28 @@ export type UserDoc = {
   bio: string
 };
 
-export type PollResultDocBase = {
+export interface PollResultDocBase {
   pk: string
   sk: string
   type: PollType
   totalVotes: number
 };
-
-export type ChoiceResultDoc = {
-  votes: number
-  users: string[]
+export type PollResultDoc<T> = PollResultDocBase & {
+  results: T;
 };
 
-export type MultipleChoiceResultDoc = PollResultDocBase & {
-  choices: ChoiceResultDoc[]
-};
+// export type ChoiceResultDoc = {
+//   votes: number
+//   users: string[]
+// };
 
-export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
+// export type MultipleChoiceResultDoc = PollResultDocBase & {
+//   choices: ChoiceResultDoc[]
+// };
 
-export type PollVoterDocBase = {
+// export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
+
+export interface PollVoterDocBase {
   pk: string
   sk: string
   type: PollType
@@ -63,8 +61,10 @@ export type PollVoterDocBase = {
   voteTimestamp?: string
 };
 
-export type MultipleChoiceVoterDoc = PollVoterDocBase & {
-  selectedIndex?: number[]
-};
+// export type MultipleChoiceVoterDoc = PollVoterDocBase & {
+//   selectedIndex?: number[]
+// };
 
-export type PollVoterDoc = MultipleChoiceVoterDoc; // | RankVoterDoc | etc;
+export type PollVoterDoc<T> = PollVoterDocBase & {
+  vote?: T
+};

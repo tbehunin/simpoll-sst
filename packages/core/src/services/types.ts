@@ -1,5 +1,4 @@
 import { PollScope, PollStatus, PollType, RoleType, VotePrivacy } from '../common/types';
-import { PollDetail, PollVote } from '../models';
 
 export type QueryPollsRequest = {
   userId: string,
@@ -9,18 +8,18 @@ export type QueryPollsRequest = {
   pollStatus?: PollStatus,
 };
 
-export type CreatePollRequest = {
+export type CreatePollRequest<T> = {
   userId: string
   type: PollType
   title: string
   expireTimestamp?: string
   sharedWith: string[]
   votePrivacy: VotePrivacy
-  details: PollDetail
+  details: T
 };
 
-export type VoteRequest = {
+export type VoteRequest<T> = {
   pollId: string
   userId: string
-  vote: PollVote
+  vote: T
 };

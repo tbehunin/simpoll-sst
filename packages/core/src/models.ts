@@ -1,6 +1,6 @@
-import { MediaType, PollScope, PollType, VotePrivacy } from './common/types';
+import { PollScope, PollType, VotePrivacy } from './common/types';
 
-export type Poll = {
+interface PollBase {
   pollId: string
   userId: string
   ct: string
@@ -10,34 +10,11 @@ export type Poll = {
   expireTimestamp: string
   votePrivacy: VotePrivacy
   sharedWith: string[]
-  details: PollDetail
 };
 
-export type MediaAsset = {
-  type: MediaType
-  value: string
+export type Poll<T> = PollBase & {
+  details: T
 };
-
-export type Choice = {
-  text: string
-  media?: MediaAsset
-};
-
-export type PollDetailBase = {
-  type: PollType
-};
-
-export type MultipleChoiceDetail = PollDetailBase & {
-  multiSelect: boolean
-  choices: Choice[]
-};
-
-
-export type RankDetail = PollDetailBase & {
-  foo: string
-};
-
-export type PollDetail = MultipleChoiceDetail | RankDetail; // | RatePoll | OpenTextPoll | StreetPoll;
 
 export type User = {
   userId: string
@@ -47,28 +24,17 @@ export type User = {
   bio: string
 };
 
-export type PollResultBase = {
+export interface PollResultBase {
   pollId: string
   type: PollType
   totalVotes: number
 };
 
-export interface ChoiceResult {
-  votes: number
-  users: string[]
+export type PollResult<T> = PollResultBase & {
+  results: T
 };
 
-export type MultipleChoiceResult = PollResultBase & {
-  choices: ChoiceResult[]
-};
-
-export type RankResult = PollResultBase & {
-  foo: string
-};
-
-export type PollResult = MultipleChoiceResult | RankResult; // | RateResult | OpenTextResult | StreetResult;
-
-export type PollVoterBase = {
+export interface PollVoterBase {
   pollId: string
   userId: string
   type: PollType
@@ -78,17 +44,11 @@ export type PollVoterBase = {
   voteTimestamp?: string
 };
 
-export type MultipleChoiceVoter = PollVoterBase & {
-  selectedIndex?: number[]
+export type PollVoter<T> = PollVoterBase & {
+  vote?: T
 };
 
-export type RankVoter = PollVoterBase & {
-  bar?: string
-};
-
-export type PollVoter = MultipleChoiceVoter | RankVoter; // | RateVote | OpenTextVote | StreetVote;
-
-export type CreatePollBase = {
+export interface CreatePollBase {
   userId: string
   title: string
   sharedWith: string[]
@@ -96,10 +56,14 @@ export type CreatePollBase = {
   expireTimestamp?: string
 };
 
-export type CreateMultipleChoicePoll = CreatePollBase & {
-  multiSelect: boolean
-  choices: string[]
+export type CreatePoll<T> = CreatePollBase & {
+  details: T
 };
+
+// export type CreateMultipleChoicePoll = CreatePollBase & {
+//   multiSelect: boolean
+//   choices: string[]
+// };
 
 export type MultipleChoiceVote = {
   selectedIndex: number[]
