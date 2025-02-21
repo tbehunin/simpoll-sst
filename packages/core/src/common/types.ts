@@ -1,9 +1,9 @@
 export enum PollType {
   MultipleChoice = 'MultipleChoice',
-  Rank = 'Rank',
-  Rate = 'Rate',
-  OpenText = 'OpenText',
-  Street = 'Street',
+  // Rank = 'Rank',
+  // Rate = 'Rate',
+  // OpenText = 'OpenText',
+  // Street = 'Street',
 };
 
 export enum RoleType {

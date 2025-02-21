@@ -69,8 +69,4 @@ export type MultipleChoiceVote = {
   selectedIndex: number[]
 };
 
-export type RankVote = {
-  bar: string
-};
-
-export type PollVote = MultipleChoiceVote | RankVote; // | RateVote | OpenTextVote | StreetVote;
+export type PollVote = MultipleChoiceVote;

@@ -1,10 +1,9 @@
 import { pollService } from '@simpoll-sst/core/services/pollService';
 import { builder } from '../builder';
 import { multipleChoiceResult } from '../types/multipleChoicePoll';
-import { rankResult } from '../types/rankPoll';
 
 export const pollResult = builder.loadableUnion('PollResult', {
-  types: [multipleChoiceResult, rankResult],
+  types: [multipleChoiceResult],
   resolveType: (obj) => `${obj.type}Result`,
   load: async (pollIds: string[]) => {
     const polls = await pollService.getPollResultsByIds(pollIds);
