@@ -1,29 +1,4 @@
-import { PollScope, PollType, VotePrivacy } from '../common/types';
-
-export type PollDetailDocBase = {
-  pk: string
-  sk: string
-  gsipk1: string
-  gsipk2: string
-  gsisk2: string
-  userId: string
-  ct: string
-  scope: PollScope
-  type: PollType
-  title: string
-  expireTimestamp: string
-  sharedWith: string[]
-  votePrivacy: VotePrivacy
-};
-
-export type MultipleChoiceDetail = {
-  multiSelect: boolean
-  choices: { text: string }[]
-};
-
-export type MultipleChoiceDetailDoc = PollDetailDocBase & MultipleChoiceDetail;
-
-export type PollDetailDoc = MultipleChoiceDetailDoc; // | RankDetailDoc | etc;
+import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from '../common/types';
 
 export type UserDoc = {
   pk: string
@@ -34,25 +9,38 @@ export type UserDoc = {
   bio: string
 };
 
-export type PollResultDocBase = {
+export interface PollDetailDocBase {
+  pk: string
+  sk: string
+  gsipk1: string
+  gsipk2: string
+  gsisk2: string
+  userId: string
+  ct: string
+  scope: PollScope
+  title: string
+  expireTimestamp: string
+  sharedWith: string[]
+  votePrivacy: VotePrivacy
+};
+
+export type PollDetailDoc<T extends PollType> = PollDetailDocBase & {
+  type: T
+  details: PollDetailsMap[T]
+};
+
+export interface PollResultDocBase {
   pk: string
   sk: string
   type: PollType
   totalVotes: number
 };
-
-export type ChoiceResultDoc = {
-  votes: number
-  users: string[]
+export type PollResultDoc<T extends PollType> = PollResultDocBase & {
+  type: T
+  results: PollResultsMap[T];
 };
 
-export type MultipleChoiceResultDoc = PollResultDocBase & {
-  choices: ChoiceResultDoc[]
-};
-
-export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
-
-export type PollVoterDocBase = {
+export interface PollVoterDocBase {
   pk: string
   sk: string
   type: PollType
@@ -63,8 +51,7 @@ export type PollVoterDocBase = {
   voteTimestamp?: string
 };
 
-export type MultipleChoiceVoterDoc = PollVoterDocBase & {
-  selectedIndex?: number[]
+export type PollVoterDoc<T extends PollType> = PollVoterDocBase & {
+  type: T
+  vote?: PollVoterMap[T]
 };
-
-export type PollVoterDoc = MultipleChoiceVoterDoc; // | RankVoterDoc | etc;

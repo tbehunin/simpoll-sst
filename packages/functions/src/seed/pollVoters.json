@@ -7,7 +7,9 @@
     "gsipk2": "User#user2#Voter",
     "gsisk1": "Voted#Y#2023-01-02T08:00:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
-    "selectedIndex": [1],
+    "vote": {
+      "selectedIndex": [1]
+    },
     "voteTimestamp": "2023-01-01T08:01:00.000Z"
   },
   {
@@ -45,7 +47,9 @@
     "gsipk2": "User#user1#Voter",
     "gsisk1": "Voted#Y#2023-01-01T08:01:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
-    "selectedIndex": [0],
+    "vote": {
+      "selectedIndex": [0]
+    },
     "voteTimestamp": "2023-01-01T08:01:00.000Z"
   }
 ]

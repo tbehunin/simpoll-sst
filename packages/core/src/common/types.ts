@@ -1,9 +1,11 @@
+import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from "../handlers/multipleChoiceHandler";
+
 export enum PollType {
   MultipleChoice = 'MultipleChoice',
-  Rank = 'Rank',
-  Rate = 'Rate',
-  OpenText = 'OpenText',
-  Street = 'Street',
+  // Rank = 'Rank',
+  // Rate = 'Rate',
+  // OpenText = 'OpenText',
+  // Street = 'Street',
 };
 
 export enum RoleType {
@@ -31,4 +33,25 @@ export enum MediaType {
   Video = 'Video',
   Image = 'Image',
   Giphy = 'Giphy',
+};
+
+export type MediaAsset = {
+  type: MediaType
+  value: string
+};
+
+export interface PollVoterBase {
+  voteTimestamp: string
+};
+
+export type PollDetailsMap = {
+  [PollType.MultipleChoice]: MultipleChoiceDetail
+};
+
+export type PollResultsMap = {
+  [PollType.MultipleChoice]: MultipleChoiceResult
+};
+
+export interface PollVoterMap extends PollVoterBase {
+  [PollType.MultipleChoice]: MultipleChoiceVoter
 };

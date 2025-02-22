@@ -1,43 +1,4 @@
-import { MediaType, PollScope, PollType, VotePrivacy } from './common/types';
-
-export type Poll = {
-  pollId: string
-  userId: string
-  ct: string
-  scope: PollScope
-  type: PollType
-  title: string
-  expireTimestamp: string
-  votePrivacy: VotePrivacy
-  sharedWith: string[]
-  details: PollDetail
-};
-
-export type MediaAsset = {
-  type: MediaType
-  value: string
-};
-
-export type Choice = {
-  text: string
-  media?: MediaAsset
-};
-
-export type PollDetailBase = {
-  type: PollType
-};
-
-export type MultipleChoiceDetail = PollDetailBase & {
-  multiSelect: boolean
-  choices: Choice[]
-};
-
-
-export type RankDetail = PollDetailBase & {
-  foo: string
-};
-
-export type PollDetail = MultipleChoiceDetail | RankDetail; // | RatePoll | OpenTextPoll | StreetPoll;
+import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from './common/types';
 
 export type User = {
   userId: string
@@ -47,48 +8,47 @@ export type User = {
   bio: string
 };
 
-export type PollResultBase = {
+export interface PollBase {
   pollId: string
-  type: PollType
+  userId: string
+  ct: string
+  scope: PollScope
+  title: string
+  expireTimestamp: string
+  votePrivacy: VotePrivacy
+  sharedWith: string[]
+};
+
+export type Poll<T extends PollType> = PollBase & {
+  type: T
+  details: PollDetailsMap[T]
+};
+
+export interface PollResultBase {
+  pollId: string
   totalVotes: number
 };
 
-export interface ChoiceResult {
-  votes: number
-  users: string[]
+export type PollResult<T extends PollType> = PollResultBase & {
+  type: T
+  results: PollResultsMap[T]
 };
 
-export type MultipleChoiceResult = PollResultBase & {
-  choices: ChoiceResult[]
-};
-
-export type RankResult = PollResultBase & {
-  foo: string
-};
-
-export type PollResult = MultipleChoiceResult | RankResult; // | RateResult | OpenTextResult | StreetResult;
-
-export type PollVoterBase = {
+export interface PollVoterBase {
   pollId: string
   userId: string
-  type: PollType
-  pollScope: PollScope
+  scope: PollScope
   voted: boolean
   expireTimestamp: string
   voteTimestamp?: string
 };
 
-export type MultipleChoiceVoter = PollVoterBase & {
-  selectedIndex?: number[]
+export type PollVoter<T extends PollType> = PollVoterBase & {
+  type: T
+  vote?: PollVoterMap[T]
 };
 
-export type RankVoter = PollVoterBase & {
-  bar?: string
-};
-
-export type PollVoter = MultipleChoiceVoter | RankVoter; // | RateVote | OpenTextVote | StreetVote;
-
-export type CreatePollBase = {
+export interface CreatePollBase {
   userId: string
   title: string
   sharedWith: string[]
@@ -96,17 +56,12 @@ export type CreatePollBase = {
   expireTimestamp?: string
 };
 
-export type CreateMultipleChoicePoll = CreatePollBase & {
-  multiSelect: boolean
-  choices: string[]
+export type CreatePoll<T> = CreatePollBase & {
+  details: T
 };
 
 export type MultipleChoiceVote = {
   selectedIndex: number[]
 };
 
-export type RankVote = {
-  bar: string
-};
-
-export type PollVote = MultipleChoiceVote | RankVote; // | RateVote | OpenTextVote | StreetVote;
+export type PollVote = MultipleChoiceVote;

@@ -5,31 +5,59 @@ import { pollResultsDao } from '../data/pollResultsDao';
 import { pollVotersDao } from '../data/pollVotersDao';
 import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
-import { CreatePollRequest, QueryPollsRequest } from './types';
+import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
 import { docBuilder } from './docBuilder';
-import { pollTypeMapper } from '../mappers/pollTypeMapper';
+import { PollScope, PollType } from '../common/types';
+import { generatePollVoterId } from './utils';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await pollQueryDao.query(request);
   return result;
 };
 
-const getPollsByIds = async (pollIds: string[]): Promise<Poll[]> => {
+const getPollsByIds = async (pollIds: string[]): Promise<Poll<PollType>[]> => {
   const result = await pollDetailsDao.batchGet(pollIds);
-  return result.map((pollDetailDoc) => pollTypeMapper.get(pollDetailDoc.type).mapToPoll(pollDetailDoc));
+  return result.map((pollDetailDoc) => {
+    const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = pollDetailDoc;
+    const base = { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details };
+    return {
+      ...base,
+      pollId: pk.split('#')[1],
+    };
+  });
 };
 
-const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult[]> => {
+const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult<PollType>[]> => {
   const result = await pollResultsDao.batchGet(pollIds);
-  return result.map((pollResultDoc) => pollTypeMapper.get(pollResultDoc.type).mapToPollResult(pollResultDoc));
+  return result.map((pollResultDoc) => {
+    const { pk, type, totalVotes, results } = pollResultDoc;
+    return {
+      pollId: pk.split('#')[1],
+      type,
+      totalVotes,
+      results
+    };
+  });
 };
 
-const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter[]> => {
+const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter<PollType>[]> => {
   const result = await pollVotersDao.batchGet(pollVoterIds);
-  return result.map((pollVoterDoc) => pollTypeMapper.get(pollVoterDoc.type).mapToPollVoter(pollVoterDoc));
+  return result.map((pollVoterDoc) => {
+    const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = pollVoterDoc;
+    return {
+      pollId: pk.split('#')[1],
+      userId: sk.split('#')[1],
+      type,
+      scope: gsipk1.split('#')[3] === 'Public' ? PollScope.Public : PollScope.Private,
+      voted: gsisk1.split('#')[1] === 'Y',
+      expireTimestamp: gsisk1.split('#')[2],
+      voteTimestamp,
+      vote,
+    };
+  });
 };
 
-const createPoll = async (request: CreatePollRequest): Promise<string> => {
+const createPoll = async (request: CreatePollRequest<PollType>): Promise<string> => {
   const pollId = uuidv4();
   const now = new Date().toISOString();
   const pollDetailDoc = docBuilder.buildPollDetailDoc(pollId, now, request);
@@ -39,10 +67,9 @@ const createPoll = async (request: CreatePollRequest): Promise<string> => {
   return pollId;
 };
 
-const vote = async (request: VoteRequest): Promise<void> => {
+const vote = async (request: VoteRequest<PollType>): Promise<void> => {
   const now = new Date().toISOString();
-  const doc = await pollDetailsDao.get(request.pollId);
-  const poll = mapper.mapToPoll(doc);
+  const poll = await pollDetailsDao.get(request.pollId);
 
   // Validate:
   // - Poll exists
@@ -67,9 +94,7 @@ const vote = async (request: VoteRequest): Promise<void> => {
   }
   switch (poll.type) {
     case PollType.MultipleChoice:
-      if (!(poll.details as MultipleChoiceDetail).multiSelect && (request.vote as MultipleChoiceVote).selectedIndex.length > 1) {
-        throw new Error('Multiple choice poll is not multi-select');
-      }
+      
       break;
     default:
       throw new Error(`Unknown poll type: ${poll.type}`);

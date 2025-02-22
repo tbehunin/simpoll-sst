@@ -1,12 +1,20 @@
-import { Choice, ChoiceResult, MediaAsset, MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from '@simpoll-sst/core/models';
+import { Choice, ChoiceResult } from '@simpoll-sst/core/handlers/multipleChoiceHandler';
 import { builder } from '../builder';
-import { mediaType, pollType } from '../common/enums';
+import { mediaType } from '../common/enums';
+import { MediaAsset, PollType } from '@simpoll-sst/core/common/types';
+import { PollResult, PollVoter } from '@simpoll-sst/core/models';
+import { PollDetailWithType } from '../unions/pollDetail';
 
-export const multipleChoiceDetail = builder.objectRef<MultipleChoiceDetail>('MultipleChoiceDetail').implement({
+export const multipleChoiceDetail = builder.objectRef<PollDetailWithType<PollType.MultipleChoice>>('MultipleChoiceDetail').implement({
   fields: (t) => ({
-    type: t.expose('type', { type: pollType }),
-    multiSelect: t.exposeBoolean('multiSelect'),
-    choices: t.expose('choices', { type: [choice] }),
+    multiSelect: t.field({
+      type: 'Boolean',
+      resolve: (source) => source.details.multiSelect,
+    }),
+    choices: t.field({
+      type: [choice],
+      resolve: (source) => source.details.choices,
+    }),
   }),
 });
 
@@ -24,9 +32,12 @@ export const mediaAsset = builder.objectRef<MediaAsset>('MediaAsset').implement(
   }),
 });
 
-export const multipleChoiceResult = builder.objectRef<MultipleChoiceResult>('MultipleChoiceResult').implement({
+export const multipleChoiceResult = builder.objectRef<PollResult<PollType.MultipleChoice>>('MultipleChoiceResult').implement({
   fields: (t) => ({
-    choices: t.expose('choices', { type: [choiceResult] }),
+    choices: t.field({
+      type: [choiceResult],
+      resolve: (source) => source.results.choices,
+    }),
   }),
 });
 
@@ -40,7 +51,22 @@ export const choiceResult = builder.objectRef<ChoiceResult>('ChoiceResult').impl
 export const multipleChoiceInput = builder.inputType('MultipleChoiceInput', {
   fields: (t) => ({
     multiSelect: t.boolean(),
-    choices: t.stringList(),
+    choices: t.field({
+      type: [choiceInput],
+      required: true,
+    }),
+  }),
+});
+export const choiceInput = builder.inputType('ChoiceInput', {
+  fields: (t) => ({
+    text: t.string(),
+    media: t.field({ type: mediaAssetInput, required: false }),
+  }),
+});
+export const mediaAssetInput = builder.inputType('MediaAssetInput', {
+  fields: (t) => ({
+    type: t.field({ type: mediaType }),
+    value: t.string(),
   }),
 });
 
@@ -50,9 +76,13 @@ export const multipleChoiceVoteInput = builder.inputType('MultipleChoiceVoteInpu
   }),
 });
 
-export const multipleChoiceVoter = builder.objectRef<MultipleChoiceVoter>('MultipleChoiceVoter').implement({
+export const multipleChoiceVoter = builder.objectRef<PollVoter<PollType.MultipleChoice>>('MultipleChoiceVoter').implement({
   fields: (t) => ({
-    selectedIndex: t.exposeIntList('selectedIndex', { nullable: true  }),
+    selectedIndex: t.field({
+      type: ['Int'],
+      nullable: true,
+      resolve: (source) => source.vote?.selectedIndex,
+    }),
     voteTimestamp: t.exposeString('voteTimestamp', { nullable: true }),
   }),
 });
