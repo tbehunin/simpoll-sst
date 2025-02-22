@@ -7,7 +7,6 @@ import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
 import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
 import { docBuilder } from './docBuilder';
-import { pollTypeMapper } from '../mappers/pollTypeMapper';
 import { PollScope, PollType } from '../common/types';
 import { generatePollVoterId } from './utils';
 
@@ -16,22 +15,49 @@ const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   return result;
 };
 
-const getPollsByIds = async <Detail, Result, Voter>(pollIds: string[]): Promise<Poll<Detail>[]> => {
-  const result = await pollDetailsDao.batchGet<Detail>(pollIds);
-  return result.map((pollDetailDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollDetailDoc.type).mapToPoll(pollDetailDoc));
+const getPollsByIds = async (pollIds: string[]): Promise<Poll<PollType>[]> => {
+  const result = await pollDetailsDao.batchGet(pollIds);
+  return result.map((pollDetailDoc) => {
+    const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = pollDetailDoc;
+    const base = { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details };
+    return {
+      ...base,
+      pollId: pk.split('#')[1],
+    };
+  });
 };
 
-const getPollResultsByIds = async <Detail, Result, Voter>(pollIds: string[]): Promise<PollResult<Result>[]> => {
-  const result = await pollResultsDao.batchGet<Detail, Result, Voter>(pollIds);
-  return result.map((pollResultDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollResultDoc.type).mapToPollResult(pollResultDoc));
+const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult<PollType>[]> => {
+  const result = await pollResultsDao.batchGet(pollIds);
+  return result.map((pollResultDoc) => {
+    const { pk, type, totalVotes, results } = pollResultDoc;
+    return {
+      pollId: pk.split('#')[1],
+      type,
+      totalVotes,
+      results
+    };
+  });
 };
 
-const getPollVotersByIds = async <Detail, Result, Voter>(pollVoterIds: string[]): Promise<PollVoter<Voter>[]> => {
-  const result = await pollVotersDao.batchGet<Voter>(pollVoterIds);
-  return result.map((pollVoterDoc) => pollTypeMapper.get<Detail, Result, Voter>(pollVoterDoc.type).mapToPollVoter(pollVoterDoc));
+const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter<PollType>[]> => {
+  const result = await pollVotersDao.batchGet(pollVoterIds);
+  return result.map((pollVoterDoc) => {
+    const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = pollVoterDoc;
+    return {
+      pollId: pk.split('#')[1],
+      userId: sk.split('#')[1],
+      type,
+      scope: gsipk1.split('#')[3] === 'Public' ? PollScope.Public : PollScope.Private,
+      voted: gsisk1.split('#')[1] === 'Y',
+      expireTimestamp: gsisk1.split('#')[2],
+      voteTimestamp,
+      vote,
+    };
+  });
 };
 
-const createPoll = async <T>(request: CreatePollRequest<T>): Promise<string> => {
+const createPoll = async (request: CreatePollRequest<PollType>): Promise<string> => {
   const pollId = uuidv4();
   const now = new Date().toISOString();
   const pollDetailDoc = docBuilder.buildPollDetailDoc(pollId, now, request);
@@ -41,11 +67,9 @@ const createPoll = async <T>(request: CreatePollRequest<T>): Promise<string> => 
   return pollId;
 };
 
-const vote = async <T>(request: VoteRequest<T>): Promise<void> => {
+const vote = async (request: VoteRequest<PollType>): Promise<void> => {
   const now = new Date().toISOString();
-  const doc = await pollDetailsDao.get(request.pollId);
-  const mapper = pollTypeMapper.get(doc.type);
-  const poll = mapper.mapToPoll(doc);
+  const poll = await pollDetailsDao.get(request.pollId);
 
   // Validate:
   // - Poll exists

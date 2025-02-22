@@ -8,6 +8,7 @@ import { pollDetail } from '../unions/pollDetail';
 import { pollResult } from '../unions/pollResult';
 import { pollVoter } from '../unions/pollVoter';
 import { generatePollVoterId } from '@simpoll-sst/core/services/utils';
+import { PollType } from '@simpoll-sst/core/common/types';
 
 export const poll = builder.loadableObject('Poll', {
   load: async (pollIds: string[]) => {
@@ -40,7 +41,7 @@ export const poll = builder.loadableObject('Poll', {
     sharedWith: t.exposeStringList('sharedWith'),
     details: t.field({
       type: pollDetail,
-      resolve: (parent: Poll) => parent.details,
+      resolve: (parent: Poll<PollType>) => parent,
     }),
     results: t.field({
       type: pollResult,

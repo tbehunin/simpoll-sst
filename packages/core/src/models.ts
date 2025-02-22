@@ -1,20 +1,4 @@
-import { PollScope, PollType, VotePrivacy } from './common/types';
-
-interface PollBase {
-  pollId: string
-  userId: string
-  ct: string
-  scope: PollScope
-  type: PollType
-  title: string
-  expireTimestamp: string
-  votePrivacy: VotePrivacy
-  sharedWith: string[]
-};
-
-export type Poll<T> = PollBase & {
-  details: T
-};
+import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from './common/types';
 
 export type User = {
   userId: string
@@ -24,28 +8,44 @@ export type User = {
   bio: string
 };
 
+export interface PollBase {
+  pollId: string
+  userId: string
+  ct: string
+  scope: PollScope
+  title: string
+  expireTimestamp: string
+  votePrivacy: VotePrivacy
+  sharedWith: string[]
+};
+
+export type Poll<T extends PollType> = PollBase & {
+  type: T
+  details: PollDetailsMap[T]
+};
+
 export interface PollResultBase {
   pollId: string
-  type: PollType
   totalVotes: number
 };
 
-export type PollResult<T> = PollResultBase & {
-  results: T
+export type PollResult<T extends PollType> = PollResultBase & {
+  type: T
+  results: PollResultsMap[T]
 };
 
 export interface PollVoterBase {
   pollId: string
   userId: string
-  type: PollType
-  pollScope: PollScope
+  scope: PollScope
   voted: boolean
   expireTimestamp: string
   voteTimestamp?: string
 };
 
-export type PollVoter<T> = PollVoterBase & {
-  vote?: T
+export type PollVoter<T extends PollType> = PollVoterBase & {
+  type: T
+  vote?: PollVoterMap[T]
 };
 
 export interface CreatePollBase {
@@ -59,11 +59,6 @@ export interface CreatePollBase {
 export type CreatePoll<T> = CreatePollBase & {
   details: T
 };
-
-// export type CreateMultipleChoicePoll = CreatePollBase & {
-//   multiSelect: boolean
-//   choices: string[]
-// };
 
 export type MultipleChoiceVote = {
   selectedIndex: number[]

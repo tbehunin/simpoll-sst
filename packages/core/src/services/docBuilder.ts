@@ -1,10 +1,10 @@
 import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
 import { generateExpireTimestamp, generatePollScope } from './utils';
-import { Poll } from '../models';
 import { CreatePollRequest, VoteRequest } from './types';
-import { pollTypeMapper } from '../mappers/pollTypeMapper';
+import { PollType } from '../common/types';
+import { getPollTypeHandler } from '../handlers/pollRegistry';
 
-const buildPollDetailDoc = <T>(pollId: string, createdTimestamp: string, request: CreatePollRequest<T>): PollDetailDoc<T> => {
+const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest<PollType>): PollDetailDoc<PollType> => {
   const scope = generatePollScope(request.sharedWith);
   const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
   
@@ -22,21 +22,22 @@ const buildPollDetailDoc = <T>(pollId: string, createdTimestamp: string, request
     expireTimestamp,
     sharedWith: request.sharedWith,
     votePrivacy: request.votePrivacy,
-    details: pollTypeMapper.get(request.type).parseDetails(request) as T,
+    details: request.details,
   };
 };
 
-const buildPollResultDoc = <T>(pollId: string, request: CreatePollRequest<T>): PollResultDoc<T> => {
+const buildPollResultDoc = (pollId: string, request: CreatePollRequest<PollType>): PollResultDoc<PollType> => {
+  const handler = getPollTypeHandler(request.type);
   return {
     pk: `Poll#${pollId}`,
     sk: 'Results',
     type: request.type,
     totalVotes: 0,
-    results: pollTypeMapper.get(request.type).buildResults(request) as T,
+    results: handler.buildResults(request),
   };
 };
 
-const buildPollVoterDocs = <T>(pollId: string, request: CreatePollRequest<T>): PollVoterDoc<T>[] => {
+const buildPollVoterDocs = (pollId: string, request: CreatePollRequest<PollType>): PollVoterDoc<PollType>[] => {
   if (request.sharedWith.length === 0) {
     return [];
   }
@@ -52,10 +53,10 @@ const buildPollVoterDocs = <T>(pollId: string, request: CreatePollRequest<T>): P
   }));
 };
 
-const buildPollVoterDoc = <Detail, Voter>(poll: Poll<Detail>, voteRequest: VoteRequest<Voter>): PollVoterDoc<Voter> => {
+const buildPollVoterDoc = (poll: PollDetailDoc<PollType>, voteRequest: VoteRequest<PollType>): PollVoterDoc<PollType> => {
   const expireTimestamp = generateExpireTimestamp(poll.expireTimestamp);
-  const pollVoterDoc = {
-    pk: `Poll#${poll.pollId}`,
+  return {
+    pk: poll.pk,
     sk: `Voter#${voteRequest.userId}`,
     type: poll.type,
     gsipk1: `User#${voteRequest.userId}#Voter#${poll.scope}`,
@@ -63,10 +64,7 @@ const buildPollVoterDoc = <Detail, Voter>(poll: Poll<Detail>, voteRequest: VoteR
     gsisk1: `Voted:Y#${expireTimestamp}`,
     gsisk2: expireTimestamp,
     voteTimestamp: new Date().toISOString(),
-  };
-  return {
-    ...pollVoterDoc,
-    vote: pollTypeMapper.get(poll.type).parseVote(voteRequest) as Voter,
+    vote: voteRequest.vote,
   };
 };
 

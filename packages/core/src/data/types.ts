@@ -1,24 +1,4 @@
-import { PollScope, PollType, VotePrivacy } from '../common/types';
-
-export interface PollDetailDocBase {
-  pk: string
-  sk: string
-  gsipk1: string
-  gsipk2: string
-  gsisk2: string
-  userId: string
-  ct: string
-  scope: PollScope
-  type: PollType
-  title: string
-  expireTimestamp: string
-  sharedWith: string[]
-  votePrivacy: VotePrivacy
-};
-
-export type PollDetailDoc<T> = PollDetailDocBase & {
-  details: T
-};
+import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from '../common/types';
 
 export type UserDoc = {
   pk: string
@@ -29,26 +9,36 @@ export type UserDoc = {
   bio: string
 };
 
+export interface PollDetailDocBase {
+  pk: string
+  sk: string
+  gsipk1: string
+  gsipk2: string
+  gsisk2: string
+  userId: string
+  ct: string
+  scope: PollScope
+  title: string
+  expireTimestamp: string
+  sharedWith: string[]
+  votePrivacy: VotePrivacy
+};
+
+export type PollDetailDoc<T extends PollType> = PollDetailDocBase & {
+  type: T
+  details: PollDetailsMap[T]
+};
+
 export interface PollResultDocBase {
   pk: string
   sk: string
   type: PollType
   totalVotes: number
 };
-export type PollResultDoc<T> = PollResultDocBase & {
-  results: T;
+export type PollResultDoc<T extends PollType> = PollResultDocBase & {
+  type: T
+  results: PollResultsMap[T];
 };
-
-// export type ChoiceResultDoc = {
-//   votes: number
-//   users: string[]
-// };
-
-// export type MultipleChoiceResultDoc = PollResultDocBase & {
-//   choices: ChoiceResultDoc[]
-// };
-
-// export type PollResultDoc = MultipleChoiceResultDoc; // | RankResultDoc | etc;
 
 export interface PollVoterDocBase {
   pk: string
@@ -61,10 +51,7 @@ export interface PollVoterDocBase {
   voteTimestamp?: string
 };
 
-// export type MultipleChoiceVoterDoc = PollVoterDocBase & {
-//   selectedIndex?: number[]
-// };
-
-export type PollVoterDoc<T> = PollVoterDocBase & {
-  vote?: T
+export type PollVoterDoc<T extends PollType> = PollVoterDocBase & {
+  type: T
+  vote?: PollVoterMap[T]
 };
