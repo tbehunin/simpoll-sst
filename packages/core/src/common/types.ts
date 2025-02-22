@@ -40,10 +40,6 @@ export type MediaAsset = {
   value: string
 };
 
-export interface PollVoterBase {
-  voteTimestamp: string
-};
-
 export type PollDetailsMap = {
   [PollType.MultipleChoice]: MultipleChoiceDetail
 };
@@ -52,6 +48,6 @@ export type PollResultsMap = {
   [PollType.MultipleChoice]: MultipleChoiceResult
 };
 
-export interface PollVoterMap extends PollVoterBase {
+export interface PollVoterMap {
   [PollType.MultipleChoice]: MultipleChoiceVoter
 };
