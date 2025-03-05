@@ -47,7 +47,7 @@ const buildPollVoterDocs = (pollId: string, request: CreatePollRequest<PollType>
     sk: `Voter#${userId}`,
     type: request.type,
     gsipk1: `User#${userId}#Voter#Private`,
-    gsipk2: `Poll#${userId}#Voter`,
+    gsipk2: `User#${userId}#Voter`,
     gsisk1: `Voted:N#${expireTimestamp}`,
     gsisk2: expireTimestamp,
   }));

@@ -26,7 +26,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
     multiSelect: details.multiSelect,
     choices: details.choices.map((choice: any) => ({
       text: choice.text,
-      media: choice.media
+      ...(choice.media && {media: choice.media}) // Handle optional property
     }))
   }),
   parseResults: (results: any): MultipleChoiceResult => ({
