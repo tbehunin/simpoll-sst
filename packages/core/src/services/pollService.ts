@@ -106,7 +106,7 @@ const vote = async (request: VoteRequest<PollType>): Promise<void> => {
 
   // Save vote
   const pollVoterDoc = docBuilder.buildPollVoterDoc(poll, request);
-  await dbClient.write(pollVoterDoc);
+  await dbClient.put(pollVoterDoc);
 };
 
 export const pollService = {
