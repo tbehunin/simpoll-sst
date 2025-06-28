@@ -61,7 +61,7 @@ const buildPollVoterDoc = (poll: PollDetailDoc<PollType>, voteRequest: VoteReque
     type: poll.type,
     gsipk1: `User#${voteRequest.userId}#Voter#${poll.scope}`,
     gsipk2: `Poll#${voteRequest.userId}#Voter`,
-    gsisk1: `Voted:Y#${expireTimestamp}`,
+    gsisk1: `Voted#Y#${expireTimestamp}`,
     gsisk2: expireTimestamp,
     voteTimestamp: new Date().toISOString(),
     vote: voteRequest.vote,
