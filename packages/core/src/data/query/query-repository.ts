@@ -1,7 +1,7 @@
-import { PollScope, PollStatus, RoleType } from '../common/types';
-import { MAX_DATE, MIN_DATE } from '../common/constants';
-import { dbClient } from './dbClient';
-import { QueryPollsRequest } from '../services/types';
+import { PollScope, PollStatus, RoleType } from '../../common/types';
+import { MAX_DATE, MIN_DATE } from '../../common/constants';
+import { dbClient } from '../dbClient';
+import { QueryPollsRequest } from '../../services/types';
 
 
 type QueryParams = {
@@ -31,7 +31,7 @@ const generateInitialQueryParams = (skToken: string, userId: string, roleType: R
   };
 };
 
-export const pollQueryDao = {
+export const QueryRepository = {
   query: async ({ userId, roleType, scope, voted, pollStatus }: QueryPollsRequest): Promise<string[]> => {
     const skToken = '[SKTOKEN]';
     const now = new Date().toISOString();

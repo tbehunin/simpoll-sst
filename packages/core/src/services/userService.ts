@@ -1,5 +1,5 @@
-import { UserEntity } from '../data/types';
-import { usersDao } from '../data/usersDao';
+import { UserEntity } from '../data/user/user.entity';
+import { UserRepository } from '../data/user/user.repository';
 import { User } from '../models';
 
 const mapToModel = (userDocs: UserEntity[]): User[] => {
@@ -11,7 +11,7 @@ const mapToModel = (userDocs: UserEntity[]): User[] => {
 
 export const userService = {
   getUsersByIds: async (userIds: string[]): Promise<User[]> => {
-    const result = await usersDao.batchGet(userIds);
+    const result = await UserRepository.batchGet(userIds);
     return mapToModel(result);
   },
 };

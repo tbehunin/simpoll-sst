@@ -1,7 +1,7 @@
-import { dbClient, DbId } from './dbClient';
-import { UserEntity } from './types';
+import { DbId, dbClient } from "../dbClient";
+import { UserEntity } from "./user.entity";
 
-export const usersDao = {
+export const UserRepository = {
   batchGet: async (userIds: string[]): Promise<UserEntity[]> => {
     const keys: DbId[] = userIds.map((userId) => ({ pk: `User#${userId}`, sk: 'Profile' }));
     const rawData = await dbClient.batchGet(keys, 'Users');
@@ -11,5 +11,5 @@ export const usersDao = {
       const result: UserEntity = { pk, sk, username, fullName, email, bio };
       return result;
     });
-  }
+  },
 };

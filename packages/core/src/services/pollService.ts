@@ -1,22 +1,22 @@
 import { v4 as uuidv4 } from 'uuid';
-import { pollDetailsDao } from '../data/pollDetailsDao';
-import { pollQueryDao } from '../data/pollQueryDao';
-import { pollResultsDao } from '../data/pollResultsDao';
-import { pollVotersDao } from '../data/pollVotersDao';
+import { QueryRepository } from '../data/query/query-repository';
 import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
 import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
 import { docBuilder } from './docBuilder';
 import { PollScope, PollType } from '../common/types';
 import { generatePollVoterId } from './utils';
+import { PollDetailRepository } from '../data/poll-detail/poll-detail.repository';
+import { pollResultRepository } from '../data/poll-result/poll-result.repository';
+import { PollVoteRepository } from '../data/poll-vote/poll-vote.repository';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
-  const result = await pollQueryDao.query(request);
+  const result = await QueryRepository.query(request);
   return result;
 };
 
 const getPollsByIds = async (pollIds: string[]): Promise<Poll<PollType>[]> => {
-  const result = await pollDetailsDao.batchGet(pollIds);
+  const result = await PollDetailRepository.batchGet(pollIds);
   return result.map((pollDetailDoc) => {
     const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = pollDetailDoc;
     const base = { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details };
@@ -28,7 +28,7 @@ const getPollsByIds = async (pollIds: string[]): Promise<Poll<PollType>[]> => {
 };
 
 const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult<PollType>[]> => {
-  const result = await pollResultsDao.batchGet(pollIds);
+  const result = await pollResultRepository.batchGet(pollIds);
   return result.map((pollResultDoc) => {
     const { pk, type, totalVotes, results } = pollResultDoc;
     return {
@@ -41,7 +41,7 @@ const getPollResultsByIds = async (pollIds: string[]): Promise<PollResult<PollTy
 };
 
 const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter<PollType>[]> => {
-  const result = await pollVotersDao.batchGet(pollVoterIds);
+  const result = await PollVoteRepository.batchGet(pollVoterIds);
   return result.map((pollVoterDoc) => {
     const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = pollVoterDoc;
     return {
@@ -69,7 +69,7 @@ const createPoll = async (request: CreatePollRequest<PollType>): Promise<string>
 
 const vote = async (request: VoteRequest<PollType>): Promise<void> => {
   const now = new Date().toISOString();
-  const poll = await pollDetailsDao.get(request.pollId);
+  const poll = await PollDetailRepository.get(request.pollId);
 
   // Validate:
   // - Poll exists
@@ -99,7 +99,7 @@ const vote = async (request: VoteRequest<PollType>): Promise<void> => {
     default:
       throw new Error(`Unknown poll type: ${poll.type}`);
   }
-  const voter = await pollVotersDao.get(generatePollVoterId(request.pollId, request.userId));
+  const voter = await PollVoteRepository.get(generatePollVoterId(request.pollId, request.userId));
   if (voter && voter.voteTimestamp) {
     throw new Error('User has already voted on this poll');
   }
