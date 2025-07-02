@@ -6,7 +6,7 @@ import { docBuilder } from './docBuilder';
 import { PollScope, PollType } from '../common/types';
 import { generatePollVoterId } from './utils';
 import { PollVoteRepository } from '../data/poll/vote/poll-vote.repository';
-import { QueryRepository } from '../data/poll/query/query-repository';
+import { QueryRepository } from '../data/poll/query/poll-query.repository';
 import { PollDetailRepository } from '../data/poll/detail/poll-detail.repository';
 import { pollResultRepository } from '../data/poll/result/poll-result.repository';
 
