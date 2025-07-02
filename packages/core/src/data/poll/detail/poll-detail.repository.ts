@@ -1,5 +1,5 @@
-import { PollType } from "../../common/types";
-import { dbClient, DbId } from "../dbClient";
+import { PollType } from "../../../common/types";
+import { dbClient, DbId } from "../../dbClient";
 import { PollDetailEntity } from "./poll-detail.entity";
 import { PollDetailMapper } from "./poll-detail.mapper";
 

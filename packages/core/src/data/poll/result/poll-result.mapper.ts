@@ -1,5 +1,5 @@
-import { PollType } from "../../common/types";
-import { getPollTypeHandler } from "../../handlers/pollRegistry";
+import { PollType } from "../../../common/types";
+import { getPollTypeHandler } from "../../../handlers/pollRegistry";
 import { PollResultEntity, PollResultEntityBase } from "./poll-result.entity";
 
 export const PollResultMapper = {

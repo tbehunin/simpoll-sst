@@ -1,4 +1,4 @@
-import { PollType, PollVoteMap } from "../../common/types"
+import { PollType, PollVoteMap } from "../../../common/types"
 
 export interface PollVoteEntityBase {
   pk: string

@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
-import { QueryRepository } from '../data/query/query-repository';
 import { Poll, PollResult, PollVoter } from '../models';
 import { dbClient } from '../data/dbClient';
 import { CreatePollRequest, QueryPollsRequest, VoteRequest } from './types';
 import { docBuilder } from './docBuilder';
 import { PollScope, PollType } from '../common/types';
 import { generatePollVoterId } from './utils';
-import { PollDetailRepository } from '../data/poll-detail/poll-detail.repository';
-import { pollResultRepository } from '../data/poll-result/poll-result.repository';
-import { PollVoteRepository } from '../data/poll-vote/poll-vote.repository';
+import { PollVoteRepository } from '../data/poll/vote/poll-vote.repository';
+import { QueryRepository } from '../data/poll/query/query-repository';
+import { PollDetailRepository } from '../data/poll/detail/poll-detail.repository';
+import { pollResultRepository } from '../data/poll/result/poll-result.repository';
 
 const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await QueryRepository.query(request);

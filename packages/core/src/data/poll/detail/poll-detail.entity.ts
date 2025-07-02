@@ -1,4 +1,4 @@
-import { PollDetailMap, PollScope, PollType, VotePrivacy } from '../../common/types';
+import { PollDetailMap, PollScope, PollType, VotePrivacy } from '../../../common/types';
 
 export interface PollDetailEntityBase {
   pk: string;
