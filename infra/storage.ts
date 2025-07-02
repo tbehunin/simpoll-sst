@@ -31,6 +31,32 @@ export const table = new sst.aws.Dynamo('PollsTable', {
       projection: 'keys-only',
     },
   },
+  stream: 'new-and-old-images',
+});
+table.subscribe("VoteSubscription", "packages/functions/src/voteSubscription/handler.main", {
+  filters: [{
+    eventName: ["MODIFY"],
+    dynamodb: {
+      Keys: {
+        pk: {
+          S: [{'prefix': 'Poll#'}],
+        },
+        sk: {
+          S: [{'prefix': 'Voter#'}],
+        },
+      },
+      OldImage: {
+        gsisk1: {
+          S: [{'prefix': 'Voted#N#'}],
+        },
+      },
+      NewImage: {
+        gsisk1: {
+          S: [{'prefix': 'Voted#Y#'}],
+        },
+      },
+    },
+  }],
 });
   
   // Create an S3 bucket

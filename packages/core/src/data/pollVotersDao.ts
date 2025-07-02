@@ -34,4 +34,18 @@ export const pollVotersDao = {
     const rawData = await dbClient.batchGet(keys, 'PollVoters');
     return mapToDoc(rawData);
   },
+  parseStreamImage: (image: Record<string, any>): PollVoterDoc<PollType> => {
+    const handler = getPollTypeHandler(image.type.S as PollType);
+    return {
+      pk: image.pk.S,
+      sk: image.sk.S,
+      type: image.type.S as PollType,
+      gsipk1: image.gsipk1.S,
+      gsipk2: image.gsipk2.S,
+      gsisk1: image.gsisk1.S,
+      gsisk2: image.gsisk2.S,
+      voteTimestamp: image.voteTimestamp.S,
+      vote: handler.parseVoteStream(image.vote),
+    };
+  }
 };

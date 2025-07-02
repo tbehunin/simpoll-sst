@@ -1,5 +1,5 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand, GetCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient, UpdateItemInput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, BatchWriteCommand, QueryCommand, BatchGetCommand, GetCommand, PutCommand, UpdateCommand, UpdateCommandInput } from '@aws-sdk/lib-dynamodb';
 import { Resource } from 'sst';
 
 export type QueryParams = {
@@ -13,16 +13,30 @@ export type DbId = {
   sk: string
 };
 
+export type UpdateRequest = {
+  Key: DbId
+  UpdateExpression: string
+  ExpressionAttributeValues: any
+};
+
 const TableName = Resource.PollsTable.name;
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const dbClient = {
+  update: async (item: UpdateRequest) => {
+    const params: UpdateCommandInput = {
+      TableName,
+      ...item,
+    };
+    // console.log('*** DATA ACCESS: UpdateCommand ***', params);
+    await dynamoDb.send(new UpdateCommand(params));
+  },
   put: async (item: any) => {
     const params = {
       TableName,
       Item: item,
     };
-    console.log('*** DATA ACCESS: PutCommand ***', params);
+    // console.log('*** DATA ACCESS: PutCommand ***', params);
     await dynamoDb.send(new PutCommand(params));
   },
   batchWrite: async (items: any[]) => {
@@ -33,7 +47,7 @@ export const dbClient = {
         })),
       },
     };
-    console.log('*** DATA ACCESS: BatchWriteCommand ***', params);
+    // console.log('*** DATA ACCESS: BatchWriteCommand ***', params);
     await dynamoDb.send(new BatchWriteCommand(params));
   },
   query: async (params: QueryParams) => {
@@ -41,7 +55,7 @@ export const dbClient = {
       ...params,
       TableName,
     };
-    console.log('*** DATA ACCESS: QueryCommand ***', pollParams);
+    // console.log('*** DATA ACCESS: QueryCommand ***', pollParams);
     const result = await dynamoDb.send(new QueryCommand(pollParams));
     //console.log('query result', result);
     return (result || {}).Items;
@@ -54,7 +68,7 @@ export const dbClient = {
         },
       },
     };
-    console.log('*** DATA ACCESS: BatchGetCommand ***', logMsg, JSON.stringify(params));
+    // console.log('*** DATA ACCESS: BatchGetCommand ***', logMsg, JSON.stringify(params));
     const result = await dynamoDb.send(new BatchGetCommand(params));
     return result?.Responses?.[TableName] || [];
   },
@@ -63,7 +77,7 @@ export const dbClient = {
       TableName,
       Key: key,
     };
-    console.log('*** DATA ACCESS: GetCommand ***', logMsg, JSON.stringify(params));
+    // console.log('*** DATA ACCESS: GetCommand ***', logMsg, JSON.stringify(params));
     const result = await dynamoDb.send(new GetCommand(params));
     return result.Item;
   }

@@ -8,6 +8,7 @@ export interface PollTypeHandler<T extends PollType> {
   parseDetails(details: any): PollDetailsMap[T];
   parseResults(results: any): PollResultsMap[T];
   parseVoter(voter: any): PollVoterMap[T];
+  parseVoteStream(voteImage: any): PollVoterMap[T];
   buildResults(request: CreatePollRequest<PollType>): PollResultsMap[T];
 };
 

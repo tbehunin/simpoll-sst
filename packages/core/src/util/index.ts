@@ -1,8 +1,8 @@
-import { Context, APIGatewayProxyEvent } from 'aws-lambda';
+import { Context, APIGatewayProxyEvent, DynamoDBStreamEvent } from 'aws-lambda';
 
 export module Util {
   export function handler(
-    lambda: (evt: APIGatewayProxyEvent, context: Context) => Promise<string>
+    lambda: (evt: APIGatewayProxyEvent | DynamoDBStreamEvent, context: Context) => Promise<string>
   ) {
     return async function(event: APIGatewayProxyEvent, context: Context) {
       let body: string, statusCode: number;

@@ -3,6 +3,7 @@ import { generateExpireTimestamp, generatePollScope } from './utils';
 import { CreatePollRequest, VoteRequest } from './types';
 import { PollType } from '../common/types';
 import { getPollTypeHandler } from '../handlers/pollRegistry';
+import { UpdateRequest } from '../data/dbClient';
 
 const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest<PollType>): PollDetailDoc<PollType> => {
   const scope = generatePollScope(request.sharedWith);
@@ -65,6 +66,19 @@ const buildPollVoterDoc = (poll: PollDetailDoc<PollType>, voteRequest: VoteReque
     gsisk2: expireTimestamp,
     voteTimestamp: new Date().toISOString(),
     vote: voteRequest.vote,
+  };
+};
+
+const buildPollResultUpdateRequest = (pollVoterDoc: PollVoterDoc<PollType>): UpdateRequest => {
+  return {
+    Key: {
+      pk: pollVoterDoc.pk,
+      sk: 'Results',
+    },
+    UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
+    ExpressionAttributeValues: {
+      ':inc': 1,
+    },
   };
 };
 
