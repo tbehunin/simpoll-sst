@@ -1,7 +1,8 @@
 import { PollType } from '../common/types';
 import { getPollTypeHandler } from '../handlers/pollRegistry';
 import { dbClient, DbId } from './dbClient';
-import { PollDetailEntity, PollDetailEntityBase } from './types';
+import { PollDetailEntity } from './types';
+import { PollDetailEntityBase } from './PollDetailEntityBase';
 
 const mapToPollDetailDocBase = (rawData: Record<string, any>): PollDetailEntityBase => {
   const { pk, sk, gsipk1, gsipk2, gsisk2, userId, ct, scope, title, expireTimestamp, sharedWith, votePrivacy } = rawData;
