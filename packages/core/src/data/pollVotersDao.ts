@@ -1,14 +1,14 @@
 import { PollType } from '../common/types';
 import { getPollTypeHandler } from '../handlers/pollRegistry';
 import { dbClient, DbId } from './dbClient';
-import { PollVoterDoc, PollVoterDocBase } from './types';
+import { PollVoteEntity, PollVoteEntityBase } from './types';
 
-const mapToPollVoterDocBase = (rawData: Record<string, any>): PollVoterDocBase => {
+const mapToPollVoterDocBase = (rawData: Record<string, any>): PollVoteEntityBase => {
   const { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp } = rawData;
   return { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp };
 };
 
-const mapToDoc = (rawData: Record<string, any>[] | undefined): PollVoterDoc<PollType>[] => {
+const mapToDoc = (rawData: Record<string, any>[] | undefined): PollVoteEntity<PollType>[] => {
   if (!rawData) return [];
   return rawData.map((poll) => {
     const handler = getPollTypeHandler(poll.type);
@@ -20,13 +20,13 @@ const mapToDoc = (rawData: Record<string, any>[] | undefined): PollVoterDoc<Poll
 };
 
 export const pollVotersDao = {
-  get: async (pollVoterId: string): Promise<PollVoterDoc<PollType>> => {
+  get: async (pollVoterId: string): Promise<PollVoteEntity<PollType>> => {
     const idSplit = pollVoterId.split(':');
     const rawData = await dbClient.get({ pk: `Poll#${idSplit[0]}`, sk: `Voter#${idSplit[1]}` }, 'PollVoters');
     const [result] = mapToDoc(rawData ? [rawData] : undefined);
     return result;
   },
-  batchGet: async (pollVoterIds: string[]): Promise<PollVoterDoc<PollType>[]> => {
+  batchGet: async (pollVoterIds: string[]): Promise<PollVoteEntity<PollType>[]> => {
     const keys: DbId[] = pollVoterIds.map((pollVoterId) => {
       const idSplit = pollVoterId.split(':');
       return { pk: `Poll#${idSplit[0]}`, sk: `Voter#${idSplit[1]}` };

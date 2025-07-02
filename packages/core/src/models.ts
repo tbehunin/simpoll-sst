@@ -1,4 +1,4 @@
-import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from './common/types';
+import { PollDetailMap, PollResultMap, PollScope, PollType, PollVoteMap, VotePrivacy } from './common/types';
 
 export type User = {
   userId: string
@@ -21,7 +21,7 @@ export interface PollBase {
 
 export type Poll<T extends PollType> = PollBase & {
   type: T
-  details: PollDetailsMap[T]
+  details: PollDetailMap[T]
 };
 
 export interface PollResultBase {
@@ -31,7 +31,7 @@ export interface PollResultBase {
 
 export type PollResult<T extends PollType> = PollResultBase & {
   type: T
-  results: PollResultsMap[T]
+  results: PollResultMap[T]
 };
 
 export interface PollVoterBase {
@@ -45,7 +45,7 @@ export interface PollVoterBase {
 
 export type PollVoter<T extends PollType> = PollVoterBase & {
   type: T
-  vote?: PollVoterMap[T]
+  vote?: PollVoteMap[T]
 };
 
 export interface CreatePollBase {

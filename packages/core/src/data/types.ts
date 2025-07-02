@@ -1,6 +1,6 @@
-import { PollDetailsMap, PollResultsMap, PollScope, PollType, PollVoterMap, VotePrivacy } from '../common/types';
+import { PollDetailMap, PollResultMap, PollScope, PollType, PollVoteMap, VotePrivacy } from '../common/types';
 
-export type UserDoc = {
+export type UserEntity = {
   pk: string
   sk: string
   username: string
@@ -9,7 +9,7 @@ export type UserDoc = {
   bio: string
 };
 
-export interface PollDetailDocBase {
+export interface PollDetailEntityBase {
   pk: string
   sk: string
   gsipk1: string
@@ -24,23 +24,23 @@ export interface PollDetailDocBase {
   votePrivacy: VotePrivacy
 };
 
-export type PollDetailDoc<T extends PollType> = PollDetailDocBase & {
+export type PollDetailEntity<T extends PollType> = PollDetailEntityBase & {
   type: T
-  details: PollDetailsMap[T]
+  details: PollDetailMap[T]
 };
 
-export interface PollResultDocBase {
+export interface PollResultEntityBase {
   pk: string
   sk: string
   type: PollType
   totalVotes: number
 };
-export type PollResultDoc<T extends PollType> = PollResultDocBase & {
+export type PollResultEntity<T extends PollType> = PollResultEntityBase & {
   type: T
-  results: PollResultsMap[T];
+  results: PollResultMap[T];
 };
 
-export interface PollVoterDocBase {
+export interface PollVoteEntityBase {
   pk: string
   sk: string
   type: PollType
@@ -51,7 +51,7 @@ export interface PollVoterDocBase {
   voteTimestamp?: string
 };
 
-export type PollVoterDoc<T extends PollType> = PollVoterDocBase & {
+export type PollVoteEntity<T extends PollType> = PollVoteEntityBase & {
   type: T
-  vote?: PollVoterMap[T]
+  vote?: PollVoteMap[T]
 };

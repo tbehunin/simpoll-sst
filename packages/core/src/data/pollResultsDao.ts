@@ -1,14 +1,14 @@
 import { PollType } from '../common/types';
 import { getPollTypeHandler } from '../handlers/pollRegistry';
 import { dbClient, DbId } from './dbClient';
-import { PollResultDoc, PollResultDocBase } from './types';
+import { PollResultEntity, PollResultEntityBase } from './types';
 
-const mapToPollResultDocBase = (rawData: Record<string, any>): PollResultDocBase => {
+const mapToPollResultDocBase = (rawData: Record<string, any>): PollResultEntityBase => {
   const { pk, sk, type, totalVotes } = rawData;
   return { pk, sk, type, totalVotes };
 };
 
-const mapToDoc = (rawData: Record<string, any>[] | undefined): PollResultDoc<PollType>[] => {
+const mapToDoc = (rawData: Record<string, any>[] | undefined): PollResultEntity<PollType>[] => {
   if (!rawData) return [];
   return rawData.map((poll) => {
     const handler = getPollTypeHandler(poll.type);
@@ -20,7 +20,7 @@ const mapToDoc = (rawData: Record<string, any>[] | undefined): PollResultDoc<Pol
 };
 
 export const pollResultsDao = {
-  batchGet: async (pollIds: string[]): Promise<PollResultDoc<PollType>[]> => {
+  batchGet: async (pollIds: string[]): Promise<PollResultEntity<PollType>[]> => {
     const keys: DbId[] = pollIds.map((pollId) => ({ pk: `Poll#${pollId}`, sk: 'Results' }));
     const rawData = await dbClient.batchGet(keys, 'PollResults');
     return mapToDoc(rawData);

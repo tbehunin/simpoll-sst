@@ -1,10 +1,10 @@
-import { PollDetailDoc, PollResultDoc, PollVoterDoc } from '../data/types';
+import { PollDetailEntity, PollResultEntity, PollVoteEntity } from '../data/types';
 import { generateExpireTimestamp, generatePollScope } from './utils';
 import { CreatePollRequest, VoteRequest } from './types';
 import { PollType } from '../common/types';
 import { getPollTypeHandler } from '../handlers/pollRegistry';
 
-const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest<PollType>): PollDetailDoc<PollType> => {
+const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: CreatePollRequest<PollType>): PollDetailEntity<PollType> => {
   const scope = generatePollScope(request.sharedWith);
   const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
   
@@ -26,7 +26,7 @@ const buildPollDetailDoc = (pollId: string, createdTimestamp: string, request: C
   };
 };
 
-const buildPollResultDoc = (pollId: string, request: CreatePollRequest<PollType>): PollResultDoc<PollType> => {
+const buildPollResultDoc = (pollId: string, request: CreatePollRequest<PollType>): PollResultEntity<PollType> => {
   const handler = getPollTypeHandler(request.type);
   return {
     pk: `Poll#${pollId}`,
@@ -37,7 +37,7 @@ const buildPollResultDoc = (pollId: string, request: CreatePollRequest<PollType>
   };
 };
 
-const buildPollVoterDocs = (pollId: string, request: CreatePollRequest<PollType>): PollVoterDoc<PollType>[] => {
+const buildPollVoterDocs = (pollId: string, request: CreatePollRequest<PollType>): PollVoteEntity<PollType>[] => {
   if (request.sharedWith.length === 0) {
     return [];
   }
@@ -53,7 +53,7 @@ const buildPollVoterDocs = (pollId: string, request: CreatePollRequest<PollType>
   }));
 };
 
-const buildPollVoterDoc = (poll: PollDetailDoc<PollType>, voteRequest: VoteRequest<PollType>): PollVoterDoc<PollType> => {
+const buildPollVoterDoc = (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>): PollVoteEntity<PollType> => {
   const expireTimestamp = generateExpireTimestamp(poll.expireTimestamp);
   return {
     pk: poll.pk,

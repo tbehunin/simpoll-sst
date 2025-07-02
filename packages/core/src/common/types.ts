@@ -40,14 +40,14 @@ export type MediaAsset = {
   value: string
 };
 
-export type PollDetailsMap = {
+export type PollDetailMap = {
   [PollType.MultipleChoice]: MultipleChoiceDetail
 };
 
-export type PollResultsMap = {
+export type PollResultMap = {
   [PollType.MultipleChoice]: MultipleChoiceResult
 };
 
-export interface PollVoterMap {
+export interface PollVoteMap {
   [PollType.MultipleChoice]: MultipleChoiceVoter
 };
