@@ -1,4 +1,4 @@
-import { pollService } from '@simpoll-sst/core/services/pollService';
+import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { PollType } from '@simpoll-sst/core/common/types';
 import { builder } from '../builder';
 import { pollType } from '../common/enums';
@@ -22,7 +22,7 @@ export const vote = builder.mutationField('vote', (t) =>
         type,
         vote: handler.parseVoter(multipleChoice),
       };
-      pollService.vote(request);
+      PollService.vote(request);
       
       return pollId;
     },
