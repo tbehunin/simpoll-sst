@@ -3,6 +3,7 @@ import { PollDetailRepository } from "../../data/poll/detail/poll-detail.reposit
 import { QueryRepository } from "../../data/poll/query/poll-query.repository";
 import { Poll } from "../../models";
 import { QueryPollsRequest } from "../types";
+import { PollDetailMapper } from "./mappers";
 
 export const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
   const result = await QueryRepository.query(request);
@@ -10,13 +11,6 @@ export const queryPolls = async (request: QueryPollsRequest): Promise<string[]> 
 };
 
 export const getPollsByIds = async (pollIds: string[]): Promise<Poll<PollType>[]> => {
-  const result = await PollDetailRepository.batchGet(pollIds);
-  return result.map((pollDetailDoc) => {
-    const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = pollDetailDoc;
-    const base = { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details };
-    return {
-      ...base,
-      pollId: pk.split('#')[1],
-    };
-  });
+  const entities = await PollDetailRepository.batchGet(pollIds);
+  return PollDetailMapper.toDomainList(entities);
 };

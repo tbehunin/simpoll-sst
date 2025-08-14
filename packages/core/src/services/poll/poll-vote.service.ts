@@ -3,25 +3,13 @@ import { dbClient } from "../../data/dbClient";
 import { PollDetailRepository } from "../../data/poll/detail/poll-detail.repository";
 import { PollVoteRepository } from "../../data/poll/vote/poll-vote.repository";
 import { PollVoter } from "../../models";
-import { docBuilder } from "../docBuilder";
 import { VoteRequest } from "../types";
 import { generatePollVoterId } from "../utils";
+import { PollVoterMapper } from "./mappers";
 
 export const getPollVotersByIds = async (pollVoterIds: string[]): Promise<PollVoter<PollType>[]> => {
-  const result = await PollVoteRepository.batchGet(pollVoterIds);
-  return result.map((pollVoterDoc) => {
-    const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = pollVoterDoc;
-    return {
-      pollId: pk.split('#')[1],
-      userId: sk.split('#')[1],
-      type,
-      scope: gsipk1.split('#')[3] === 'Public' ? PollScope.Public : PollScope.Private,
-      voted: gsisk1.split('#')[1] === 'Y',
-      expireTimestamp: gsisk1.split('#')[2],
-      voteTimestamp,
-      vote,
-    };
-  });
+  const entities = await PollVoteRepository.batchGet(pollVoterIds);
+  return PollVoterMapper.toDomainList(entities);
 };
 
 export const vote = async (request: VoteRequest<PollType>): Promise<void> => {
@@ -62,6 +50,6 @@ export const vote = async (request: VoteRequest<PollType>): Promise<void> => {
   }
 
   // Save vote
-  const pollVoterDoc = docBuilder.buildPollVoterDoc(poll, request);
+  const pollVoterDoc = PollVoterMapper.fromVoteRequest(poll, request);
   await dbClient.put(pollVoterDoc);
 };
