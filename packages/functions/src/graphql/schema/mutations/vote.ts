@@ -22,7 +22,8 @@ export const vote = builder.mutationField('vote', (t) =>
         type,
         vote: handler.parseVoter(multipleChoice),
       };
-      PollService.vote(request);
+      
+      await PollService.vote(request);
       
       return pollId;
     },
