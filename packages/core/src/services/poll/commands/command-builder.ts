@@ -14,18 +14,15 @@ export const createContextCommand = <TRequest, TResult>(
   executor: ContextExecutor<TRequest, TResult>
 ) => async (request: TRequest): Promise<TResult> => {
   // 1. Fetch all required data once
-  console.log('got here1');
   const context = await createContext(request);
   
   // 2. Run pure validation with pre-fetched data
-  console.log('got here2');
   const validationResult = validator(request, context);
   
-  console.log('got here3', validationResult);
   if (!validationResult.isValid) {
     throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
   }
-  console.log('got here4');
+  
   // 3. Execute with context (may reuse fetched data)
   return executor(request, context);
 };
