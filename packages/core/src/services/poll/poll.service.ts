@@ -1,13 +1,14 @@
-import { createPoll } from "./poll-creation.service";
-import { queryPolls, getPollsByIds } from "./poll-query.service";
-import { getPollResultsByIds } from "./poll-result.service";
-import { getPollVotersByIds, vote } from "./poll-vote.service";
+import { getPollsByIds, queryPolls, getPollResultsByIds, getPollVotersByIds } from './queries';
+import { createPollCommand, voteCommand } from './commands';
 
 export const PollService = {
+  // Queries
   queryPolls,
   getPollsByIds,
   getPollResultsByIds,
   getPollVotersByIds,
-  createPoll,
-  vote,
+  
+  // Commands
+  createPoll: createPollCommand,
+  vote: voteCommand,
 };
