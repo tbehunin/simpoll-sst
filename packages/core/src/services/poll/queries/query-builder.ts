@@ -1,6 +1,4 @@
-type Repository<T> = {
-  batchGet: (ids: string[]) => Promise<T[]>;
-};
+import { Repository } from '../../../data/repository.interface';
 
 type Mapper<TEntity, TDomain> = {
   toDomainList: (entities: TEntity[]) => TDomain[];

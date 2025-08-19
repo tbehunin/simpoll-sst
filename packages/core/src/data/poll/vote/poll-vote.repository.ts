@@ -1,9 +1,10 @@
 import { PollType } from "../../../common/types";
 import { dbClient, DbId } from "../../dbClient";
+import { Repository } from "../../repository.interface";
 import { PollVoteEntity } from "./poll-vote.entity";
 import { PollVoteMapper } from "./poll-vote.mapper";
 
-export const PollVoteRepository = {
+export const PollVoteRepository: Repository<PollVoteEntity<PollType>> = {
   get: async (pollVoterId: string): Promise<PollVoteEntity<PollType>> => {
     const idSplit = pollVoterId.split(':');
     const rawData = await dbClient.get({ pk: `Poll#${idSplit[0]}`, sk: `Voter#${idSplit[1]}` }, 'PollVoters');
