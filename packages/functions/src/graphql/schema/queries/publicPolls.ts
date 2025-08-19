@@ -22,7 +22,7 @@ export const publicPollsInput = builder.inputType('PublicPollsInput', {
 });
 
 export const publicPollsResolver = (_root: any, args: { input?: { voted?: boolean | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
-  return PollService.queryPolls({
+  return PollService.queryPollDetails({
     userId: context.currentUserId,
     roleType: RoleType.Voter,
     scope: PollScope.Public,

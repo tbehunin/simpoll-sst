@@ -4,11 +4,11 @@ import { QueryRepository } from '../../../data/poll/query/poll-query.repository'
 import { PollDetailMapper } from '../mappers';
 import { QueryPollsRequest } from '../../types';
 
-export const getPollsByIds = createBatchQuery(
+export const getPollDetailsByIds = createBatchQuery(
   PollDetailRepository,
   PollDetailMapper
 );
 
-export const queryPolls = async (request: QueryPollsRequest): Promise<string[]> => {
+export const queryPollDetails = async (request: QueryPollsRequest): Promise<string[]> => {
   return QueryRepository.query(request);
 };

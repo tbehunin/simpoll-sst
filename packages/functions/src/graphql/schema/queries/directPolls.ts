@@ -22,7 +22,7 @@ export const directPollsInput = builder.inputType('DirectPollsInput', {
 });
 
 export const directPollsResolver = (_root: any, args: { input?: { voted?: boolean | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
-  return PollService.queryPolls({
+  return PollService.queryPollDetails({
     userId: context.currentUserId,
     roleType: RoleType.Voter,
     scope: PollScope.Private,
