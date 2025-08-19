@@ -1,8 +1,5 @@
 import { Repository } from '../../../data/repository.interface';
-
-type Mapper<TEntity, TDomain> = {
-  toDomainList: (entities: TEntity[]) => TDomain[];
-};
+import { Mapper } from '../mappers/mapper.interface';
 
 // Higher-order function that creates query functions
 export const createBatchQuery = <TEntity, TDomain>(
