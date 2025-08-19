@@ -3,8 +3,9 @@ import { PollResult } from "../../../models";
 import { PollResultEntity } from "../../../data/poll/result/poll-result.entity";
 import { CreatePollRequest } from "../../types";
 import { getPollTypeHandler } from "../../../handlers/pollRegistry";
+import { Mapper } from "./mapper.interface";
 
-export const PollResultMapper = {
+export const PollResultMapper: Mapper<PollResultEntity<PollType>, PollResult<PollType>> = {
   // Entity → Domain Model
   toDomain: (entity: PollResultEntity<PollType>): PollResult<PollType> => {
     const { pk, type, totalVotes, results } = entity;

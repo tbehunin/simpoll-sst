@@ -3,8 +3,9 @@ import { Poll } from "../../../models";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest } from "../../types";
 import { generateExpireTimestamp, generatePollScope } from "../../utils";
+import { Mapper } from "./mapper.interface";
 
-export const PollDetailMapper = {
+export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, Poll<PollType>> = {
   // Entity → Domain Model
   toDomain: (entity: PollDetailEntity<PollType>): Poll<PollType> => {
     const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = entity;

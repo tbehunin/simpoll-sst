@@ -4,8 +4,11 @@ import { PollVoteEntity } from "../../../data/poll/vote/poll-vote.entity";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest, VoteRequest } from "../../types";
 import { generateExpireTimestamp } from "../../utils";
+import { Mapper } from "./mapper.interface";
 
-export const PollVoterMapper = {
+export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollType>> & {
+  fromVoteRequest: (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>) => PollVoteEntity<PollType>;
+} = {
   // Entity → Domain Model
   toDomain: (entity: PollVoteEntity<PollType>): PollVoter<PollType> => {
     const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = entity;
