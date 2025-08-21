@@ -1,13 +1,13 @@
 import { PollType, PollScope } from "../../../common/types";
-import { Poll } from "../../../models";
+import { PollDetail } from "../domain";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest } from "../../types";
 import { generateExpireTimestamp, generatePollScope } from "../../utils";
 import { Mapper } from "./mapper.interface";
 
-export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, Poll<PollType>> = {
+export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<PollType>> = {
   // Entity → Domain Model
-  toDomain: (entity: PollDetailEntity<PollType>): Poll<PollType> => {
+  toDomain: (entity: PollDetailEntity<PollType>): PollDetail<PollType> => {
     const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = entity;
     return {
       pollId: pk.split('#')[1],
@@ -51,7 +51,7 @@ export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, Poll<PollType>
   },
 
   // Batch transformations
-  toDomainList: (entities: PollDetailEntity<PollType>[]): Poll<PollType>[] => {
+  toDomainList: (entities: PollDetailEntity<PollType>[]): PollDetail<PollType>[] => {
     return entities.map(PollDetailMapper.toDomain);
   },
 };

@@ -1,6 +1,6 @@
 import { UserEntity } from '../data/user/user.entity';
 import { UserRepository } from '../data/user/user.repository';
-import { User } from '../models';
+import { User } from './poll/domain';
 
 const mapToModel = (userDocs: UserEntity[]): User[] => {
   return userDocs.map((userDoc) => {
