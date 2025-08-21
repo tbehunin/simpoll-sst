@@ -15,7 +15,10 @@ const executeCreatePoll = async (request: CreatePollRequest<PollType>): Promise<
   const pollResultDoc = PollResultMapper.fromCreateRequest(pollId, request);
   const pollVoterDocs = PollVoterMapper.fromCreateRequest(pollId, request);
   
-  await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollVoterDocs]);
+  // Ensure pollVoterDocs is always treated as an array for spreading
+  const pollVoterDocsArray = Array.isArray(pollVoterDocs) ? pollVoterDocs : [pollVoterDocs];
+  
+  await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollVoterDocsArray]);
   return pollId;
 };
 
