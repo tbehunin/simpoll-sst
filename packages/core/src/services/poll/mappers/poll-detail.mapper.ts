@@ -1,7 +1,7 @@
 import { PollType, PollScope } from "../../../common/types";
 import { PollDetail } from "../domain";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
-import { CreatePollRequest } from "../../types";
+import { CreatePollRequest } from "../types";
 import { generateExpireTimestamp, generatePollScope } from "../../utils";
 import { Mapper } from "./mapper.interface";
 

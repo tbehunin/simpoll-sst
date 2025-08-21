@@ -1,6 +1,6 @@
 import { createSimpleCommand } from './command-builder';
 import { validateCreatePoll } from '../validation/poll-validation';
-import { CreatePollRequest } from '../../types';
+import { CreatePollRequest } from '../types';
 import { PollType } from '../../../common/types';
 import { PollDetailMapper, PollResultMapper, PollVoterMapper } from '../mappers';
 import { dbClient } from '../../../data/dbClient';

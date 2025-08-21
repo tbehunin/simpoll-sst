@@ -1,7 +1,7 @@
 import { createContextCommand } from './command-builder';
 import { createValidationContext } from '../validation/validation-context';
 import { validateVoteRequest } from '../validation/poll-validation';
-import { VoteRequest } from '../../types';
+import { VoteRequest } from '../types';
 import { PollType } from '../../../common/types';
 import { PollVoterMapper } from '../mappers';
 import { dbClient } from '../../../data/dbClient';

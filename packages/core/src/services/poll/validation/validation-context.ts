@@ -3,7 +3,7 @@ import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { PollVoteEntity } from "../../../data/poll/vote/poll-vote.entity";
 import { PollDetailRepository } from "../../../data/poll/detail/poll-detail.repository";
 import { PollVoteRepository } from "../../../data/poll/vote/poll-vote.repository";
-import { VoteRequest } from "../../types";
+import { VoteRequest } from "../types";
 import { generatePollVoterId } from "../../utils";
 
 export type ValidationContext = {

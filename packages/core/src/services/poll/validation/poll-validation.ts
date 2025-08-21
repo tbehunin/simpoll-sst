@@ -1,5 +1,5 @@
 import { PollType, PollScope } from "../../../common/types";
-import { VoteRequest, CreatePollRequest } from "../../types";
+import { VoteRequest, CreatePollRequest } from "../types";
 import { ValidationContext } from "./validation-context";
 
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };

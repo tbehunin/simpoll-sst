@@ -1,7 +1,7 @@
 import { PollType } from "../../../common/types";
 import { PollResult } from "../domain";
 import { PollResultEntity } from "../../../data/poll/result/poll-result.entity";
-import { CreatePollRequest } from "../../types";
+import { CreatePollRequest } from "../types";
 import { getPollTypeHandler } from "../../../handlers/pollRegistry";
 import { Mapper } from "./mapper.interface";
 
