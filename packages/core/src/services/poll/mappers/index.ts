@@ -1,3 +1,3 @@
-export { PollDetailMapper } from './poll-detail.mapper';
-export { PollVoterMapper } from './poll-voter.mapper';
-export { PollResultMapper } from './poll-result.mapper';
+export { PollDetailMapper } from '../details';
+export { PollVoterMapper } from '../voters';
+export { PollResultMapper } from '../results';

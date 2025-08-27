@@ -3,7 +3,7 @@ import { createValidationContext } from '../validation/validation-context';
 import { validateVoteRequest } from '../validation/poll-validation';
 import { VoteRequest } from '../types';
 import { PollType } from '../../../common/types';
-import { PollVoterMapper } from '../mappers';
+import { PollVoterMapper } from '../voters';
 import { dbClient } from '../../../data/dbClient';
 import { ValidationContext } from '../validation/validation-context';
 

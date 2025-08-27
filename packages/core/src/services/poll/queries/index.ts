@@ -1,3 +1,3 @@
-export { getPollDetailsByIds, queryPollDetails } from './poll-details.query';
-export { getPollResultsByIds } from './poll-results.query';
-export { getPollVotersByIds } from './poll-voters.query';
+export { getPollDetailsByIds, queryPollDetails } from '../details';
+export { getPollResultsByIds } from '../results';
+export { getPollVotersByIds } from '../voters';

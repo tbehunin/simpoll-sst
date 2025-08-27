@@ -2,7 +2,9 @@ import { createSimpleCommand } from './command-builder';
 import { validateCreatePoll } from '../validation/poll-validation';
 import { CreatePollRequest } from '../types';
 import { PollType } from '../../../common/types';
-import { PollDetailMapper, PollResultMapper, PollVoterMapper } from '../mappers';
+import { PollDetailMapper } from '../details';
+import { PollResultMapper } from '../results';
+import { PollVoterMapper } from '../voters';
 import { dbClient } from '../../../data/dbClient';
 import { v4 as uuidv4 } from 'uuid';
 

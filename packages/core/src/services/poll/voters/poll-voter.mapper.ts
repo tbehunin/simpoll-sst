@@ -1,10 +1,10 @@
 import { PollType, PollScope } from "../../../common/types";
-import { PollVoter } from "../domain";
+import { PollVoter } from "./poll-voter.domain";
 import { PollVoteEntity } from "../../../data/poll/vote/poll-vote.entity";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest, VoteRequest } from "../types";
 import { generateExpireTimestamp } from "../../utils";
-import { Mapper } from "./mapper.interface";
+import { Mapper } from "../mappers/mapper.interface";
 
 export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollType>> & {
   fromVoteRequest: (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>) => PollVoteEntity<PollType>;
