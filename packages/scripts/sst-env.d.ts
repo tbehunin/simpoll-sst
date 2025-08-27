@@ -2,42 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /* deno-fmt-ignore-file */
+
+/// <reference path="../../sst-env.d.ts" />
+
 import "sst"
 export {}
-declare module "sst" {
-  export interface Resource {
-    "Api": {
-      "type": "sst.aws.ApiGatewayV2"
-      "url": string
-    }
-    "GraphQL": {
-      "type": "sst.aws.ApiGatewayV2"
-      "url": string
-    }
-    "IdentityPool": {
-      "id": string
-      "type": "sst.aws.CognitoIdentityPool"
-    }
-    "PollsTable": {
-      "name": string
-      "type": "sst.aws.Dynamo"
-    }
-    "Seed": {
-      "type": "sst.aws.ApiGatewayV2"
-      "url": string
-    }
-    "Uploads": {
-      "name": string
-      "type": "sst.aws.Bucket"
-    }
-    "UserPool": {
-      "id": string
-      "type": "sst.aws.CognitoUserPool"
-    }
-    "UserPoolClient": {
-      "id": string
-      "secret": string
-      "type": "sst.aws.CognitoUserPoolClient"
-    }
-  }
-}

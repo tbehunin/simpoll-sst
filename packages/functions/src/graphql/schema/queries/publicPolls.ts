@@ -1,5 +1,5 @@
 import { RoleType, PollScope, PollStatus } from '@simpoll-sst/core/common/types';
-import { pollService } from '@simpoll-sst/core/services/pollService';
+import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
 import { poll } from '../types/poll';
 import { ContextType } from '../../context';
@@ -22,7 +22,7 @@ export const publicPollsInput = builder.inputType('PublicPollsInput', {
 });
 
 export const publicPollsResolver = (_root: any, args: { input?: { voted?: boolean | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
-  return pollService.queryPolls({
+  return PollService.queryPollDetails({
     userId: context.currentUserId,
     roleType: RoleType.Voter,
     scope: PollScope.Public,

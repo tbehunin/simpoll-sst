@@ -17,7 +17,7 @@ const TableName = Resource.PollsTable.name;
 const dynamoDb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const dbClient = {
-  write: async (item: any) => {
+  put: async (item: any) => {
     const params = {
       TableName,
       Item: item,

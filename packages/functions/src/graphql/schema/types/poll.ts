@@ -1,5 +1,5 @@
 import { Poll } from '@simpoll-sst/core/models';
-import { pollService } from '@simpoll-sst/core/services/pollService';
+import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { MAX_DATE } from '@simpoll-sst/core/common/constants';
 import { builder } from '../builder';
 import { pollScope, pollType, votePrivacy } from '../common/enums';
@@ -12,7 +12,7 @@ import { PollType } from '@simpoll-sst/core/common/types';
 
 export const poll = builder.loadableObject('Poll', {
   load: async (pollIds: string[]) => {
-    const polls = await pollService.getPollsByIds(pollIds);
+    const polls = await PollService.getPollDetailsByIds(pollIds);
 
     // The order of objects returned from Dynamo isn't guaranteed to be the same order as the order of id's passed in
     // so make sure that order is maintained before returning (a requirement to use DataLoader).

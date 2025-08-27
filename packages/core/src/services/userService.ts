@@ -1,8 +1,8 @@
-import { UserDoc } from '../data/types';
-import { usersDao } from '../data/usersDao';
-import { User } from '../models';
+import { UserEntity } from '../data/user/user.entity';
+import { UserRepository } from '../data/user/user.repository';
+import { User } from './poll/domain';
 
-const mapToModel = (userDocs: UserDoc[]): User[] => {
+const mapToModel = (userDocs: UserEntity[]): User[] => {
   return userDocs.map((userDoc) => {
     const { pk, username, fullName, email, bio } = userDoc;
     return { userId: pk.split('#')[1], username, fullName, email, bio };
@@ -11,7 +11,7 @@ const mapToModel = (userDocs: UserDoc[]): User[] => {
 
 export const userService = {
   getUsersByIds: async (userIds: string[]): Promise<User[]> => {
-    const result = await usersDao.batchGet(userIds);
+    const result = await UserRepository.batchGet(userIds);
     return mapToModel(result);
   },
 };
