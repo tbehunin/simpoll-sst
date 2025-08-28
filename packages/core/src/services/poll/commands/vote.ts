@@ -3,7 +3,7 @@ import { createValidationContext } from '../validation/validation-context';
 import { validateVoteRequest } from '../validation/poll-validation';
 import { VoteRequest } from '../types';
 import { PollType } from '../../../common/types';
-import { PollVoterMapper } from '../voters';
+import { PollParticipantMapper } from '../participants';
 import { dbClient } from '../../../data/dbClient';
 import { ValidationContext } from '../validation/validation-context';
 
@@ -13,8 +13,8 @@ const executeVote = async (
   context: ValidationContext
 ): Promise<void> => {
   // We already have the poll from validation context
-  const pollVoterDoc = PollVoterMapper.fromVoteRequest(context.poll!, request);
-  await dbClient.put(pollVoterDoc);
+  const pollParticipantDoc = PollParticipantMapper.fromVoteRequest(context.poll!, request);
+  await dbClient.put(pollParticipantDoc);
 };
 
 // Composed command with single DB fetch

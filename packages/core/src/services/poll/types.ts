@@ -1,4 +1,4 @@
-import { PollDetailMap, PollScope, PollStatus, PollType, PollVoteMap, RoleType, VotePrivacy } from '../../common/types';
+import { PollDetailMap, PollScope, PollStatus, PollType, PollParticipantMap, RoleType, VotePrivacy } from '../../common/types';
 
 export type QueryPollsRequest = {
   userId: string,
@@ -22,5 +22,5 @@ export type VoteRequest<T extends PollType> = {
   pollId: string
   userId: string
   type: T
-  vote: PollVoteMap[T]
+  vote: PollParticipantMap[T]
 };

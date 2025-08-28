@@ -1,7 +1,7 @@
 import { Util } from '@simpoll-sst/core/util';
 import { dbClient } from '@simpoll-sst/core/data/dbClient';
 import pollDetails from './pollDetails.json';
-import pollVoters from './pollVoters.json';
+import pollParticipants from './pollParticipants.json';
 import results from './pollResults.json';
 import comments from './comments.json';
 import users from './users.json';
@@ -17,7 +17,7 @@ export const main = Util.handler(async (event) => {
       expireTimestamp: nowPlus4Hours,
     }))
     // @ts-ignore
-    .concat(pollVoters.map((pollVote) => {
+    .concat(pollParticipants.map((pollVote) => {
       const gsisk1Split = pollVote.gsisk1.split('#');
       gsisk1Split[2] = nowPlus4Hours;
       const voteTimestamp = pollVote.voteTimestamp ? nowPlus1Min : null;

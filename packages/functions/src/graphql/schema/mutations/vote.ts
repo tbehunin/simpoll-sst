@@ -20,7 +20,7 @@ export const vote = builder.mutationField('vote', (t) =>
         pollId,
         userId: context.currentUserId,
         type,
-        vote: handler.parseVoter(multipleChoice),
+        vote: handler.parseParticipant(multipleChoice),
       };
       
       await PollService.vote(request);

@@ -36,7 +36,7 @@ export const QueryRepository = {
     const now = new Date().toISOString();
     const params = generateInitialQueryParams(skToken, userId, roleType, scope);
 
-    if (roleType === RoleType.Voter && voted !== undefined) {
+    if (roleType === RoleType.Participant && voted !== undefined) {
       params.IndexName = params.IndexName.replace(skToken, 'gsisk1');
       const votedYesNo = voted ? 'Y' : 'N';
       if (pollStatus === PollStatus.Open) {

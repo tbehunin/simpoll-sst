@@ -17,7 +17,7 @@ export interface ChoiceResult {
 export interface MultipleChoiceResult {
   choices: ChoiceResult[]
 };
-export interface MultipleChoiceVoter {
+export interface MultipleChoiceParticipant {
   selectedIndex?: number[]
 };
 
@@ -35,8 +35,8 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       users: choice.users
     }))
   }),
-  parseVoter: (voter: any): MultipleChoiceVoter => ({
-    selectedIndex: voter.selectedIndex,
+  parseParticipant: (participant: any): MultipleChoiceParticipant => ({
+    selectedIndex: participant.selectedIndex,
   }),
   buildResults: (request: CreatePollRequest<PollType>): MultipleChoiceResult => ({
     choices: request.details.choices.map(() => ({

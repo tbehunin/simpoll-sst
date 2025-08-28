@@ -4,7 +4,7 @@ import { CreatePollRequest } from '../types';
 import { PollType } from '../../../common/types';
 import { PollDetailMapper } from '../details';
 import { PollResultMapper } from '../results';
-import { PollVoterMapper } from '../voters';
+import { PollParticipantMapper } from '../participants';
 import { dbClient } from '../../../data/dbClient';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -15,12 +15,12 @@ const executeCreatePoll = async (request: CreatePollRequest<PollType>): Promise<
   
   const pollDetailDoc = PollDetailMapper.fromCreateRequest(pollId, now, request);
   const pollResultDoc = PollResultMapper.fromCreateRequest(pollId, request);
-  const pollVoterDocs = PollVoterMapper.fromCreateRequest(pollId, request);
+  const pollParticipantDocs = PollParticipantMapper.fromCreateRequest(pollId, request);
   
-  // Ensure pollVoterDocs is always treated as an array for spreading
-  const pollVoterDocsArray = Array.isArray(pollVoterDocs) ? pollVoterDocs : [pollVoterDocs];
+  // Ensure pollParticipantDocs is always treated as an array for spreading
+  const pollParticipantDocsArray = Array.isArray(pollParticipantDocs) ? pollParticipantDocs : [pollParticipantDocs];
   
-  await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollVoterDocsArray]);
+  await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollParticipantDocsArray]);
   return pollId;
 };
 
