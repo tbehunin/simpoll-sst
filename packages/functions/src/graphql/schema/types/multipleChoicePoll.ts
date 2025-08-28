@@ -2,7 +2,8 @@ import { Choice, ChoiceResult } from '@simpoll-sst/core/handlers/multipleChoiceH
 import { builder } from '../builder';
 import { mediaType } from '../common/enums';
 import { MediaAsset, PollType } from '@simpoll-sst/core/common/types';
-import { PollResult, PollParticipant } from '@simpoll-sst/core/models';
+import { PollResult } from '@simpoll-sst/core/services/poll/results/poll-result.domain';
+import { PollParticipant } from '@simpoll-sst/core/services/poll/participants/poll-participant.domain';
 import { PollDetailWithType } from '../unions/pollDetail';
 
 export const multipleChoiceDetail = builder.objectRef<PollDetailWithType<PollType.MultipleChoice>>('MultipleChoiceDetail').implement({

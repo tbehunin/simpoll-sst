@@ -17,12 +17,12 @@ export const main = Util.handler(async (event) => {
       expireTimestamp: nowPlus4Hours,
     }))
     // @ts-ignore
-    .concat(pollParticipants.map((pollVote) => {
-      const gsisk1Split = pollVote.gsisk1.split('#');
+    .concat(pollParticipants.map((pollParticipant) => {
+      const gsisk1Split = pollParticipant.gsisk1.split('#');
       gsisk1Split[2] = nowPlus4Hours;
-      const voteTimestamp = pollVote.voteTimestamp ? nowPlus1Min : null;
+      const voteTimestamp = pollParticipant.voteTimestamp ? nowPlus1Min : null;
       return {
-        ...pollVote,
+        ...pollParticipant,
         gsisk1: gsisk1Split.join('#'),
         gsisk2: nowPlus4Hours,
         voteTimestamp,
