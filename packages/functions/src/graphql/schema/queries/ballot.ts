@@ -23,7 +23,7 @@ export const ballotInput = builder.inputType('BallotInput', {
 export const ballotResolver = (_root: any, args: { input?: { pollScope?: PollScope | null } | null }, context: ContextType) => {
   return PollService.queryPollDetails({
     userId: context.currentUserId,
-    roleType: RoleType.Voter,
+    roleType: RoleType.Participant,
     scope: args.input?.pollScope || undefined,
     voted: false,
     pollStatus: PollStatus.Open,

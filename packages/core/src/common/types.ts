@@ -1,4 +1,4 @@
-import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceVoter } from "../handlers/multipleChoiceHandler";
+import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from "../handlers/multipleChoiceHandler";
 
 export enum PollType {
   MultipleChoice = 'MultipleChoice',
@@ -10,7 +10,7 @@ export enum PollType {
 
 export enum RoleType {
   Author = 'Author',
-  Voter = 'Voter',
+  Participant = 'Participant',
 };
 
 export enum PollScope {
@@ -48,6 +48,6 @@ export type PollResultMap = {
   [PollType.MultipleChoice]: MultipleChoiceResult
 };
 
-export interface PollVoteMap {
-  [PollType.MultipleChoice]: MultipleChoiceVoter
+export interface PollParticipantMap {
+  [PollType.MultipleChoice]: MultipleChoiceParticipant
 };

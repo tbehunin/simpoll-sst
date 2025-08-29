@@ -41,7 +41,7 @@ export const validateHasAccess: ContextValidator<VoteRequest<PollType>> =
 
 export const validateNotAlreadyVoted: ContextValidator<VoteRequest<PollType>> = 
   (request, context) => {
-    return !context.existingVoter?.voteTimestamp
+    return !context.existingParticipant?.voteTimestamp
       ? { isValid: true }
       : { isValid: false, errors: ['User has already voted on this poll'] };
   };

@@ -1,10 +1,10 @@
-import { User } from '@simpoll-sst/core/models';
-import { userService } from '@simpoll-sst/core/services/userService';
+import { User } from '@simpoll-sst/core/services/user/user.domain';
+import { UserService } from '@simpoll-sst/core/services/user/user.service';
 import { builder } from '../builder';
 
 export const user = builder.loadableObjectRef<User, string>('User', {
   load: async (userIds: string[]) => {
-    const users = await userService.getUsersByIds(userIds);
+    const users = await UserService.getUsersByIds(userIds);
 
     // The order of objects returned from Dynamo isn't guaranteed to be the same order as the order of id's passed in
     // so make sure that order is maintained before returning (a requirement to use DataLoader).

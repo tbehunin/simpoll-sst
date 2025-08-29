@@ -1,5 +1,5 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
-import { CreatePollRequest } from '@simpoll-sst/core/services/types';
+import { CreatePollRequest } from '@simpoll-sst/core/services/poll/types';
 import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/types';
 import { generatePollScope } from '@simpoll-sst/core/services/utils';
 import { builder } from '../builder';

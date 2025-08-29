@@ -1,4 +1,4 @@
-import { Poll } from '@simpoll-sst/core/models';
+import { PollDetail } from '@simpoll-sst/core/services/poll/details/poll-detail.domain';
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { MAX_DATE } from '@simpoll-sst/core/common/constants';
 import { builder } from '../builder';
@@ -6,8 +6,8 @@ import { pollScope, pollType, votePrivacy } from '../common/enums';
 import { user } from './user';
 import { pollDetail } from '../unions/pollDetail';
 import { pollResult } from '../unions/pollResult';
-import { pollVoter } from '../unions/pollVoter';
-import { generatePollVoterId } from '@simpoll-sst/core/services/utils';
+import { pollParticipant } from '../unions/pollParticipant';
+import { generatePollUserId } from '@simpoll-sst/core/services/utils';
 import { PollType } from '@simpoll-sst/core/common/types';
 
 export const poll = builder.loadableObject('Poll', {
@@ -41,7 +41,7 @@ export const poll = builder.loadableObject('Poll', {
     sharedWith: t.exposeStringList('sharedWith'),
     details: t.field({
       type: pollDetail,
-      resolve: (parent: Poll<PollType>) => parent,
+      resolve: (parent: PollDetail<PollType>) => parent,
     }),
     results: t.field({
       type: pollResult,
@@ -55,16 +55,16 @@ export const poll = builder.loadableObject('Poll', {
         if (poll.expireTimestamp < now || poll.userId === context.currentUserId) {
           return poll.pollId;
         }
-        const voter = await pollVoter.getDataloader(context).load(generatePollVoterId(poll.pollId, context.currentUserId));
-        return voter && voter.voted ? poll.pollId : null;
+        const participant = await pollParticipant.getDataloader(context).load(generatePollUserId(poll.pollId, context.currentUserId));
+        return participant && participant.voted ? poll.pollId : null;
       },
     }),
     vote: t.field({
-      type: pollVoter,
+      type: pollParticipant,
       nullable: true,
       resolve: (poll, args, context) => {
-        // Generate the 'pollVoterId' for the current user and poll
-        return generatePollVoterId(poll.pollId, context.currentUserId);
+        // Generate the 'pollUserId' for the current user and poll
+        return generatePollUserId(poll.pollId, context.currentUserId);
       },
     }),
   }),

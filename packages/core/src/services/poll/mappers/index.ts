@@ -1,3 +1,3 @@
 export { PollDetailMapper } from '../details';
-export { PollVoterMapper } from '../voters';
+export { PollParticipantMapper } from '../participants';
 export { PollResultMapper } from '../results';

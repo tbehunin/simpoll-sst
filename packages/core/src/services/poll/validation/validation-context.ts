@@ -1,14 +1,14 @@
 import { PollType } from "../../../common/types";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
-import { PollVoteEntity } from "../../../data/poll/vote/poll-vote.entity";
+import { PollParticipantEntity } from "../../../data/poll/participant/poll-participant.entity";
 import { PollDetailRepository } from "../../../data/poll/detail/poll-detail.repository";
-import { PollVoteRepository } from "../../../data/poll/vote/poll-vote.repository";
+import { PollParticipantRepository } from "../../../data/poll/participant/poll-participant.repository";
 import { VoteRequest } from "../types";
-import { generatePollVoterId } from "../../utils";
+import { generatePollUserId } from "../../utils";
 
 export type ValidationContext = {
   poll?: PollDetailEntity<PollType>;
-  existingVoter?: PollVoteEntity<PollType>;
+  existingParticipant?: PollParticipantEntity<PollType>;
   currentTime: string;
 };
 
@@ -19,14 +19,14 @@ export const createValidationContext = async (
   const currentTime = new Date().toISOString();
   
   // Fetch all required data in parallel (single round-trip)
-  const [poll, existingVoter] = await Promise.all([
+  const [poll, existingParticipant] = await Promise.all([
     PollDetailRepository.get(request.pollId),
-    PollVoteRepository.get(generatePollVoterId(request.pollId, request.userId))
+    PollParticipantRepository.get(generatePollUserId(request.pollId, request.userId))
   ]);
 
   return {
     poll,
-    existingVoter,
+    existingParticipant: existingParticipant,
     currentTime,
   };
 };

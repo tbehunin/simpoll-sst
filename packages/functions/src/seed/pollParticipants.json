@@ -1,10 +1,10 @@
 [
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000001",
-    "sk": "Voter#user2",
+    "sk": "Participant#user2",
     "type": "MultipleChoice",
-    "gsipk1": "User#user2#Voter#Private",
-    "gsipk2": "User#user2#Voter",
+    "gsipk1": "User#user2#Participant#Private",
+    "gsipk2": "User#user2#Participant",
     "gsisk1": "Voted#Y#2023-01-02T08:00:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
     "vote": {
@@ -14,37 +14,37 @@
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000003",
-    "sk": "Voter#user1",
+    "sk": "Participant#user1",
     "type": "MultipleChoice",
-    "gsipk1": "User#user1#Voter#Private",
-    "gsipk2": "User#user1#Voter",
+    "gsipk1": "User#user1#Participant#Private",
+    "gsipk2": "User#user1#Participant",
     "gsisk1": "Voted#N#2023-01-02T08:00:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z"
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000004",
-    "sk": "Voter#user1",
+    "sk": "Participant#user1",
     "type": "MultipleChoice",
-    "gsipk1": "User#user1#Voter#Public",
-    "gsipk2": "User#user1#Voter",
+    "gsipk1": "User#user1#Participant#Public",
+    "gsipk2": "User#user1#Participant",
     "gsisk1": "Voted#N#2023-01-01T08:01:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z"
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000005",
-    "sk": "Voter#user3",
+    "sk": "Participant#user3",
     "type": "MultipleChoice",
-    "gsipk1": "User#user3#Voter#Private",
-    "gsipk2": "User#user3#Voter",
+    "gsipk1": "User#user3#Participant#Private",
+    "gsipk2": "User#user3#Participant",
     "gsisk1": "Voted#N#2023-01-02T08:00:00.000Z",
     "gsisk2": "2023-01-01T08:00:00.000Z"
   },
   {
     "pk": "Poll#00000000-0000-0000-0000-000000000006",
-    "sk": "Voter#user1",
+    "sk": "Participant#user1",
     "type": "MultipleChoice",
-    "gsipk1": "User#user1#Voter#Public",
-    "gsipk2": "User#user1#Voter",
+    "gsipk1": "User#user1#Participant#Public",
+    "gsipk2": "User#user1#Participant",
     "gsisk1": "Voted#Y#2023-01-01T08:01:00.000Z",
     "gsisk2": "2023-01-01T08:01:00.000Z",
     "vote": {

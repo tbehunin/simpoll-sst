@@ -1,3 +1,3 @@
 import './pollDetail';
 import './pollResult';
-import './pollVoter';
+import './pollParticipant';

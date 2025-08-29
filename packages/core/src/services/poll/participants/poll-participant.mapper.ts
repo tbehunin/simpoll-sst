@@ -1,16 +1,16 @@
 import { PollType, PollScope } from "../../../common/types";
-import { PollVoter } from "./poll-voter.domain";
-import { PollVoteEntity } from "../../../data/poll/vote/poll-vote.entity";
+import { PollParticipant } from "./poll-participant.domain";
+import { PollParticipantEntity } from "../../../data/poll/participant/poll-participant.entity";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest, VoteRequest } from "../types";
 import { generateExpireTimestamp } from "../../utils";
 import { Mapper } from "../mappers/mapper.interface";
 
-export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollType>> & {
-  fromVoteRequest: (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>) => PollVoteEntity<PollType>;
+export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, PollParticipant<PollType>> & {
+  fromVoteRequest: (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>) => PollParticipantEntity<PollType>;
 } = {
   // Entity → Domain Model
-  toDomain: (entity: PollVoteEntity<PollType>): PollVoter<PollType> => {
+  toDomain: (entity: PollParticipantEntity<PollType>): PollParticipant<PollType> => {
     const { pk, sk, type, gsipk1, gsisk1, voteTimestamp, vote } = entity;
     return {
       pollId: pk.split('#')[1],
@@ -28,16 +28,16 @@ export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollTyp
   fromCreateRequest: (
     pollId: string, 
     request: CreatePollRequest<PollType>
-  ): PollVoteEntity<PollType>[] => {
+  ): PollParticipantEntity<PollType>[] => {
     if (request.sharedWith.length === 0) return [];
     
     const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
     return request.sharedWith.map((userId) => ({
       pk: `Poll#${pollId}`,
-      sk: `Voter#${userId}`,
+      sk: `Participant#${userId}`,
       type: request.type,
-      gsipk1: `User#${userId}#Voter#Private`,
-      gsipk2: `User#${userId}#Voter`,
+      gsipk1: `User#${userId}#Participant#Private`,
+      gsipk2: `User#${userId}#Participant`,
       gsisk1: `Voted:N#${expireTimestamp}`,
       gsisk2: expireTimestamp,
     }));
@@ -47,14 +47,14 @@ export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollTyp
   fromVoteRequest: (
     poll: PollDetailEntity<PollType>, 
     voteRequest: VoteRequest<PollType>
-  ): PollVoteEntity<PollType> => {
+  ): PollParticipantEntity<PollType> => {
     const expireTimestamp = generateExpireTimestamp(poll.expireTimestamp);
     return {
       pk: poll.pk,
-      sk: `Voter#${voteRequest.userId}`,
+      sk: `Participant#${voteRequest.userId}`,
       type: poll.type,
-      gsipk1: `User#${voteRequest.userId}#Voter#${poll.scope}`,
-      gsipk2: `Poll#${voteRequest.userId}#Voter`,
+      gsipk1: `User#${voteRequest.userId}#Participant#${poll.scope}`,
+      gsipk2: `Poll#${voteRequest.userId}#Participant`,
       gsisk1: `Voted#Y#${expireTimestamp}`,
       gsisk2: expireTimestamp,
       voteTimestamp: new Date().toISOString(),
@@ -63,7 +63,7 @@ export const PollVoterMapper: Mapper<PollVoteEntity<PollType>, PollVoter<PollTyp
   },
 
   // Batch transformations
-  toDomainList: (entities: PollVoteEntity<PollType>[]): PollVoter<PollType>[] => {
-    return entities.map(PollVoterMapper.toDomain);
+  toDomainList: (entities: PollParticipantEntity<PollType>[]): PollParticipant<PollType>[] => {
+    return entities.map(PollParticipantMapper.toDomain);
   },
 };
