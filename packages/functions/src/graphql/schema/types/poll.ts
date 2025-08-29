@@ -1,4 +1,4 @@
-import { Poll } from '@simpoll-sst/core/models';
+import { PollDetail } from '@simpoll-sst/core/services/poll/details/poll-detail.domain';
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { MAX_DATE } from '@simpoll-sst/core/common/constants';
 import { builder } from '../builder';
@@ -41,7 +41,7 @@ export const poll = builder.loadableObject('Poll', {
     sharedWith: t.exposeStringList('sharedWith'),
     details: t.field({
       type: pollDetail,
-      resolve: (parent: Poll<PollType>) => parent,
+      resolve: (parent: PollDetail<PollType>) => parent,
     }),
     results: t.field({
       type: pollResult,

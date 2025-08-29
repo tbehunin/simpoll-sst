@@ -8,7 +8,7 @@ export const PollResultMapper = {
     return rawData.map((poll) => {
       const handler = getPollTypeHandler(poll.type);
       return {
-        ...PollResultMapper.toPollResultEntityBase(rawData),
+        ...PollResultMapper.toPollResultEntityBase(poll),
         results: handler.parseResults(poll.results),
       };
     });
