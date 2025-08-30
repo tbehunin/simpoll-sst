@@ -5,6 +5,7 @@ import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest, VoteRequest } from "../types";
 import { generateExpireTimestamp } from "../../utils";
 import { Mapper } from "../mappers/mapper.interface";
+import { UpdateRequest } from "../../../data/dbClient";
 
 export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, PollParticipant<PollType>> & {
   fromVoteRequest: (poll: PollDetailEntity<PollType>, voteRequest: VoteRequest<PollType>) => PollParticipantEntity<PollType>;
@@ -66,4 +67,17 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
   toDomainList: (entities: PollParticipantEntity<PollType>[]): PollParticipant<PollType>[] => {
     return entities.map(PollParticipantMapper.toDomain);
   },
+};
+
+const buildPollResultUpdateRequest = (pollVoterDoc: PollParticipantEntity<PollType>): UpdateRequest => {
+  return {
+    Key: {
+      pk: pollVoterDoc.pk,
+      sk: 'Results',
+    },
+    UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
+    ExpressionAttributeValues: {
+      ':inc': 1,
+    },
+  };
 };
