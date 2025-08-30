@@ -42,7 +42,7 @@ table.subscribe("VoteSubscription", "packages/functions/src/voteSubscription/han
           S: [{'prefix': 'Poll#'}],
         },
         sk: {
-          S: [{'prefix': 'Voter#'}],
+          S: [{'prefix': 'Participant#'}],
         },
       },
       OldImage: {
