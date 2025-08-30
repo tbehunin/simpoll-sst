@@ -17,7 +17,7 @@ export const PollParticipantMapper = {
     const { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp } = rawData;
     return { pk, sk, type, gsipk1, gsipk2, gsisk1, gsisk2, voteTimestamp };
   },
-  parseStreamImage: (image: Record<string, any>): PollParticipantEntity<PollType> => {
+  voteStreamToPollParticipantEntity: (image: Record<string, any>): PollParticipantEntity<PollType> => {
     const handler = getPollTypeHandler(image.type.S as PollType);
     return {
       pk: image.pk.S,

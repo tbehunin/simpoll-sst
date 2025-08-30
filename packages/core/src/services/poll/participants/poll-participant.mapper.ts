@@ -69,15 +69,15 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
   },
 };
 
-const buildPollResultUpdateRequest = (pollVoterDoc: PollParticipantEntity<PollType>): UpdateRequest => {
-  return {
-    Key: {
-      pk: pollVoterDoc.pk,
-      sk: 'Results',
-    },
-    UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
-    ExpressionAttributeValues: {
-      ':inc': 1,
-    },
-  };
-};
+// const buildPollResultUpdateRequest = (pollVoterDoc: PollParticipantEntity<PollType>): UpdateRequest => {
+//   return {
+//     Key: {
+//       pk: pollVoterDoc.pk,
+//       sk: 'Results',
+//     },
+//     UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
+//     ExpressionAttributeValues: {
+//       ':inc': 1,
+//     },
+//   };
+// };

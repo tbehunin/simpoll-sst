@@ -1,14 +1,11 @@
-import { pollVotersDao } from "@simpoll-sst/core/data/pollVotersDao";
+import { PollParticipantMapper } from "@simpoll-sst/core/data/poll/participant/poll-participant.mapper";
 import { Util } from "@simpoll-sst/core/util";
 import { DynamoDBStreamEvent } from "aws-lambda";
 
-// interface Foo {
-//   Records:
-// }
 export const main = Util.handler(async (event, context) => {
   (<DynamoDBStreamEvent>event).Records.forEach(record => {
-    const voterDoc = pollVotersDao.parseStreamImage(record.dynamodb?.NewImage ?? {});
-    
+    const pollParticipantEntity = PollParticipantMapper.voteStreamToPollParticipantEntity(record.dynamodb?.NewImage ?? {});
+    console.log('*************** pollParticipantEntity ***************', JSON.stringify(pollParticipantEntity, null, 2));
   });
 
   // 1. Get the type from the event object
@@ -30,7 +27,8 @@ export const main = Util.handler(async (event, context) => {
   // - Need to bump the totalVotes count
   // - Need to update the results object
   //   - Will need to know if the poll is public or private
-  console.log('*************** event ***************', JSON.stringify(event, null, 2));
-  console.log('***************context ***************', JSON.stringify(context, null, 2));
+
+  // console.log('*************** event ***************', JSON.stringify(event, null, 2));
+  // console.log('*************** context ***************', JSON.stringify(context, null, 2));
   return "Hello, world!";
 });

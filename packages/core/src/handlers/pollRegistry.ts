@@ -5,7 +5,6 @@ import { multipleChoiceHandler } from "./multipleChoiceHandler";
 
 
 export interface PollTypeHandler<T extends PollType> {
-
   parseDetails(details: any): PollDetailMap[T];
   parseResults(results: any): PollResultMap[T];
   parseParticipant(Participant: any): PollParticipantMap[T];
