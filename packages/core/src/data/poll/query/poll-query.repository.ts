@@ -1,8 +1,7 @@
-import { PollScope, PollStatus, RoleType } from '../common/types';
-import { MAX_DATE, MIN_DATE } from '../common/constants';
-import { dbClient } from './dbClient';
-import { QueryPollsRequest } from '../services/types';
-
+import { MAX_DATE, MIN_DATE } from "../../../common/constants";
+import { RoleType, PollScope, PollStatus } from "../../../common/types";
+import { QueryPollsRequest } from "../../../services/poll/types";
+import { dbClient } from "../../dbClient";
 
 type QueryParams = {
   IndexName: string
@@ -31,13 +30,13 @@ const generateInitialQueryParams = (skToken: string, userId: string, roleType: R
   };
 };
 
-export const pollQueryDao = {
+export const QueryRepository = {
   query: async ({ userId, roleType, scope, voted, pollStatus }: QueryPollsRequest): Promise<string[]> => {
     const skToken = '[SKTOKEN]';
     const now = new Date().toISOString();
     const params = generateInitialQueryParams(skToken, userId, roleType, scope);
 
-    if (roleType === RoleType.Voter && voted !== undefined) {
+    if (roleType === RoleType.Participant && voted !== undefined) {
       params.IndexName = params.IndexName.replace(skToken, 'gsisk1');
       const votedYesNo = voted ? 'Y' : 'N';
       if (pollStatus === PollStatus.Open) {

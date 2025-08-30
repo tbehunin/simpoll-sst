@@ -1,15 +1,16 @@
-import { PollDetailsMap, PollResultsMap, PollType, PollVoterMap } from "../common/types";
-import { CreatePollRequest } from "../services/types";
+import { PollDetailMap, PollResultMap, PollType, PollParticipantMap } from "../common/types";
+import { CreatePollRequest } from "../services/poll/types";
 import { multipleChoiceHandler } from "./multipleChoiceHandler";
 
 
 
 export interface PollTypeHandler<T extends PollType> {
-  parseDetails(details: any): PollDetailsMap[T];
-  parseResults(results: any): PollResultsMap[T];
-  parseVoter(voter: any): PollVoterMap[T];
-  parseVoteStream(voteImage: any): PollVoterMap[T];
-  buildResults(request: CreatePollRequest<PollType>): PollResultsMap[T];
+
+  parseDetails(details: any): PollDetailMap[T];
+  parseResults(results: any): PollResultMap[T];
+  parseParticipant(Participant: any): PollParticipantMap[T];
+  parseVoteStream(voteImage: any): PollParticipantMap[T];
+  buildResults(request: CreatePollRequest<PollType>): PollResultMap[T];
 };
 
 const pollRegistry: Partial<Record<PollType, PollTypeHandler<PollType>>> = {};
