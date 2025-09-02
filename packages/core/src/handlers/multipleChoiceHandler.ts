@@ -44,7 +44,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       users: []
     }))
   }),
-  parseVoteStream: (voteImage: any): MultipleChoiceVoter => ({
+  parseVoteStream: (voteImage: any): MultipleChoiceParticipant => ({
     selectedIndex: (voteImage?.M?.selectedIndex?.L || []).map((item: any) => parseInt(item.N, 10)),
   }),
 };

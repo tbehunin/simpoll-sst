@@ -33,7 +33,7 @@ export const table = new sst.aws.Dynamo('PollsTable', {
   },
   stream: 'new-and-old-images',
 });
-table.subscribe("VoteSubscription", "packages/functions/src/voteSubscription/handler.main", {
+table.subscribe("VoteAggregator", "packages/functions/src/vote-aggregator/handler.main", {
   filters: [{
     eventName: ["MODIFY"],
     dynamodb: {

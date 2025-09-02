@@ -1,17 +1,15 @@
-import { ValidationContext } from "../validation/validation-context";
-
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
-type ContextCreator<T> = (request: T) => Promise<ValidationContext>;
-type ContextValidator<T> = (request: T, context: ValidationContext) => ValidationResult;
-type ContextExecutor<TRequest, TResult> = (request: TRequest, context: ValidationContext) => Promise<TResult>;
+type ContextCreator<T, TContext> = (request: T) => Promise<TContext>;
+type ContextValidator<T, TContext> = (request: T, context: TContext) => ValidationResult;
+type ContextExecutor<TRequest, TResult, TContext> = (request: TRequest, context: TContext) => Promise<TResult>;
 type SimpleValidator<T> = (request: T) => Promise<ValidationResult>;
 type SimpleExecutor<TRequest, TResult> = (request: TRequest) => Promise<TResult>;
 
 // Optimized command builder - single data fetch, pure validation, efficient execution
-export const createContextCommand = <TRequest, TResult>(
-  createContext: ContextCreator<TRequest>,
-  validator: ContextValidator<TRequest>,
-  executor: ContextExecutor<TRequest, TResult>
+export const createContextCommand = <TRequest, TResult, TContext>(
+  createContext: ContextCreator<TRequest, TContext>,
+  validator: ContextValidator<TRequest, TContext>,
+  executor: ContextExecutor<TRequest, TResult, TContext>
 ) => async (request: TRequest): Promise<TResult> => {
   // 1. Fetch all required data once
   const context = await createContext(request);
