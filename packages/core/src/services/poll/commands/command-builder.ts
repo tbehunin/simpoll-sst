@@ -24,19 +24,3 @@ export const createContextCommand = <TRequest, TResult, TContext>(
   // 3. Execute with context (may reuse fetched data)
   return executor(request, context);
 };
-
-// Simple command builder for commands that don't need context
-export const createSimpleCommand = <TRequest, TResult>(
-  validator: SimpleValidator<TRequest>,
-  executor: SimpleExecutor<TRequest, TResult>
-) => async (request: TRequest): Promise<TResult> => {
-  // 1. Run validation
-  const validationResult = await validator(request);
-  
-  if (!validationResult.isValid) {
-    throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
-  }
-  
-  // 2. Execute command
-  return executor(request);
-};
