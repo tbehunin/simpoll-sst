@@ -36,7 +36,7 @@ const executeAggregateVote = async (
   const newTotalVotes = (currentResults.totalVotes || 0) + 1;
 
   // Update the database atomically
-  await dbClient.update(
+  await dbClient.updateItem(
     { pk: `Poll#${pollId}`, sk: 'Results' },
     'SET totalVotes = :totalVotes, results = :results',
     {
