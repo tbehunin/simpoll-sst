@@ -1,5 +1,5 @@
 import { PollDetailMap, PollResultMap, PollType, PollParticipantMap } from "../common/types";
-import { CreatePollRequest } from "../services/poll/types";
+import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
 import { multipleChoiceHandler } from "./multipleChoiceHandler";
 
 

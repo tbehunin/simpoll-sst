@@ -1,4 +1,4 @@
-import { PollDetailMap, PollScope, PollStatus, PollType, PollParticipantMap, RoleType, VotePrivacy } from '../../common/types';
+import { PollScope, PollStatus, RoleType } from '../../common/types';
 
 export type QueryPollsRequest = {
   userId: string,
@@ -6,21 +6,4 @@ export type QueryPollsRequest = {
   scope?: PollScope,
   voted?: boolean,
   pollStatus?: PollStatus,
-};
-
-export type CreatePollRequest<T extends PollType> = {
-  userId: string
-  type: T
-  title: string
-  expireTimestamp?: string
-  sharedWith: string[]
-  votePrivacy: VotePrivacy
-  details: PollDetailMap[T]
-};
-
-export type VoteRequest<T extends PollType> = {
-  pollId: string
-  userId: string
-  type: T
-  vote: PollParticipantMap[T]
 };

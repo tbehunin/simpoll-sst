@@ -1,5 +1,5 @@
 import { MediaAsset, PollType } from "../common/types";
-import { CreatePollRequest } from "../services/poll/types";
+import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
 import { PollTypeHandler } from "./pollRegistry";
 
 export interface Choice {

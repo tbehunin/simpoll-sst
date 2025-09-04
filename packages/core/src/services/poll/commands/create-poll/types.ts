@@ -1,4 +1,11 @@
-import { PollType } from '../../../../common/types';
+import { PollType, VotePrivacy, PollDetailMap } from "../../../../common/types";
 
-// Re-export from main types file for domain cohesion
-export type { CreatePollRequest } from '../../types';
+export type CreatePollRequest<T extends PollType> = {
+  userId: string
+  type: T
+  title: string
+  expireTimestamp?: string
+  sharedWith: string[]
+  votePrivacy: VotePrivacy
+  details: PollDetailMap[T]
+};
