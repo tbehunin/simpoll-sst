@@ -1,6 +1,6 @@
 import { PollType, PollScope } from "../../../common/types";
 import { PollParticipant } from "./poll-participant.domain";
-import { PollParticipantEntity } from "../../../data/poll/participant/poll-participant.entity";
+import { PollParticipantEntity } from "../../../common/poll-participant.entity";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
 import { CreatePollRequest } from '../commands/create-poll/types';
 import { VoteRequest } from "../commands/vote/types";

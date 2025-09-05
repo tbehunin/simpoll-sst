@@ -1,6 +1,6 @@
 import { PollType } from "../../../common/types";
 import { getPollTypeHandler } from "../../../handlers/pollRegistry";
-import { PollParticipantEntity, PollParticipantEntityBase } from "./poll-participant.entity";
+import { PollParticipantEntity, PollParticipantEntityBase } from "../../../common/poll-participant.entity";
 
 export const PollParticipantMapper = {
   toPollParticipantEntity: (rawData: Record<string, any>[] | undefined): PollParticipantEntity<PollType>[] => {
