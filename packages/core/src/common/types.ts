@@ -51,3 +51,10 @@ export type PollResultMap = {
 export interface PollParticipantMap {
   [PollType.MultipleChoice]: MultipleChoiceParticipant
 };
+
+export const parsePollType = (typeStr?: string) => {
+  const pollType = Object.values(PollType).find(type => type === typeStr);
+  if (!pollType) throw new Error(`Unknown poll type: ${typeStr}`);
+
+  return pollType;
+};
