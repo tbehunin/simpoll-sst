@@ -8,30 +8,34 @@ export const validateAggregateVote = (
   request: AggregateVoteRequest,
   context: AggregateVoteValidationContext
 ): ValidationResult => {
-  const { pollParticipant, voteStreamData } = request;
+  const { participant } = request;
   const errors: string[] = [];
 
-  if (!pollParticipant?.pollId) {
+  if (!participant.pollId) {
     errors.push('Poll ID is required');
   }
 
-  if (!pollParticipant?.userId) {
+  if (!participant.userId) {
     errors.push('User ID is required');
   }
 
-  if (!pollParticipant?.voted) {
-    errors.push('Participant has not voted');
+  if (!participant.type) {
+    errors.push('Poll type is required');
   }
 
-  if (!voteStreamData) {
-    errors.push('Vote stream data is required');
+  if (!participant.scope) {
+    errors.push('Poll scope is required');
+  }
+
+  if (!participant.vote) {
+    errors.push('Vote data is required');
   }
 
   if (!context.pollResults) {
     errors.push('Poll results not found');
   }
 
-  return errors.length === 0 
+  return errors.length === 0
     ? { isValid: true }
     : { isValid: false, errors };
 };

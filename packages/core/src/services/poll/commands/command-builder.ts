@@ -2,8 +2,6 @@ type ValidationResult = { isValid: true } | { isValid: false; errors: string[] }
 type ContextCreator<T, TContext> = (request: T) => Promise<TContext>;
 type ContextValidator<T, TContext> = (request: T, context: TContext) => ValidationResult;
 type ContextExecutor<TRequest, TResult, TContext> = (request: TRequest, context: TContext) => Promise<TResult>;
-type SimpleValidator<T> = (request: T) => Promise<ValidationResult>;
-type SimpleExecutor<TRequest, TResult> = (request: TRequest) => Promise<TResult>;
 
 // Optimized command builder - single data fetch, pure validation, efficient execution
 export const createContextCommand = <TRequest, TResult, TContext>(

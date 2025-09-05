@@ -5,27 +5,28 @@ import { AggregateVoteRequest } from './types';
 import { PollType, PollScope } from '../../../../common/types';
 import { getPollTypeHandler } from '../../../../handlers/pollRegistry';
 import { dbClient } from '../../../../data/dbClient';
-import { MultipleChoiceResult, MultipleChoiceParticipant } from '../../../../handlers/multipleChoiceHandler';
+import { MultipleChoiceResult } from '../../../../handlers/multipleChoiceHandler';
 
 // Pure executor function
 const executeAggregateVote = async (
   request: AggregateVoteRequest,
   context: AggregateVoteValidationContext
 ): Promise<void> => {
-  const { pollParticipant, voteStreamData } = request;
-  const { pollId, type, userId, scope } = pollParticipant;
+  const { participant } = request;
+  const { pollId, userId, type, scope, vote } = participant;
 
-  // Get the correct handler and parse vote data
+  // Get the correct handler - no more stream parsing needed
   const handler = getPollTypeHandler(type);
-  const parsedVote = handler.parseVoteStream(voteStreamData);
 
   // Use poll results from context (already fetched during validation)
   const currentResults = context.pollResults!;
 
   // Parse current results and aggregate the new vote
   const currentParsedResults = handler.parseResults(currentResults.results);
-  const updatedResults = aggregateVoteByType(type, currentParsedResults, parsedVote, userId, scope);
   
+  // voteData is already parsed by the handler layer
+  const updatedResults = aggregateVoteByType(type, currentParsedResults, vote, userId, scope);
+
   // Update total votes count
   const newTotalVotes = (currentResults.totalVotes || 0) + 1;
 
@@ -44,7 +45,7 @@ const executeAggregateVote = async (
 const aggregateVoteByType = (
   type: PollType,
   currentResults: any,
-  vote: any,
+  voteData: any,
   userId: string,
   scope: PollScope
 ): any => {
@@ -52,7 +53,7 @@ const aggregateVoteByType = (
     case PollType.MultipleChoice:
       return aggregateMultipleChoiceVote(
         currentResults as MultipleChoiceResult,
-        vote as MultipleChoiceParticipant,
+        voteData,
         userId,
         scope
       );
@@ -64,15 +65,15 @@ const aggregateVoteByType = (
 // Pure function for multiple choice vote aggregation
 const aggregateMultipleChoiceVote = (
   currentResults: MultipleChoiceResult,
-  vote: MultipleChoiceParticipant,
+  voteData: any,
   userId: string,
   scope: PollScope
 ): MultipleChoiceResult => {
   const updatedChoices = [...currentResults.choices];
 
-  // Process each selected choice
-  if (vote.selectedIndex) {
-    vote.selectedIndex.forEach(choiceIndex => {
+  // Process each selected choice - voteData.selectedChoices is already parsed
+  if (voteData.selectedChoices) {
+    voteData.selectedChoices.forEach((choiceIndex: number) => {
       if (choiceIndex >= 0 && choiceIndex < updatedChoices.length) {
         // Increment vote count
         updatedChoices[choiceIndex].votes += 1;

@@ -13,10 +13,10 @@ export const createAggregateVoteContext = async (
   request: AggregateVoteRequest
 ): Promise<AggregateVoteValidationContext> => {
   const currentTime = new Date().toISOString();
-  const { pollParticipant } = request;
+  const { participant } = request;
   
   // Fetch poll results for aggregation
-  const pollResults = await pollResultRepository.get(pollParticipant.pollId);
+  const pollResults = await pollResultRepository.get(participant.pollId);
 
   return {
     currentTime,
