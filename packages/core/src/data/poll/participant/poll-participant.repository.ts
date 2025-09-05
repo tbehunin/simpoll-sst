@@ -1,7 +1,7 @@
 import { PollType } from "../../../common/types";
 import { dbClient, DbId } from "../../dbClient";
 import { Repository } from "../../repository.interface";
-import { PollParticipantEntity } from "./poll-participant.entity";
+import { PollParticipantEntity } from "../../../common/poll-participant.entity";
 import { PollParticipantMapper } from "./poll-participant.mapper";
 
 export const PollParticipantRepository: Repository<PollParticipantEntity<PollType>> = {

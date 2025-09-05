@@ -1,5 +1,5 @@
 import { MediaAsset, PollType } from "../common/types";
-import { CreatePollRequest } from "../services/poll/types";
+import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
 import { PollTypeHandler } from "./pollRegistry";
 
 export interface Choice {
@@ -26,7 +26,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
     multiSelect: details.multiSelect,
     choices: details.choices.map((choice: any) => ({
       text: choice.text,
-      ...(choice.media && {media: choice.media}) // Handle optional property
+      ...(choice.media && { media: choice.media }) // Handle optional property
     }))
   }),
   parseResults: (results: any): MultipleChoiceResult => ({
@@ -43,5 +43,8 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       votes: 0,
       users: []
     }))
+  }),
+  parseVoteStream: (voteStream: any): MultipleChoiceParticipant => ({
+    selectedIndex: (voteStream?.M?.selectedIndex?.L || []).map((item: any) => parseInt(item.N, 10)),
   }),
 };
