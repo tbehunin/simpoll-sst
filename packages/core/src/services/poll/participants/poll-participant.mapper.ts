@@ -68,16 +68,3 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
     return entities.map(PollParticipantMapper.toDomain);
   },
 };
-
-// const buildPollResultUpdateRequest = (pollVoterDoc: PollParticipantEntity<PollType>): UpdateRequest => {
-//   return {
-//     Key: {
-//       pk: pollVoterDoc.pk,
-//       sk: 'Results',
-//     },
-//     UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
-//     ExpressionAttributeValues: {
-//       ':inc': 1,
-//     },
-//   };
-// };
