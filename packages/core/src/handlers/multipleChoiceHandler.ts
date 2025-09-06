@@ -53,24 +53,27 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       throw new Error('No choices selected for vote aggregation');
     }
 
-    const updateExpressions: string[] = [];
+    const addExpressions: string[] = [];
+    const setExpressions: string[] = [];
     const expressionAttributeValues: any = {};
     const expressionAttributeNames: any = {};
 
     // ADD operation for totalVotes increment
-    updateExpressions.push('ADD totalVotes :inc');
+    addExpressions.push('totalVotes :inc');
     expressionAttributeValues[':inc'] = 1;
 
     // Process each selected choice
     vote.selectedIndex.forEach((choiceIndex, i) => {
       // ADD operation for vote count (atomic increment)
-      updateExpressions.push(`ADD #choice${i}_votes :inc`);
-      expressionAttributeNames[`#choice${i}_votes`] = `results.choices[${choiceIndex}].votes`;
+      addExpressions.push(`#results.#choices[${choiceIndex}].#votes :inc`);
+      expressionAttributeNames['#results'] = 'results';
+      expressionAttributeNames['#choices'] = 'choices';
+      expressionAttributeNames['#votes'] = 'votes';
       
       // list_append for users array (only for private polls)
       if (scope === PollScope.Private) {
-        updateExpressions.push(`SET #choice${i}_users = list_append(if_not_exists(#choice${i}_users, :empty_list), :user${i})`);
-        expressionAttributeNames[`#choice${i}_users`] = `results.choices[${choiceIndex}].users`;
+        setExpressions.push(`#results.#choices[${choiceIndex}].#users = list_append(if_not_exists(#results.#choices[${choiceIndex}].#users, :empty_list), :user${i})`);
+        expressionAttributeNames['#users'] = 'users';
         expressionAttributeValues[`:user${i}`] = [userId];
       }
     });
@@ -80,9 +83,20 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       expressionAttributeValues[':empty_list'] = [];
     }
 
+    // Build the UpdateExpression with proper separation
+    const updateExpressionParts: string[] = [];
+    
+    if (addExpressions.length > 0) {
+      updateExpressionParts.push(`ADD ${addExpressions.join(', ')}`);
+    }
+    
+    if (setExpressions.length > 0) {
+      updateExpressionParts.push(`SET ${setExpressions.join(', ')}`);
+    }
+
     return {
       Key: { pk: `Poll#${pollId}`, sk: 'Results' },
-      UpdateExpression: updateExpressions.join(', '),
+      UpdateExpression: updateExpressionParts.join(' '),
       ExpressionAttributeValues: expressionAttributeValues,
       ExpressionAttributeNames: expressionAttributeNames
     };
