@@ -31,6 +31,39 @@ export const table = new sst.aws.Dynamo('PollsTable', {
       projection: 'keys-only',
     },
   },
+  stream: 'new-and-old-images',
+});
+
+// Create the vote aggregator function with explicit table link
+export const voteAggregatorFunction = new sst.aws.Function("VoteAggregator", {
+  handler: "packages/functions/src/vote-aggregator/handler.main",
+  link: [table]
+});
+
+table.subscribe("VoteAggregator", voteAggregatorFunction.arn, {
+  filters: [{
+    eventName: ["MODIFY"],
+    dynamodb: {
+      Keys: {
+        pk: {
+          S: [{'prefix': 'Poll#'}],
+        },
+        sk: {
+          S: [{'prefix': 'Participant#'}],
+        },
+      },
+      OldImage: {
+        gsisk1: {
+          S: [{'prefix': 'Voted#N#'}],
+        },
+      },
+      NewImage: {
+        gsisk1: {
+          S: [{'prefix': 'Voted#Y#'}],
+        },
+      },
+    },
+  }],
 });
   
   // Create an S3 bucket

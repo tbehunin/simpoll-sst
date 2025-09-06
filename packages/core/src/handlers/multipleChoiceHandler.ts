@@ -1,6 +1,7 @@
-import { MediaAsset, PollType } from "../common/types";
-import { CreatePollRequest } from "../services/poll/types";
+import { MediaAsset, PollType, PollScope } from "../common/types";
+import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
 import { PollTypeHandler } from "./pollRegistry";
+import { UpdateRequest } from "../data/dbClient";
 
 export interface Choice {
   text: string
@@ -26,7 +27,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
     multiSelect: details.multiSelect,
     choices: details.choices.map((choice: any) => ({
       text: choice.text,
-      ...(choice.media && {media: choice.media}) // Handle optional property
+      ...(choice.media && { media: choice.media }) // Handle optional property
     }))
   }),
   parseResults: (results: any): MultipleChoiceResult => ({
@@ -44,4 +45,60 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       users: []
     }))
   }),
+  parseVoteStream: (voteStream: any): MultipleChoiceParticipant => ({
+    selectedIndex: (voteStream?.M?.selectedIndex?.L || []).map((item: any) => parseInt(item.N, 10)),
+  }),
+  buildAggregateVoteUpdateRequest: (pollId: string, userId: string, scope: PollScope, vote: MultipleChoiceParticipant): UpdateRequest => {
+    if (!vote?.selectedIndex || vote.selectedIndex.length === 0) {
+      throw new Error('No choices selected for vote aggregation');
+    }
+
+    const addExpressions: string[] = [];
+    const setExpressions: string[] = [];
+    const expressionAttributeValues: any = {};
+    const expressionAttributeNames: any = {};
+
+    // ADD operation for totalVotes increment
+    addExpressions.push('totalVotes :inc');
+    expressionAttributeValues[':inc'] = 1;
+
+    // Process each selected choice
+    vote.selectedIndex.forEach((choiceIndex, i) => {
+      // ADD operation for vote count (atomic increment)
+      addExpressions.push(`#results.#choices[${choiceIndex}].#votes :inc`);
+      expressionAttributeNames['#results'] = 'results';
+      expressionAttributeNames['#choices'] = 'choices';
+      expressionAttributeNames['#votes'] = 'votes';
+      
+      // list_append for users array (only for private polls)
+      if (scope === PollScope.Private) {
+        setExpressions.push(`#results.#choices[${choiceIndex}].#users = list_append(if_not_exists(#results.#choices[${choiceIndex}].#users, :empty_list), :user${i})`);
+        expressionAttributeNames['#users'] = 'users';
+        expressionAttributeValues[`:user${i}`] = [userId];
+      }
+    });
+
+    // Add empty list for list_append operations
+    if (scope === PollScope.Private) {
+      expressionAttributeValues[':empty_list'] = [];
+    }
+
+    // Build the UpdateExpression with proper separation
+    const updateExpressionParts: string[] = [];
+    
+    if (addExpressions.length > 0) {
+      updateExpressionParts.push(`ADD ${addExpressions.join(', ')}`);
+    }
+    
+    if (setExpressions.length > 0) {
+      updateExpressionParts.push(`SET ${setExpressions.join(', ')}`);
+    }
+
+    return {
+      Key: { pk: `Poll#${pollId}`, sk: 'Results' },
+      UpdateExpression: updateExpressionParts.join(' '),
+      ExpressionAttributeValues: expressionAttributeValues,
+      ExpressionAttributeNames: expressionAttributeNames
+    };
+  }
 };

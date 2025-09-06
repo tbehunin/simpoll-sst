@@ -1,8 +1,9 @@
 import { PollType, PollScope } from "../../../common/types";
 import { PollParticipant } from "./poll-participant.domain";
-import { PollParticipantEntity } from "../../../data/poll/participant/poll-participant.entity";
+import { PollParticipantEntity } from "../../../common/poll-participant.entity";
 import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
-import { CreatePollRequest, VoteRequest } from "../types";
+import { CreatePollRequest } from '../commands/create-poll/types';
+import { VoteRequest } from "../commands/vote/types";
 import { generateExpireTimestamp } from "../../utils";
 import { Mapper } from "../mappers/mapper.interface";
 
@@ -67,3 +68,16 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
     return entities.map(PollParticipantMapper.toDomain);
   },
 };
+
+// const buildPollResultUpdateRequest = (pollVoterDoc: PollParticipantEntity<PollType>): UpdateRequest => {
+//   return {
+//     Key: {
+//       pk: pollVoterDoc.pk,
+//       sk: 'Results',
+//     },
+//     UpdateExpression: 'set totalVotes = totalVotes + :inc, #results.#choiceIndex.#votes :inc',
+//     ExpressionAttributeValues: {
+//       ':inc': 1,
+//     },
+//   };
+// };
