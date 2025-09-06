@@ -33,7 +33,14 @@ export const table = new sst.aws.Dynamo('PollsTable', {
   },
   stream: 'new-and-old-images',
 });
-table.subscribe("VoteAggregator", "packages/functions/src/vote-aggregator/handler.main", {
+
+// Create the vote aggregator function with explicit table link
+export const voteAggregatorFunction = new sst.aws.Function("VoteAggregator", {
+  handler: "packages/functions/src/vote-aggregator/handler.main",
+  link: [table]
+});
+
+table.subscribe("VoteAggregator", voteAggregatorFunction.arn, {
   filters: [{
     eventName: ["MODIFY"],
     dynamodb: {
