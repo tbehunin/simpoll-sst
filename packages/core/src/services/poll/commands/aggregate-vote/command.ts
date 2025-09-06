@@ -2,12 +2,9 @@ import { createContextCommand } from '../command-builder';
 import { createAggregateVoteContext, AggregateVoteValidationContext } from './context';
 import { validateAggregateVote } from './validation';
 import { AggregateVoteRequest } from './types';
-import { PollType, PollScope } from '../../../../common/types';
 import { getPollTypeHandler } from '../../../../handlers/pollRegistry';
 import { dbClient } from '../../../../data/dbClient';
-import { MultipleChoiceResult } from '../../../../handlers/multipleChoiceHandler';
 
-// Pure executor function
 const executeAggregateVote = async (
   request: AggregateVoteRequest,
   context: AggregateVoteValidationContext
@@ -15,80 +12,19 @@ const executeAggregateVote = async (
   const { participant } = request;
   const { pollId, userId, type, scope, vote } = participant;
 
-  // Get the correct handler - no more stream parsing needed
+  // Validate vote data exists
+  if (!vote) {
+    throw new Error('Vote data is required for aggregation');
+  }
+
+  // Get the correct handler for atomic operations
   const handler = getPollTypeHandler(type);
 
-  // Use poll results from context (already fetched during validation)
-  const currentResults = context.pollResults!;
+  // Build atomic update request using the handler
+  const updateRequest = handler.buildAggregateVoteUpdateRequest(pollId, userId, scope, vote);
 
-  // Parse current results and aggregate the new vote
-  const currentParsedResults = handler.parseResults(currentResults.results);
-  
-  // voteData is already parsed by the handler layer
-  const updatedResults = aggregateVoteByType(type, currentParsedResults, vote, userId, scope);
-
-  // Update total votes count
-  const newTotalVotes = (currentResults.totalVotes || 0) + 1;
-
-  // Update the database atomically
-  await dbClient.updateItem(
-    { pk: `Poll#${pollId}`, sk: 'Results' },
-    'SET totalVotes = :totalVotes, results = :results',
-    {
-      ':totalVotes': newTotalVotes,
-      ':results': updatedResults
-    }
-  );
-};
-
-// Pure function for vote aggregation by type
-const aggregateVoteByType = (
-  type: PollType,
-  currentResults: any,
-  voteData: any,
-  userId: string,
-  scope: PollScope
-): any => {
-  switch (type) {
-    case PollType.MultipleChoice:
-      return aggregateMultipleChoiceVote(
-        currentResults as MultipleChoiceResult,
-        voteData,
-        userId,
-        scope
-      );
-    default:
-      throw new Error(`Vote aggregation not implemented for poll type: ${type}`);
-  }
-};
-
-// Pure function for multiple choice vote aggregation
-const aggregateMultipleChoiceVote = (
-  currentResults: MultipleChoiceResult,
-  voteData: any,
-  userId: string,
-  scope: PollScope
-): MultipleChoiceResult => {
-  const updatedChoices = [...currentResults.choices];
-
-  // Process each selected choice - voteData.selectedChoices is already parsed
-  if (voteData.selectedChoices) {
-    voteData.selectedChoices.forEach((choiceIndex: number) => {
-      if (choiceIndex >= 0 && choiceIndex < updatedChoices.length) {
-        // Increment vote count
-        updatedChoices[choiceIndex].votes += 1;
-        
-        // Add user to the choice if poll is not anonymous (private scope)
-        if (scope === PollScope.Private) {
-          if (!updatedChoices[choiceIndex].users.includes(userId)) {
-            updatedChoices[choiceIndex].users.push(userId);
-          }
-        }
-      }
-    });
-  }
-
-  return { choices: updatedChoices };
+  // Execute atomic update - no race conditions
+  await dbClient.update(updateRequest);
 };
 
 // Composed command using context pattern for consistency

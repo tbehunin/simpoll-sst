@@ -1,4 +1,5 @@
-import { PollDetailMap, PollResultMap, PollType, PollParticipantMap } from "../common/types";
+import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from "../common/types";
+import { UpdateRequest } from "../data/dbClient";
 import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
 import { multipleChoiceHandler } from "./multipleChoiceHandler";
 
@@ -10,6 +11,7 @@ export interface PollTypeHandler<T extends PollType> {
   parseParticipant(Participant: any): PollParticipantMap[T];
   parseVoteStream(voteStream: any): PollParticipantMap[T];
   buildResults(request: CreatePollRequest<PollType>): PollResultMap[T];
+  buildAggregateVoteUpdateRequest(pollId: string, userId: string, scope: PollScope, vote: PollParticipantMap[T]): UpdateRequest;
 };
 
 const pollRegistry: Partial<Record<PollType, PollTypeHandler<PollType>>> = {};

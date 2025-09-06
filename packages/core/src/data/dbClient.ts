@@ -17,6 +17,7 @@ export type UpdateRequest = {
   Key: DbId
   UpdateExpression: string
   ExpressionAttributeValues: any
+  ExpressionAttributeNames: any
 };
 
 const TableName = Resource.PollsTable.name;
@@ -27,17 +28,6 @@ export const dbClient = {
     const params: UpdateCommandInput = {
       TableName,
       ...item,
-    };
-    // console.log('*** DATA ACCESS: UpdateCommand ***', params);
-    await dynamoDb.send(new UpdateCommand(params));
-  },
-  updateItem: async (key: DbId, updateExpression: string, expressionAttributeValues: any, expressionAttributeNames?: any) => {
-    const params: UpdateCommandInput = {
-      TableName,
-      Key: key,
-      UpdateExpression: updateExpression,
-      ExpressionAttributeValues: expressionAttributeValues,
-      ...(expressionAttributeNames && { ExpressionAttributeNames: expressionAttributeNames }),
     };
     // console.log('*** DATA ACCESS: UpdateCommand ***', params);
     await dynamoDb.send(new UpdateCommand(params));
