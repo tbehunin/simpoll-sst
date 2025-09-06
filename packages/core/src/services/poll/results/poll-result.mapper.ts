@@ -1,9 +1,9 @@
-import { PollType } from "../../../common/types";
-import { PollResult } from "./poll-result.domain";
-import { PollResultEntity } from "../../../data/poll/result/poll-result.entity";
+import { PollType } from '../../../common/types';
+import { PollResult } from './poll-result.domain';
+import { PollResultEntity } from '../../../data/poll/result/poll-result.entity';
 import { CreatePollRequest } from '../commands/create-poll/types';
-import { getPollTypeHandler } from "../../../handlers/pollRegistry";
-import { Mapper } from "../mappers/mapper.interface";
+import { getPollTypeHandler } from '../../../handlers/pollRegistry';
+import { Mapper } from '../mappers/mapper.interface';
 
 export const PollResultMapper: Mapper<PollResultEntity<PollType>, PollResult<PollType>> = {
   // Entity → Domain Model

@@ -1,5 +1,5 @@
-import { DbId, dbClient } from "../dbClient";
-import { UserEntity } from "./user.entity";
+import { DbId, dbClient } from '../dbClient';
+import { UserEntity } from './user.entity';
 
 export const UserRepository = {
   batchGet: async (userIds: string[]): Promise<UserEntity[]> => {

@@ -1,7 +1,7 @@
-import { PollService } from "@simpoll-sst/core/services/poll/poll.service";
-import { Util } from "@simpoll-sst/core/util";
-import { DynamoDBStreamEvent } from "aws-lambda";
-import { parsePollParticipant } from "./stream-parser";
+import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
+import { Util } from '@simpoll-sst/core/util';
+import { DynamoDBStreamEvent } from 'aws-lambda';
+import { parsePollParticipant } from './stream-parser';
 
 export const main = Util.handler(async (event, context) => {
   const streamEvent = event as DynamoDBStreamEvent;

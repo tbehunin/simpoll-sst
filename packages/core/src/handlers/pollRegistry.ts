@@ -1,7 +1,7 @@
-import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from "../common/types";
-import { UpdateRequest } from "../data/dbClient";
+import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from '../common/types';
+import { UpdateRequest } from '../data/dbClient';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
-import { multipleChoiceHandler } from "./multipleChoiceHandler";
+import { multipleChoiceHandler } from './multipleChoiceHandler';
 
 
 

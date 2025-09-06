@@ -1,7 +1,7 @@
-import { MediaAsset, PollType, PollScope } from "../common/types";
+import { MediaAsset, PollType, PollScope } from '../common/types';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/types';
-import { PollTypeHandler } from "./pollRegistry";
-import { UpdateRequest } from "../data/dbClient";
+import { PollTypeHandler } from './pollRegistry';
+import { UpdateRequest } from '../data/dbClient';
 
 export interface Choice {
   text: string

@@ -1,4 +1,4 @@
-import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from "../handlers/multipleChoiceHandler";
+import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from '../handlers/multipleChoiceHandler';
 
 export enum PollType {
   MultipleChoice = 'MultipleChoice',

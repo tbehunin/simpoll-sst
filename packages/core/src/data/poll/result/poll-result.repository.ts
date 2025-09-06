@@ -1,8 +1,8 @@
-import { PollType } from "../../../common/types";
-import { DbId, dbClient } from "../../dbClient";
-import { Repository } from "../../repository.interface";
-import { PollResultEntity } from "./poll-result.entity";
-import { PollResultMapper } from "./poll-result.mapper";
+import { PollType } from '../../../common/types';
+import { DbId, dbClient } from '../../dbClient';
+import { Repository } from '../../repository.interface';
+import { PollResultEntity } from './poll-result.entity';
+import { PollResultMapper } from './poll-result.mapper';
 
 export const pollResultRepository: Repository<PollResultEntity<PollType>> = {
   get: async (pollId: string): Promise<PollResultEntity<PollType>> => {

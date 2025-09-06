@@ -1,9 +1,9 @@
-import { PollType, PollScope } from "../../../common/types";
-import { PollDetail } from "./poll-detail.domain";
-import { PollDetailEntity } from "../../../data/poll/detail/poll-detail.entity";
+import { PollType, PollScope } from '../../../common/types';
+import { PollDetail } from './poll-detail.domain';
+import { PollDetailEntity } from '../../../data/poll/detail/poll-detail.entity';
 import { CreatePollRequest } from '../commands/create-poll/types';
-import { generateExpireTimestamp, generatePollScope } from "../../utils";
-import { Mapper } from "../mappers/mapper.interface";
+import { generateExpireTimestamp, generatePollScope } from '../../utils';
+import { Mapper } from '../mappers/mapper.interface';
 
 export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<PollType>> = {
   // Entity → Domain Model

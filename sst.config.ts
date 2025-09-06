@@ -1,22 +1,22 @@
-/// <reference path="./.sst/platform/config.d.ts" />
+/// <reference path='./.sst/platform/config.d.ts' />
 
 export default $config({
   app(input) {
     return {
-      name: "simpoll-sst",
-      removal: input?.stage === "production" ? "retain" : "remove",
-      home: "aws",
+      name: 'simpoll-sst',
+      removal: input?.stage === 'production' ? 'retain' : 'remove',
+      home: 'aws',
       providers: {
         aws: {
-          profile: "simpoll-sst",
+          profile: 'simpoll-sst',
         },
       },
     };
   },
   async run() {
-    await import("./infra/storage");
-    await import("./infra/api");
-    const auth = await import("./infra/auth");
+    await import('./infra/storage');
+    await import('./infra/api');
+    const auth = await import('./infra/auth');
 
     return {
       UserPool: auth.userPool.id,

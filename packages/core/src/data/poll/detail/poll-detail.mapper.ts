@@ -1,6 +1,6 @@
-import { PollType } from "../../../common/types";
-import { getPollTypeHandler } from "../../../handlers/pollRegistry";
-import { PollDetailEntity, PollDetailEntityBase } from "./poll-detail.entity";
+import { PollType } from '../../../common/types';
+import { getPollTypeHandler } from '../../../handlers/pollRegistry';
+import { PollDetailEntity, PollDetailEntityBase } from './poll-detail.entity';
 
 export const PollDetailMapper = {
   toPollDetailEntity: (rawData: Record<string, any>[] | undefined): PollDetailEntity<PollType>[] => {

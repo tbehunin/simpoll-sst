@@ -1,5 +1,5 @@
-import { UserEntity } from "../../data/user/user.entity";
-import { User } from "./user.domain";
+import { UserEntity } from '../../data/user/user.entity';
+import { User } from './user.domain';
 
 export const UserMapper = {
   toDomain: (userEntity: UserEntity): User => ({

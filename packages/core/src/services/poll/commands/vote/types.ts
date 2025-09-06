@@ -1,4 +1,4 @@
-import { PollType, PollParticipantMap } from "../../../../common/types";
+import { PollType, PollParticipantMap } from '../../../../common/types';
 
 export type VoteRequest<T extends PollType> = {
   pollId: string
