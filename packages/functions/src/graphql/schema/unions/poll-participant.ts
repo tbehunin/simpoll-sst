@@ -1,7 +1,7 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { generatePollUserId } from '@simpoll-sst/core/services/utils';
 import { builder } from '../builder';
-import { multipleChoiceParticipant } from '../types/multipleChoicePoll';
+import { multipleChoiceParticipant } from '../types/multiple-choice-poll';
 
 export const pollParticipant = builder.loadableUnion('PollParticipant', {
   types: [multipleChoiceParticipant],

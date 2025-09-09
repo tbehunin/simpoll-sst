@@ -1,6 +1,6 @@
 import { PollDetailMap, PollType } from '@simpoll-sst/core/common/poll.types';
 import { builder } from '../builder';
-import { multipleChoiceDetail } from '../types/multipleChoicePoll';
+import { multipleChoiceDetail } from '../types/multiple-choice-poll';
 
 export interface PollDetailWithType<T extends PollType> {
   type: T;
