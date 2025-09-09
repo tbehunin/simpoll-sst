@@ -1,3 +1,3 @@
 import './poll';
-import './multipleChoicePoll';
+import './multiple-choice-poll';
 import './user';
