@@ -1,10 +1,10 @@
 import { createContextCommand } from '../command-builder';
-import { createVoteContext, VoteValidationContext } from './context';
-import { validateVoteRequest } from './validation';
-import { VoteRequest } from './types';
-import { PollType } from '../../../../common/types';
+import { createVoteContext, VoteValidationContext } from './vote.context';
+import { validateVoteRequest } from './vote.validation';
+import { VoteRequest } from './vote.types';
+import { PollType } from '../../../../common/poll.types';
 import { PollParticipantMapper } from '../../participants';
-import { dbClient } from '../../../../data/dbClient';
+import { dbClient } from '../../../../data/db.client';
 
 // Executor can reuse the poll from context - no additional DB call!
 const executeVote = async (

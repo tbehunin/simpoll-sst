@@ -1,5 +1,5 @@
 import { Util } from '@simpoll-sst/core/util';
-import { dbClient } from '@simpoll-sst/core/data/dbClient';
+import { dbClient } from '@simpoll-sst/core/data/db.client';
 import pollDetails from './pollDetails.json';
 import pollParticipants from './pollParticipants.json';
 import results from './pollResults.json';

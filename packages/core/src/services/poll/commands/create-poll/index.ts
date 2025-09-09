@@ -1,3 +1,3 @@
-export { createPollCommand } from './command';
-export type { CreatePollRequest } from './types';
-export type { CreatePollValidationContext } from './context';
+export { createPollCommand } from './create-poll.command';
+export type { CreatePollRequest } from './create-poll.types';
+export type { CreatePollValidationContext } from './create-poll.context';

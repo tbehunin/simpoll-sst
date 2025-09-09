@@ -1,11 +1,11 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
-import { PollType } from '@simpoll-sst/core/common/types';
+import { PollType } from '@simpoll-sst/core/common/poll.types';
 import { builder } from '../builder';
 import { pollType } from '../common/enums';
 import { multipleChoiceVoteInput } from '../types/multipleChoicePoll';
 import { poll } from '../types/poll';
-import { getPollTypeHandler } from '@simpoll-sst/core/handlers/pollRegistry';
-import { VoteRequest } from '@simpoll-sst/core/services/poll/commands/vote/types';
+import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
+import { VoteRequest } from '@simpoll-sst/core/services/poll/commands/vote/vote.types';
 
 export const vote = builder.mutationField('vote', (t) =>
   t.field({

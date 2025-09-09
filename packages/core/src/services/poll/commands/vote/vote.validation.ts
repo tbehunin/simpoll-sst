@@ -1,6 +1,6 @@
-import { PollType, PollScope } from '../../../../common/types';
-import { VoteRequest } from './types';
-import { VoteValidationContext } from './context';
+import { PollType, PollScope } from '../../../../common/poll.types';
+import { VoteRequest } from './vote.types';
+import { VoteValidationContext } from './vote.context';
 
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
 

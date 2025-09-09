@@ -1,7 +1,7 @@
-import { Choice, ChoiceResult } from '@simpoll-sst/core/handlers/multipleChoiceHandler';
+import { Choice, ChoiceResult } from '@simpoll-sst/core/handlers/multiple-choice.handler';
 import { builder } from '../builder';
 import { mediaType } from '../common/enums';
-import { MediaAsset, PollType } from '@simpoll-sst/core/common/types';
+import { MediaAsset, PollType } from '@simpoll-sst/core/common/poll.types';
 import { PollResult } from '@simpoll-sst/core/services/poll/results/poll-result.domain';
 import { PollParticipant } from '@simpoll-sst/core/services/poll/participants/poll-participant.domain';
 import { PollDetailWithType } from '../unions/pollDetail';

@@ -1,6 +1,6 @@
-import { CreatePollRequest } from './types';
-import { CreatePollValidationContext } from './context';
-import { PollType } from '../../../../common/types';
+import { CreatePollRequest } from './create-poll.types';
+import { CreatePollValidationContext } from './create-poll.context';
+import { PollType } from '../../../../common/poll.types';
 
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
 

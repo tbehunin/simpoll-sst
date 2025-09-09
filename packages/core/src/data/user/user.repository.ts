@@ -1,4 +1,4 @@
-import { DbId, dbClient } from '../dbClient';
+import { DbId, dbClient } from '../db.client';
 import { UserEntity } from './user.entity';
 
 export const UserRepository = {

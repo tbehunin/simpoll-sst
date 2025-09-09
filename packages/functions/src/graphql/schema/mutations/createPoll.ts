@@ -1,12 +1,12 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
-import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/types';
-import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/types';
+import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
+import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/poll.types';
 import { generatePollScope } from '@simpoll-sst/core/services/utils';
 import { builder } from '../builder';
 import { pollType, votePrivacy } from '../common/enums';
 import { poll } from '../types/poll';
 import { multipleChoiceInput } from '../types/multipleChoicePoll';
-import { getPollTypeHandler } from '@simpoll-sst/core/handlers/pollRegistry';
+import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
 
 function getSingleNonNullItem<T>(items: (T | null | undefined)[]): T | null {
   const nonNullItems = items.filter(item => item !== null && item !== undefined);
