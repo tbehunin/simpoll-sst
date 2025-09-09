@@ -5,7 +5,7 @@ import { generatePollScope } from '@simpoll-sst/core/services/utils';
 import { builder } from '../builder';
 import { pollType, votePrivacy } from '../common/enums';
 import { poll } from '../types/poll';
-import { multipleChoiceInput } from '../types/multipleChoicePoll';
+import { multipleChoiceInput } from '../types/multiple-choice-poll';
 import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
 
 function getSingleNonNullItem<T>(items: (T | null | undefined)[]): T | null {

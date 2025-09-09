@@ -1,4 +1,4 @@
 import './ballot';
-import './myPolls';
-import './directPolls';
-import './publicPolls';
+import './my-polls';
+import './direct-polls';
+import './public-polls';

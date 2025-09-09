@@ -4,9 +4,9 @@ import { MAX_DATE } from '@simpoll-sst/core/common/constants';
 import { builder } from '../builder';
 import { pollScope, pollType, votePrivacy } from '../common/enums';
 import { user } from './user';
-import { pollDetail } from '../unions/pollDetail';
-import { pollResult } from '../unions/pollResult';
-import { pollParticipant } from '../unions/pollParticipant';
+import { pollDetail } from '../unions/poll-detail';
+import { pollResult } from '../unions/poll-result';
+import { pollParticipant } from '../unions/poll-participant';
 import { generatePollUserId } from '@simpoll-sst/core/services/utils';
 import { PollType } from '@simpoll-sst/core/common/poll.types';
 

@@ -1,3 +1,3 @@
-import './pollDetail';
-import './pollResult';
-import './pollParticipant';
+import './poll-detail';
+import './poll-result';
+import './poll-participant';
