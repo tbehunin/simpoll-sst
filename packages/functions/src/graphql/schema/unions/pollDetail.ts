@@ -1,4 +1,4 @@
-import { PollDetailMap, PollType } from '@simpoll-sst/core/common/types';
+import { PollDetailMap, PollType } from '@simpoll-sst/core/common/poll.types';
 import { builder } from '../builder';
 import { multipleChoiceDetail } from '../types/multipleChoicePoll';
 

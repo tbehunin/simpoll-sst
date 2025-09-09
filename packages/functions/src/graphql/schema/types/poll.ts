@@ -8,7 +8,7 @@ import { pollDetail } from '../unions/pollDetail';
 import { pollResult } from '../unions/pollResult';
 import { pollParticipant } from '../unions/pollParticipant';
 import { generatePollUserId } from '@simpoll-sst/core/services/utils';
-import { PollType } from '@simpoll-sst/core/common/types';
+import { PollType } from '@simpoll-sst/core/common/poll.types';
 
 export const poll = builder.loadableObject('Poll', {
   load: async (pollIds: string[]) => {

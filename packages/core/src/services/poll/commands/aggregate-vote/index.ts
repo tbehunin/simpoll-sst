@@ -1,3 +1,3 @@
-export { aggregateVoteCommand } from './command';
-export type { AggregateVoteRequest } from './types';
-export type { AggregateVoteValidationContext } from './context';
+export { aggregateVoteCommand } from './aggregate-vote.command';
+export type { AggregateVoteRequest } from './aggregate-vote.types';
+export type { AggregateVoteValidationContext } from './aggregate-vote.context';

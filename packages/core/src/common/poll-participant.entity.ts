@@ -1,4 +1,4 @@
-import { PollType, PollParticipantMap as PollParticipantMap } from './types'
+import { PollType, PollParticipantMap as PollParticipantMap } from './poll.types'
 
 export interface PollParticipantEntityBase {
   pk: string

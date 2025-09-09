@@ -1,9 +1,9 @@
-import { PollType, PollScope } from '../../../../common/types';
+import { PollType, PollScope } from '../../../../common/poll.types';
 import { PollDetailEntity } from '../../../../data/poll/detail/poll-detail.entity';
 import { PollParticipantEntity } from '../../../../common/poll-participant.entity';
 import { PollDetailRepository } from '../../../../data/poll/detail/poll-detail.repository';
 import { PollParticipantRepository } from '../../../../data/poll/participant/poll-participant.repository';
-import { VoteRequest } from './types';
+import { VoteRequest } from './vote.types';
 import { generatePollUserId } from '../../../utils';
 
 export type VoteValidationContext = {

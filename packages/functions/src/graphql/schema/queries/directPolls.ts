@@ -1,4 +1,4 @@
-import { RoleType, PollScope, PollStatus } from '@simpoll-sst/core/common/types';
+import { RoleType, PollScope, PollStatus } from '@simpoll-sst/core/common/poll.types';
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
 import { poll } from '../types/poll';

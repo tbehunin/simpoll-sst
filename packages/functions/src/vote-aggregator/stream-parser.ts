@@ -1,6 +1,6 @@
 import { PollParticipant, PollParticipantMapper } from '@simpoll-sst/core/services/poll/participants';
-import { parsePollType, PollType } from '@simpoll-sst/core/common/types';
-import { getPollTypeHandler } from '@simpoll-sst/core/handlers/pollRegistry';
+import { parsePollType, PollType } from '@simpoll-sst/core/common/poll.types';
+import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
 import { DynamoDBRecord } from 'aws-lambda';
 import { PollParticipantEntity } from '@simpoll-sst/core/common/poll-participant.entity';
 

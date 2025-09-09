@@ -1,5 +1,5 @@
-import { AggregateVoteRequest } from './types';
-import { AggregateVoteValidationContext } from './context';
+import { AggregateVoteRequest } from './aggregate-vote.types';
+import { AggregateVoteValidationContext } from './aggregate-vote.context';
 
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
 

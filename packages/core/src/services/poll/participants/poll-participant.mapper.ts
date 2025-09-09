@@ -1,9 +1,9 @@
-import { PollType, PollScope } from '../../../common/types';
+import { PollType, PollScope } from '../../../common/poll.types';
 import { PollParticipant } from './poll-participant.domain';
 import { PollParticipantEntity } from '../../../common/poll-participant.entity';
 import { PollDetailEntity } from '../../../data/poll/detail/poll-detail.entity';
-import { CreatePollRequest } from '../commands/create-poll/types';
-import { VoteRequest } from '../commands/vote/types';
+import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
+import { VoteRequest } from '../commands/vote/vote.types';
 import { generateExpireTimestamp } from '../../utils';
 import { Mapper } from '../mappers/mapper.interface';
 

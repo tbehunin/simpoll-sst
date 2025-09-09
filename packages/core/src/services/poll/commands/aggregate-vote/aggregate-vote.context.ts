@@ -1,7 +1,7 @@
 import { PollResultEntity } from '../../../../data/poll/result/poll-result.entity';
 import { pollResultRepository } from '../../../../data/poll/result/poll-result.repository';
-import { AggregateVoteRequest } from './types';
-import { PollType } from '../../../../common/types';
+import { AggregateVoteRequest } from './aggregate-vote.types';
+import { PollType } from '../../../../common/poll.types';
 
 export type AggregateVoteValidationContext = {
   currentTime: string;

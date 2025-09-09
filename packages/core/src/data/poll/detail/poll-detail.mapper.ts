@@ -1,5 +1,5 @@
-import { PollType } from '../../../common/types';
-import { getPollTypeHandler } from '../../../handlers/pollRegistry';
+import { PollType } from '../../../common/poll.types';
+import { getPollTypeHandler } from '../../../handlers/poll.registry';
 import { PollDetailEntity, PollDetailEntityBase } from './poll-detail.entity';
 
 export const PollDetailMapper = {

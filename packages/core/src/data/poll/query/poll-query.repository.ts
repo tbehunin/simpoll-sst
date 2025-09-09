@@ -1,7 +1,7 @@
 import { MAX_DATE, MIN_DATE } from '../../../common/constants';
-import { RoleType, PollScope, PollStatus } from '../../../common/types';
-import { QueryPollsRequest } from '../../../services/poll/types';
-import { dbClient } from '../../dbClient';
+import { RoleType, PollScope, PollStatus } from '../../../common/poll.types';
+import { QueryPollsRequest } from '../../../services/poll/poll.types';
+import { dbClient } from '../../db.client';
 
 type QueryParams = {
   IndexName: string

@@ -1,9 +1,9 @@
 import { createContextCommand } from '../command-builder';
-import { createAggregateVoteContext, AggregateVoteValidationContext } from './context';
-import { validateAggregateVote } from './validation';
-import { AggregateVoteRequest } from './types';
-import { getPollTypeHandler } from '../../../../handlers/pollRegistry';
-import { dbClient } from '../../../../data/dbClient';
+import { createAggregateVoteContext, AggregateVoteValidationContext } from './aggregate-vote.context';
+import { validateAggregateVote } from './aggregate-vote.validation';
+import { AggregateVoteRequest } from './aggregate-vote.types';
+import { getPollTypeHandler } from '../../../../handlers/poll.registry';
+import { dbClient } from '../../../../data/db.client';
 
 const executeAggregateVote = async (
   request: AggregateVoteRequest,

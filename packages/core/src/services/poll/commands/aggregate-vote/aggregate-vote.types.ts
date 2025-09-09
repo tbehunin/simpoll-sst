@@ -1,4 +1,4 @@
-import { PollType } from '../../../../common/types';
+import { PollType } from '../../../../common/poll.types';
 import { PollParticipant } from '../../participants';
 
 export interface AggregateVoteRequest {

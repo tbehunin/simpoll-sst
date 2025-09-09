@@ -1,4 +1,4 @@
-import { PollScope, PollType, PollParticipantMap } from '../../../common/types';
+import { PollScope, PollType, PollParticipantMap } from '../../../common/poll.types';
 
 export interface PollParticipantBase {
   pollId: string

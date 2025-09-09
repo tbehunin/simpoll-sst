@@ -1,5 +1,5 @@
-import { CreatePollRequest } from './types';
-import { PollType } from '../../../../common/types';
+import { CreatePollRequest } from './create-poll.types';
+import { PollType } from '../../../../common/poll.types';
 
 export type CreatePollValidationContext = {
   currentTime: string;
