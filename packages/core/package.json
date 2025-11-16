@@ -11,7 +11,8 @@
     ]
   },
   "dependencies": {
-    "sst": "*"
+    "sst": "*",
+    "zod": "^4.1.8"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145",

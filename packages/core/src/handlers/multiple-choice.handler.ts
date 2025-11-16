@@ -2,6 +2,12 @@ import { MediaAsset, PollType, PollScope } from '../common/poll.types';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
 import { PollTypeHandler } from './poll.registry';
 import { UpdateRequest } from '../data/db.client';
+import {
+  multipleChoiceValidationSchemas,
+  validateMultipleChoiceCreatePollBusinessLogic,
+  validateMultipleChoiceVoteBusinessLogic,
+  validateMultipleChoiceAggregateVoteBusinessLogic
+} from './multiple-choice.validation';
 
 export interface Choice {
   text: string
@@ -100,5 +106,11 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       ExpressionAttributeValues: expressionAttributeValues,
       ExpressionAttributeNames: expressionAttributeNames
     };
-  }
+  },
+  
+  // Validation methods
+  getValidationSchemas: () => multipleChoiceValidationSchemas,
+  validateCreatePollBusinessLogic: validateMultipleChoiceCreatePollBusinessLogic,
+  validateVoteBusinessLogic: validateMultipleChoiceVoteBusinessLogic,
+  validateAggregateVoteBusinessLogic: validateMultipleChoiceAggregateVoteBusinessLogic
 };
