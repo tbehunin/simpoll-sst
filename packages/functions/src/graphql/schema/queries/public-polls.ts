@@ -26,7 +26,7 @@ export const publicPollsResolver = (_root: any, args: { input?: { voted?: boolea
     userId: context.currentUserId,
     roleType: RoleType.Participant,
     scope: PollScope.Public,
-    voted: args.input?.voted || undefined,
-    pollStatus: args.input?.pollStatus || undefined,
+    voted: args.input?.voted ?? undefined,
+    pollStatus: args.input?.pollStatus ?? undefined,
   });
 };

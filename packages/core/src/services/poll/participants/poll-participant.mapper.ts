@@ -39,7 +39,7 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
       type: request.type,
       gsipk1: `User#${userId}#Participant#Private`,
       gsipk2: `User#${userId}#Participant`,
-      gsisk1: `Voted:N#${expireTimestamp}`,
+      gsisk1: `Voted#N#${expireTimestamp}`,
       gsisk2: expireTimestamp,
     }));
   },
@@ -55,7 +55,7 @@ export const PollParticipantMapper: Mapper<PollParticipantEntity<PollType>, Poll
       sk: `Participant#${voteRequest.userId}`,
       type: poll.type,
       gsipk1: `User#${voteRequest.userId}#Participant#${poll.scope}`,
-      gsipk2: `Poll#${voteRequest.userId}#Participant`,
+      gsipk2: `User#${voteRequest.userId}#Participant`,
       gsisk1: `Voted#Y#${expireTimestamp}`,
       gsisk2: expireTimestamp,
       voteTimestamp: new Date().toISOString(),
