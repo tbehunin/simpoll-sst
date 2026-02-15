@@ -1,41 +1,104 @@
+import { z } from 'zod';
 import { AggregateVoteRequest } from './aggregate-vote.types';
 import { AggregateVoteValidationContext } from './aggregate-vote.context';
+import { getPollTypeHandler } from '../../../../handlers/poll.registry';
+import { 
+  ValidationResult, 
+  zodToValidationResult,
+  PollTypeSchema,
+  PollScopeSchema,
+  UuidSchema,
+} from '../validation.utils';
 
-type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
+// Base participant schema (vote data validated via registry)
+const PollParticipantBaseSchema = z.object({
+  pollId: UuidSchema,
+  userId: UuidSchema,
+  type: PollTypeSchema,
+  scope: PollScopeSchema,
+  voted: z.boolean(),
+  expireTimestamp: z.string().min(1, 'Expire timestamp is required'),
+  voteTimestamp: z.string().optional(),
+});
 
-// Validation for aggregate vote command
+// --- Generic business logic validators ---
+
+const validatePollResultsExist = (
+  request: AggregateVoteRequest,
+  context: AggregateVoteValidationContext
+): string | null => {
+  return context.pollResults 
+    ? null
+    : 'Poll results not found';
+};
+
+const validateVoteDataIntegrity = (
+  request: AggregateVoteRequest,
+  _context: AggregateVoteValidationContext
+): string | null => {
+  const { participant } = request;
+
+  if (!participant.voteTimestamp) {
+    return 'Participant has not voted yet';
+  }
+
+  if (!participant.vote) {
+    return 'Vote data is missing';
+  }
+
+  return null;
+};
+
+const validateParticipantConsistency = (
+  request: AggregateVoteRequest,
+  _context: AggregateVoteValidationContext
+): string | null => {
+  const { participant } = request;
+
+  if (participant.vote && !participant.voted) {
+    return 'Participant has vote data but is not marked as voted';
+  }
+
+  if (participant.voted && !participant.voteTimestamp) {
+    return 'Participant is marked as voted but has no vote timestamp';
+  }
+
+  return null;
+};
+
+// Main validation function
 export const validateAggregateVote = (
   request: AggregateVoteRequest,
   context: AggregateVoteValidationContext
 ): ValidationResult => {
-  const { participant } = request;
-  const errors: string[] = [];
+  // 1. Validate common participant fields
+  const baseValidation = zodToValidationResult(PollParticipantBaseSchema, request.participant);
+  if (!baseValidation.isValid) return baseValidation;
 
-  if (!participant.pollId) {
-    errors.push('Poll ID is required');
+  // 2. Validate vote data structure via registry
+  const handler = getPollTypeHandler(request.participant.type);
+  if (request.participant.vote) {
+    const voteValidation = zodToValidationResult(handler.getVoteSchema(), request.participant.vote);
+    if (!voteValidation.isValid) return voteValidation;
   }
 
-  if (!participant.userId) {
-    errors.push('User ID is required');
-  }
-
-  if (!participant.type) {
-    errors.push('Poll type is required');
-  }
-
-  if (!participant.scope) {
-    errors.push('Poll scope is required');
-  }
-
-  if (!participant.vote) {
-    errors.push('Vote data is required');
-  }
-
-  if (!context.pollResults) {
-    errors.push('Poll results not found');
-  }
+  // 3. Generic business logic validators
+  const errors = [
+    validatePollResultsExist,
+    validateVoteDataIntegrity,
+    validateParticipantConsistency,
+  ]
+    .map(validator => validator(request, context))
+    .filter((error): error is string => error !== null);
 
   return errors.length === 0
     ? { isValid: true }
     : { isValid: false, errors };
+};
+
+// Export individual validators for potential reuse
+export {
+  validatePollResultsExist,
+  validateVoteDataIntegrity,
+  validateParticipantConsistency
 };

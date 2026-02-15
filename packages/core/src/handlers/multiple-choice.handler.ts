@@ -1,4 +1,5 @@
-import { MediaAsset, PollType, PollScope } from '../common/poll.types';
+import { z } from 'zod';
+import { MediaAsset, MediaType, PollType, PollScope } from '../common/poll.types';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
 import { PollTypeHandler } from './poll.registry';
 import { UpdateRequest } from '../data/db.client';
@@ -21,6 +22,31 @@ export interface MultipleChoiceResult {
 export interface MultipleChoiceParticipant {
   selectedIndex?: number[]
 };
+
+// --- Zod schemas for MultipleChoice ---
+
+const MediaTypeSchema = z.nativeEnum(MediaType, {
+  message: 'Invalid media type'
+});
+
+const MediaAssetSchema = z.object({
+  type: MediaTypeSchema,
+  value: z.string().min(1, 'Media value is required')
+});
+
+const ChoiceSchema = z.object({
+  text: z.string().min(1, 'Choice text is required'),
+  media: MediaAssetSchema.optional()
+});
+
+const MultipleChoiceDetailSchema = z.object({
+  multiSelect: z.boolean(),
+  choices: z.array(ChoiceSchema).min(2, 'At least 2 choices are required')
+});
+
+const MultipleChoiceVoteSchema = z.object({
+  selectedIndex: z.array(z.number().int().min(0)).min(1, 'At least one choice must be selected')
+});
 
 export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
   parseDetails: (details: any): MultipleChoiceDetail => ({
@@ -100,5 +126,29 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
       ExpressionAttributeValues: expressionAttributeValues,
       ExpressionAttributeNames: expressionAttributeNames
     };
+  },
+
+  // --- Validation schema methods ---
+
+  getDetailSchema: () => MultipleChoiceDetailSchema,
+
+  getVoteSchema: () => MultipleChoiceVoteSchema,
+
+  validateVoteAgainstPoll: (vote: MultipleChoiceParticipant, pollDetails: MultipleChoiceDetail): string | null => {
+    if (!vote.selectedIndex || vote.selectedIndex.length === 0) {
+      return 'At least one choice must be selected';
+    }
+
+    const maxIndex = pollDetails.choices.length - 1;
+    const invalidIndices = vote.selectedIndex.filter(index => index < 0 || index > maxIndex);
+    if (invalidIndices.length > 0) {
+      return `Invalid choice indices: ${invalidIndices.join(', ')}`;
+    }
+
+    if (!pollDetails.multiSelect && vote.selectedIndex.length > 1) {
+      return 'Multiple selections are not allowed for this poll';
+    }
+
+    return null;
   }
 };

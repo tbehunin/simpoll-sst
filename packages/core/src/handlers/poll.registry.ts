@@ -1,17 +1,24 @@
+import { z } from 'zod';
 import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from '../common/poll.types';
 import { UpdateRequest } from '../data/db.client';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
 import { multipleChoiceHandler } from './multiple-choice.handler';
 
-
-
 export interface PollTypeHandler<T extends PollType> {
+  // Parsing
   parseDetails(details: any): PollDetailMap[T];
   parseResults(results: any): PollResultMap[T];
-  parseParticipant(Participant: any): PollParticipantMap[T];
+  parseParticipant(participant: any): PollParticipantMap[T];
   parseVoteStream(voteStream: any): PollParticipantMap[T];
+
+  // Building
   buildResults(request: CreatePollRequest<PollType>): PollResultMap[T];
   buildAggregateVoteUpdateRequest(pollId: string, userId: string, scope: PollScope, vote: PollParticipantMap[T]): UpdateRequest;
+
+  // Validation schemas (Zod)
+  getDetailSchema(): z.ZodSchema<PollDetailMap[T]>;
+  getVoteSchema(): z.ZodSchema<PollParticipantMap[T]>;
+  validateVoteAgainstPoll(vote: PollParticipantMap[T], pollDetails: PollDetailMap[T]): string | null;
 };
 
 const pollRegistry: Partial<Record<PollType, PollTypeHandler<PollType>>> = {};
