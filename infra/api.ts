@@ -1,4 +1,5 @@
 import { table } from './storage';
+import { userPool, userPoolClient } from './auth';
 
 // Create the API
 export const api = new sst.aws.ApiGatewayV2('Api', {
@@ -20,12 +21,35 @@ api.route('GET /notes', 'packages/functions/src/list.main');
 api.route('PUT /notes/{id}', 'packages/functions/src/update.main');
 api.route('DELETE /notes/{id}', 'packages/functions/src/delete.main');
 
-// Create the API
+// Create the GraphQL API
+const stage = $app.stage;
+const isLocal = !!process.env.IS_LOCAL;
+
+// Validate required environment variables based on stage
+if (stage === 'dev') {
+  if (!process.env.DEV_USER_ID) {
+    throw new Error('DEV_USER_ID environment variable is required for dev stage');
+  }
+}
+
 export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
   transform: {
     route: {
       handler: {
         link: [table],
+        environment: {
+          SST_STAGE: stage,
+          IS_LOCAL: isLocal ? 'true' : 'false',
+          ...(stage === 'dev' && process.env.DEV_USER_ID
+            ? { DEV_USER_ID: process.env.DEV_USER_ID }
+            : {}),
+          ...(stage === 'production'
+            ? {
+                COGNITO_USER_POOL_ID: userPool.id,
+                COGNITO_CLIENT_ID: userPoolClient.id,
+              }
+            : {}),
+        },
       },
     }
   }
