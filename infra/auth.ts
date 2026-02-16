@@ -1,10 +1,19 @@
 import { api } from './api';
-import { bucket } from './storage';
+import { bucket, table } from './storage';
 
 const region = aws.getRegionOutput().name;
 
+// Create the post-authentication Lambda trigger
+const postAuthFunction = new sst.aws.Function('PostAuthTrigger', {
+  handler: 'packages/functions/src/cognito/post-auth.main',
+  link: [table],
+});
+
 export const userPool = new sst.aws.CognitoUserPool('UserPool', {
-  usernames: ['email']
+  usernames: ['email'],
+  triggers: {
+    postAuthentication: postAuthFunction.arn,
+  },
 });
 
 export const userPoolClient = userPool.addClient('UserPoolClient'); // Web client. Add another for mobile later.
