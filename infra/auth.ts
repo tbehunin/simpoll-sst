@@ -10,9 +10,40 @@ const postAuthFunction = new sst.aws.Function('PostAuthTrigger', {
 });
 
 export const userPool = new sst.aws.CognitoUserPool('UserPool', {
-  usernames: ['email'],
+  // Users can log in with email, phone, or username
+  usernames: ['email', 'phone', 'preferred_username'],
   triggers: {
     postAuthentication: postAuthFunction.arn,
+  },
+  transform: {
+    userPool: (args) => {
+      // Configure MFA and user attributes
+      args.mfaConfiguration = 'OPTIONAL'; // Users can choose to enable MFA
+      args.enabledMfas = ['SMS_MFA', 'SOFTWARE_TOKEN_MFA']; // Support SMS and TOTP
+      args.autoVerifiedAttributes = ['email', 'phone_number']; // Auto-verify both
+      
+      // Configure required and mutable attributes
+      args.schema = [
+        {
+          name: 'email',
+          attributeDataType: 'String',
+          required: true,
+          mutable: true,
+        },
+        {
+          name: 'phone_number',
+          attributeDataType: 'String',
+          required: true,
+          mutable: true,
+        },
+        {
+          name: 'preferred_username',
+          attributeDataType: 'String',
+          required: true,
+          mutable: true,
+        },
+      ];
+    },
   },
 });
 

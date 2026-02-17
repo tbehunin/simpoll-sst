@@ -21,7 +21,9 @@ export const UserRepository = {
     userId: string;
     username: string;
     email: string;
+    phoneNumber?: string;
     emailVerified: boolean;
+    phoneVerified?: boolean;
     lastLoginAt: string;
     updatedAt: string;
   }): Promise<void> => {
@@ -30,7 +32,9 @@ export const UserRepository = {
       sk: 'Profile',
       username: data.username,
       email: data.email,
+      phoneNumber: data.phoneNumber,
       emailVerified: data.emailVerified,
+      phoneVerified: data.phoneVerified,
       lastLoginAt: data.lastLoginAt,
       updatedAt: data.updatedAt,
     };

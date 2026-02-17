@@ -5,8 +5,10 @@
     "username": "tdawg",
     "fullName": "Todd Behunin",
     "email": "todd@email.com",
+    "phoneNumber": "+15551234567",
     "bio": "nerd",
     "emailVerified": true,
+    "phoneVerified": true,
     "lastLoginAt": "2024-01-15T10:30:00.000Z",
     "updatedAt": "2024-01-15T10:30:00.000Z",
     "createdAt": "2024-01-01T08:00:00.000Z"
@@ -17,8 +19,10 @@
     "username": "ash",
     "fullName": "Ashlee Behunin",
     "email": "ashlee@email.com",
+    "phoneNumber": "+15559876543",
     "bio": "queen",
     "emailVerified": true,
+    "phoneVerified": true,
     "lastLoginAt": "2024-01-15T09:15:00.000Z",
     "updatedAt": "2024-01-15T09:15:00.000Z",
     "createdAt": "2024-01-01T08:00:00.000Z"

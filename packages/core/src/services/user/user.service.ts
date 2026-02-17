@@ -6,7 +6,9 @@ export interface SyncUserProfileRequest {
   userId: string;
   username: string;
   email: string;
+  phoneNumber?: string;
   emailVerified: boolean;
+  phoneVerified?: boolean;
 }
 
 export const UserService = {
@@ -26,7 +28,9 @@ export const UserService = {
       userId: request.userId,
       username: request.username,
       email: request.email,
+      phoneNumber: request.phoneNumber,
       emailVerified: request.emailVerified,
+      phoneVerified: request.phoneVerified,
       lastLoginAt: timestamp,
       updatedAt: timestamp,
     });
