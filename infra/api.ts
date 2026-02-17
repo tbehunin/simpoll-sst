@@ -57,6 +57,16 @@ export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
 graphql.route('POST /graphql', 'packages/functions/src/graphql/handler.main');
 graphql.route('GET /graphql', 'packages/functions/src/graphql/handler.main');
 
+// Auth test page - for testing Cognito authentication
+graphql.route('GET /auth-test', {
+  handler: 'packages/functions/src/auth-test/handler.main',
+  link: [],
+  environment: {
+    USER_POOL_ID: userPool.id,
+    USER_POOL_CLIENT_ID: userPoolClient.id,
+  },
+});
+
 
 // Seed the table for local development
 export const seedApi = new sst.aws.ApiGatewayV2('Seed', {

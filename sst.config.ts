@@ -15,7 +15,7 @@ export default $config({
   },
   async run() {
     await import('./infra/storage');
-    await import('./infra/api');
+    const apiModule = await import('./infra/api');
     const auth = await import('./infra/auth');
 
     return {
@@ -23,6 +23,8 @@ export default $config({
       Region: aws.getRegionOutput().name,
       IdentityPool: auth.identityPool.id,
       UserPoolClient: auth.userPoolClient.id,
+      GraphQLEndpoint: apiModule.graphql.url,
+      AuthTestPage: $interpolate`${apiModule.graphql.url}/auth-test`,
     };
   },
 });
