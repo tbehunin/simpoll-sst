@@ -18,13 +18,19 @@ export default $config({
     const apiModule = await import('./infra/api');
     const auth = await import('./infra/auth');
 
-    return {
+    const outputs: Record<string, any> = {
       UserPool: auth.userPool.id,
       Region: aws.getRegionOutput().name,
       IdentityPool: auth.identityPool.id,
       UserPoolClient: auth.userPoolClient.id,
       GraphQLEndpoint: apiModule.graphql.url,
-      AuthTestPage: $interpolate`${apiModule.graphql.url}/auth-test`,
     };
+
+    // Only include AuthTestPage in dev stage
+    if ($app.stage === 'dev') {
+      outputs.AuthTestPage = $interpolate`${apiModule.graphql.url}/auth-test`;
+    }
+
+    return outputs;
   },
 });
