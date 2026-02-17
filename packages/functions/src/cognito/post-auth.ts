@@ -1,10 +1,5 @@
 import { PostAuthenticationTriggerHandler } from 'aws-lambda';
-import { Resource } from 'sst';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
-
-const client = new DynamoDBClient({});
-const dynamoDb = DynamoDBDocumentClient.from(client);
+import { UserService } from '@simpoll-sst/core/services/user/user.service';
 
 /**
  * Cognito Post Authentication Trigger
@@ -20,23 +15,13 @@ export const main: PostAuthenticationTriggerHandler = async (event) => {
     const email = event.request.userAttributes.email;
     const emailVerified = event.request.userAttributes.email_verified === 'true';
 
-    // Upsert user profile in DynamoDB
-    await dynamoDb.send(
-      new PutCommand({
-        TableName: Resource.PollsTable.name,
-        Item: {
-          odType: 'User',
-          pk: `User#${userId}`,
-          sk: 'Profile',
-          userId,
-          username,
-          email,
-          emailVerified,
-          lastLoginAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      })
-    );
+    // Delegate to service layer (maintains proper layering)
+    await UserService.syncUserProfile({
+      userId,
+      username,
+      email,
+      emailVerified,
+    });
 
     console.log(`✅ Successfully synced user profile for userId: ${userId}`);
   } catch (error) {
