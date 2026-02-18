@@ -2,7 +2,7 @@ import { createContextCommand } from '../command-builder';
 import { createAggregateVoteContext, AggregateVoteValidationContext } from './aggregate-vote.context';
 import { validateAggregateVote } from './aggregate-vote.validation';
 import { AggregateVoteRequest } from './aggregate-vote.types';
-import { getPollTypeHandler } from '../../../../handlers/poll.registry';
+import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
 import { dbClient } from '../../../../data/db.client';
 import { ValidationError } from '../../../../errors';
 

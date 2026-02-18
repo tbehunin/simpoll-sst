@@ -157,7 +157,7 @@ This project uses [npm Workspaces](https://docs.npmjs.com/cli/v8/using-npm/works
 
 Shared business logic and domain models:
 
-- **`handlers/`** - Poll type registry and handler implementations (e.g., multiple choice)
+- **`poll-types/`** - Poll type registry and handler implementations (e.g., multiple choice)
 - **`services/`** - Business logic using command pattern with 3-phase execution (fetch context → validate → execute)
 - **`data/`** - Repository pattern for DynamoDB access with entity mappers
 - **`common/`** - Shared types and constants

@@ -4,7 +4,7 @@ import { builder } from '../builder';
 import { pollType } from '../common/enums';
 import { multipleChoiceVoteInput } from '../types/multiple-choice-poll';
 import { poll } from '../types/poll';
-import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types/poll-type.registry';
 import { VoteRequest } from '@simpoll-sst/core/services/poll/commands/vote/vote.types';
 
 export const vote = builder.mutationField('vote', (t) =>

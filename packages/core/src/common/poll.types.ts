@@ -1,4 +1,4 @@
-import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from '../handlers/multiple-choice.handler';
+import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from '../poll-types/multiple-choice.handler';
 import { ValidationError } from '../errors';
 
 export enum PollType {

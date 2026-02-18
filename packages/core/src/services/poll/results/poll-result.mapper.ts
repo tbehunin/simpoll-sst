@@ -2,7 +2,7 @@ import { PollType } from '../../../common/poll.types';
 import { PollResult } from './poll-result.domain';
 import { PollResultEntity } from '../../../data/poll/result/poll-result.entity';
 import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
-import { getPollTypeHandler } from '../../../handlers/poll.registry';
+import { getPollTypeHandler } from '../../../poll-types/poll-type.registry';
 import { Mapper } from '../mappers/mapper.interface';
 
 export const PollResultMapper: Mapper<PollResultEntity<PollType>, PollResult<PollType>> = {

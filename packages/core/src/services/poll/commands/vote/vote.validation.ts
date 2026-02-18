@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { PollType, PollScope } from '../../../../common/poll.types';
 import { VoteRequest } from './vote.types';
 import { VoteValidationContext } from './vote.context';
-import { getPollTypeHandler } from '../../../../handlers/poll.registry';
+import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
 import { 
   ValidationResult, 
   zodToValidationResult,

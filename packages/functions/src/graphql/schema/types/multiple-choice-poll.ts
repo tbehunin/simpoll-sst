@@ -1,4 +1,4 @@
-import { Choice, ChoiceResult } from '@simpoll-sst/core/handlers/multiple-choice.handler';
+import { Choice, ChoiceResult } from '@simpoll-sst/core/poll-types/multiple-choice.handler';
 import { builder } from '../builder';
 import { mediaType } from '../common/enums';
 import { MediaAsset, PollType } from '@simpoll-sst/core/common/poll.types';

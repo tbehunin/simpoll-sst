@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { MediaAsset, MediaType, PollType, PollScope } from '../common/poll.types';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
-import { PollTypeHandler } from './poll.registry';
+import { PollTypeHandler } from './poll-type.registry';
 import { UpdateRequest } from '../data/db.client';
 import { ValidationError } from '../errors';
 

@@ -7,7 +7,7 @@ import { builder } from '../builder';
 import { pollType, votePrivacy } from '../common/enums';
 import { poll } from '../types/poll';
 import { multipleChoiceInput } from '../types/multiple-choice-poll';
-import { getPollTypeHandler } from '@simpoll-sst/core/handlers/poll.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types/poll-type.registry';
 
 function getSingleNonNullItem<T>(items: (T | null | undefined)[]): T | null {
   const nonNullItems = items.filter(item => item !== null && item !== undefined);
