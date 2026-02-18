@@ -5,7 +5,13 @@
     "username": "tdawg",
     "fullName": "Todd Behunin",
     "email": "todd@email.com",
-    "bio": "nerd"
+    "phoneNumber": "+15551234567",
+    "bio": "nerd",
+    "emailVerified": true,
+    "phoneVerified": true,
+    "lastLoginAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z",
+    "createdAt": "2024-01-01T08:00:00.000Z"
   },
   {
     "pk": "User#user2",
@@ -13,6 +19,12 @@
     "username": "ash",
     "fullName": "Ashlee Behunin",
     "email": "ashlee@email.com",
-    "bio": "queen"
+    "phoneNumber": "+15559876543",
+    "bio": "queen",
+    "emailVerified": true,
+    "phoneVerified": true,
+    "lastLoginAt": "2024-01-15T09:15:00.000Z",
+    "updatedAt": "2024-01-15T09:15:00.000Z",
+    "createdAt": "2024-01-01T08:00:00.000Z"
   }
 ]

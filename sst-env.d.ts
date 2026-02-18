@@ -21,6 +21,10 @@ declare module "sst" {
       "name": string
       "type": "sst.aws.Dynamo"
     }
+    "PostAuthTrigger": {
+      "name": string
+      "type": "sst.aws.Function"
+    }
     "Seed": {
       "type": "sst.aws.ApiGatewayV2"
       "url": string

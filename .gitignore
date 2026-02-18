@@ -7,9 +7,8 @@ node_modules
 # tmp files
 .#*
 
-# env 
+# env (local overrides only - .env is tracked for documentation)
 .env*.local
-.env
 
 # opennext
 .open-next

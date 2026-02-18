@@ -17,7 +17,13 @@ export const user = builder.loadableObjectRef<User, string>('User', {
   fields: (t) => ({
     userId: t.exposeString('userId'),
     username: t.exposeString('username'),
-    fullName: t.exposeString('fullName'),
-    bio: t.exposeString('bio'),
+    fullName: t.string({
+      nullable: true,
+      resolve: (user) => user.fullName ?? null,
+    }),
+    bio: t.string({
+      nullable: true,
+      resolve: (user) => user.bio ?? null,
+    }),
   }),
 });

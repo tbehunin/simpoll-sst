@@ -4,7 +4,16 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "dev": "AWS_PROFILE=simpoll-sst sst dev",
+    "dev:team": "AWS_PROFILE=simpoll-sst sst dev --stage dev",
+    "deploy:dev": "AWS_PROFILE=simpoll-sst sst deploy --stage dev",
+    "deploy:staging": "AWS_PROFILE=simpoll-sst sst deploy --stage staging",
+    "deploy:prod": "AWS_PROFILE=simpoll-sst sst deploy --stage production",
+    "remove": "AWS_PROFILE=simpoll-sst sst remove",
+    "remove:dev": "AWS_PROFILE=simpoll-sst sst remove --stage dev",
+    "remove:staging": "AWS_PROFILE=simpoll-sst sst remove --stage staging"
+  },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "typescript": "5.6.2"
@@ -12,6 +21,7 @@
   "dependencies": {
     "@pothos/core": "^4.3.0",
     "@pothos/plugin-dataloader": "^4.3.0",
+    "aws-jwt-verify": "^5.1.1",
     "dataloader": "^2.2.3",
     "graphql-scalars": "^1.24.0",
     "graphql-yoga": "^5.10.9",

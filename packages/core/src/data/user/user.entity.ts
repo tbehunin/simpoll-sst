@@ -2,7 +2,13 @@ export type UserEntity = {
   pk: string
   sk: string
   username: string
-  fullName: string
+  fullName?: string
   email: string
-  bio: string
+  phoneNumber?: string
+  bio?: string
+  emailVerified?: boolean
+  phoneVerified?: boolean
+  lastLoginAt?: string
+  updatedAt?: string
+  createdAt?: string
 };
