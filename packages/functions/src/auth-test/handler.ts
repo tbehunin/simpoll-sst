@@ -6,7 +6,7 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SimplePoll Auth Test</title>
+  <title>Simpoll Auth Test</title>
   <script src="https://unpkg.com/@aws-amplify/auth@6.0.0/dist/aws-amplify-auth.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -177,7 +177,7 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
 <body>
   <div class="container">
     <div class="card">
-      <h1>🗳️ SimplePoll Auth Test</h1>
+      <h1>🗳️ Simpoll Auth Test</h1>
       <p class="subtitle">Test Cognito authentication and get JWT tokens for GraphQL API testing</p>
       
       <div class="config-info">
