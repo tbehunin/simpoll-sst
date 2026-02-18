@@ -4,7 +4,16 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "dev": "sst dev",
+    "dev:team": "sst dev --stage dev",
+    "deploy:dev": "sst deploy --stage dev",
+    "deploy:staging": "sst deploy --stage staging",
+    "deploy:prod": "sst deploy --stage production",
+    "remove": "sst remove",
+    "remove:dev": "sst remove --stage dev",
+    "remove:staging": "sst remove --stage staging"
+  },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
     "typescript": "5.6.2"

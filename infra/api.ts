@@ -19,32 +19,23 @@ export const api = new sst.aws.ApiGatewayV2('Api', {
 
 // Create the GraphQL API
 const stage = $app.stage;
-const isLocal = !!process.env.IS_LOCAL;
 
-// Validate required environment variables based on stage
-if (stage === 'dev') {
-  if (!process.env.DEV_USER_ID) {
-    throw new Error('DEV_USER_ID environment variable is required for dev stage');
-  }
-}
+// Shared stages require authentication, personal sandbox stages (username stages) don't
+const SHARED_STAGES = ['dev', 'staging', 'production'];
+const isPersonalSandbox = !SHARED_STAGES.includes(stage);
 
 export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
   transform: {
     route: {
       handler: {
-        link: [table],
+        link: [table, userPool, userPoolClient],
         environment: {
           SST_STAGE: stage,
-          IS_LOCAL: isLocal ? 'true' : 'false',
-          ...(stage === 'dev' && process.env.DEV_USER_ID
-            ? { DEV_USER_ID: process.env.DEV_USER_ID }
-            : {}),
-          ...(stage === 'production'
-            ? {
-                COGNITO_USER_POOL_ID: userPool.id,
-                COGNITO_CLIENT_ID: userPoolClient.id,
-              }
-            : {}),
+          IS_LOCAL: isPersonalSandbox ? 'true' : 'false',
+          USER_POOL_ID: userPool.id,
+          USER_POOL_CLIENT_ID: userPoolClient.id,
+          // Personal sandbox stages get DEV_USER_ID for easy testing
+          ...(isPersonalSandbox && { DEV_USER_ID: process.env.DEV_USER_ID || 'user1' }),
         },
       },
     }
@@ -53,8 +44,8 @@ export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
 graphql.route('POST /graphql', 'packages/functions/src/graphql/handler.main');
 graphql.route('GET /graphql', 'packages/functions/src/graphql/handler.main');
 
-// Auth test page - only available in dev stage
-if (stage === 'dev') {
+// Auth test page - only available in personal sandbox stages
+if (isPersonalSandbox) {
   graphql.route('GET /auth-test', {
     handler: 'packages/functions/src/auth-test/handler.main',
     link: [],
