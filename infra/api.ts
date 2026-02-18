@@ -44,8 +44,8 @@ export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
 graphql.route('POST /graphql', 'packages/functions/src/graphql/handler.main');
 graphql.route('GET /graphql', 'packages/functions/src/graphql/handler.main');
 
-// Auth test page - only available in personal sandbox stages
-if (isPersonalSandbox) {
+// Auth test page - available in personal sandboxes and shared dev (for getting tokens)
+if (isPersonalSandbox || stage === 'dev') {
   graphql.route('GET /auth-test', {
     handler: 'packages/functions/src/auth-test/handler.main',
     link: [],
@@ -57,15 +57,16 @@ if (isPersonalSandbox) {
   });
 }
 
-
-// Seed the table for local development
-export const seedApi = new sst.aws.ApiGatewayV2('Seed', {
-  transform: {
-    route: {
-      handler: {
-        link: [table],
-      },
+// Seed API - only available in personal sandboxes
+if (isPersonalSandbox) {
+  const seedApi = new sst.aws.ApiGatewayV2('Seed', {
+    transform: {
+      route: {
+        handler: {
+          link: [table],
+        },
+      }
     }
-  }
-});
-seedApi.route('POST /seed', 'packages/functions/src/seed/handler.main');
+  });
+  seedApi.route('POST /seed', 'packages/functions/src/seed/handler.main');
+}

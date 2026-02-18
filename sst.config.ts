@@ -26,8 +26,11 @@ export default $config({
       GraphQLEndpoint: apiModule.graphql.url,
     };
 
-    // Only include AuthTestPage in dev stage
-    if ($app.stage === 'dev') {
+    // Include AuthTestPage in personal sandboxes and shared dev
+    const SHARED_STAGES = ['dev', 'staging', 'production'];
+    const isPersonalSandbox = !SHARED_STAGES.includes($app.stage);
+    
+    if (isPersonalSandbox || $app.stage === 'dev') {
       outputs.AuthTestPage = $interpolate`${apiModule.graphql.url}/auth-test`;
     }
 

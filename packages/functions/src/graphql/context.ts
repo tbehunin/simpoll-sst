@@ -13,44 +13,63 @@ export interface ContextType {
   // loadMany: <K, V>(ref: LoadableRef<K, V, ContextType>, ids: K[]) => Promise<(Error | V)[]>; // helper for loading many
 }
 
-// Initialize JWT verifier for production
-let jwtVerifier: ReturnType<typeof CognitoJwtVerifier.create> | null = null;
-if (process.env.SST_STAGE === 'production' && process.env.COGNITO_USER_POOL_ID && process.env.COGNITO_CLIENT_ID) {
-  jwtVerifier = CognitoJwtVerifier.create({
-    userPoolId: process.env.COGNITO_USER_POOL_ID,
-    tokenUse: 'id',
-    clientId: process.env.COGNITO_CLIENT_ID,
-  });
-}
+// Initialize JWT verifier (available in all stages for testing)
+const jwtVerifier =
+  process.env.USER_POOL_ID && process.env.USER_POOL_CLIENT_ID
+    ? CognitoJwtVerifier.create({
+        userPoolId: process.env.USER_POOL_ID,
+        tokenUse: 'id',
+        clientId: process.env.USER_POOL_CLIENT_ID,
+      })
+    : null;
 
 async function getCurrentUserId(event: APIGatewayProxyEventV2): Promise<string> {
-  const stage = process.env.SST_STAGE || 'dev';
+  const isPersonalSandbox = process.env.IS_LOCAL === 'true';
+  const authHeader = event.headers['authorization'] || event.headers['Authorization'];
 
-  // Development mode: use DEV_USER_ID with optional header override
-  if (stage === 'dev') {
-    const devUserId = process.env.DEV_USER_ID;
-    if (!devUserId) {
-      throw new Error('DEV_USER_ID environment variable is required in dev mode');
+  // Personal sandbox mode: smart auth handling
+  if (isPersonalSandbox) {
+    // If Authorization header is present, test JWT verification
+    if (authHeader?.startsWith('Bearer ')) {
+      console.warn('🔐 SANDBOX: Testing JWT verification...');
+      const token = authHeader.substring(7);
+
+      if (!jwtVerifier) {
+        throw new Error('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
+      }
+
+      try {
+        const payload = await jwtVerifier.verify(token);
+        const userId = (payload.sub || payload['cognito:username']) as string;
+        console.warn(`✅ JWT valid! User: ${userId}`);
+        return userId;
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+        console.error(`❌ JWT verification failed: ${errorMsg}`);
+        throw new Error(`Unauthorized: ${errorMsg}`);
+      }
     }
 
-    // Allow header override for multi-user testing
-    const headerUserId = event.headers['x-dev-user-id'];
-    return headerUserId || devUserId;
+    // No Authorization header - use dev user (fast iteration mode)
+    const devUserId = event.headers['x-dev-user-id'] || process.env.DEV_USER_ID;
+
+    if (!devUserId) {
+      throw new Error('DEV_USER_ID environment variable is required in sandbox mode');
+    }
+
+    console.warn(`🔓 SANDBOX: Using dev user ${devUserId}`);
+    return devUserId;
   }
 
-  // Production mode: verify JWT token
-  const authHeader = event.headers['authorization'] || event.headers['Authorization'];
-  if (!authHeader) {
+  // Shared stages (dev/staging/production): JWT required
+  if (!authHeader?.startsWith('Bearer ')) {
     throw new Error('Authorization header is required');
   }
 
-  const token = authHeader.replace(/^Bearer\s+/i, '');
-  if (!token) {
-    throw new Error('Invalid authorization header format');
-  }
+  const token = authHeader.substring(7);
 
   if (!jwtVerifier) {
-    throw new Error('JWT verifier not initialized');
+    throw new Error('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
   }
 
   try {
@@ -61,7 +80,8 @@ async function getCurrentUserId(event: APIGatewayProxyEventV2): Promise<string> 
     }
     return userId;
   } catch (error) {
-    throw new Error(`JWT verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+    throw new Error(`JWT verification failed: ${errorMsg}`);
   }
 }
 
