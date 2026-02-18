@@ -1,6 +1,7 @@
 import { PollDetail } from '@simpoll-sst/core/services/poll/details/poll-detail.domain';
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { MAX_DATE } from '@simpoll-sst/core/common/constants';
+import { NotFoundError } from '@simpoll-sst/core/errors';
 import { builder } from '../builder';
 import { pollScope, pollType, votePrivacy } from '../common/enums';
 import { user } from './user';
@@ -18,7 +19,7 @@ export const poll = builder.loadableObject('Poll', {
     // so make sure that order is maintained before returning (a requirement to use DataLoader).
     return pollIds.map((pollId) => {
       const poll = polls.find(poll => poll.pollId === pollId);
-      return poll ? poll : new Error(`Poll with id ${pollId} not found`);
+      return poll ?? new NotFoundError('Poll', pollId);
     });
   },
   fields: (t) => ({

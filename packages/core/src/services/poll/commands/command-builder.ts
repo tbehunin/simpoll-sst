@@ -1,3 +1,5 @@
+import { ValidationError } from '../../../errors';
+
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
 type ContextCreator<T, TContext> = (request: T) => Promise<TContext>;
 type ContextValidator<T, TContext> = (request: T, context: TContext) => ValidationResult;
@@ -16,7 +18,7 @@ export const createContextCommand = <TRequest, TResult, TContext>(
   const validationResult = validator(request, context);
   
   if (!validationResult.isValid) {
-    throw new Error(`Validation failed: ${validationResult.errors.join(', ')}`);
+    throw new ValidationError('Validation failed', validationResult.errors);
   }
   
   // 3. Execute with context (may reuse fetched data)

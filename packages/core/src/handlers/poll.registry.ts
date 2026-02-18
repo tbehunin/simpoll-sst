@@ -3,6 +3,7 @@ import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope }
 import { UpdateRequest } from '../data/db.client';
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
 import { multipleChoiceHandler } from './multiple-choice.handler';
+import { NotFoundError } from '../errors';
 
 export interface PollTypeHandler<T extends PollType> {
   // Parsing
@@ -29,7 +30,7 @@ export const registerPollType = (type: PollType, handler: PollTypeHandler<PollTy
 
 export const getPollTypeHandler = (type: PollType) => {
   const handler = pollRegistry[type];
-  if (!handler) throw new Error(`No handler registered for poll type: ${type}`);
+  if (!handler) throw new NotFoundError('Poll type handler', type);
   return handler;
 };
 

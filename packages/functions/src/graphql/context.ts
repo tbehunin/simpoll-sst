@@ -1,6 +1,7 @@
 import { initContextCache } from '@pothos/core';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { APIGatewayProxyEventV2 } from 'aws-lambda';
+import { UnauthorizedError } from '@simpoll-sst/core/errors';
 // import { LoadableRef, rejectErrors } from '@pothos/plugin-dataloader';
 // import DataLoader from 'dataloader';
 // import { loadablePoll } from './schema/interfaces/poll';
@@ -35,7 +36,7 @@ async function getCurrentUserId(event: APIGatewayProxyEventV2): Promise<string> 
       const token = authHeader.substring(7);
 
       if (!jwtVerifier) {
-        throw new Error('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
+        throw new UnauthorizedError('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
       }
 
       try {
@@ -46,7 +47,7 @@ async function getCurrentUserId(event: APIGatewayProxyEventV2): Promise<string> 
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : 'Unknown error';
         console.error(`❌ JWT verification failed: ${errorMsg}`);
-        throw new Error(`Unauthorized: ${errorMsg}`);
+        throw new UnauthorizedError(errorMsg);
       }
     }
 
@@ -63,25 +64,26 @@ async function getCurrentUserId(event: APIGatewayProxyEventV2): Promise<string> 
 
   // Shared stages (dev/staging/production): JWT required
   if (!authHeader?.startsWith('Bearer ')) {
-    throw new Error('Authorization header is required');
+    throw new UnauthorizedError('Authorization header is required');
   }
 
   const token = authHeader.substring(7);
 
   if (!jwtVerifier) {
-    throw new Error('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
+    throw new UnauthorizedError('JWT verifier not initialized - check USER_POOL_ID and USER_POOL_CLIENT_ID');
   }
 
   try {
     const payload = await jwtVerifier.verify(token);
     const userId = (payload.sub || payload['cognito:username']) as string;
     if (!userId) {
-      throw new Error('No user ID found in JWT token');
+      throw new UnauthorizedError('No user ID found in JWT token');
     }
     return userId;
   } catch (error) {
+    if (error instanceof UnauthorizedError) throw error;
     const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-    throw new Error(`JWT verification failed: ${errorMsg}`);
+    throw new UnauthorizedError(`JWT verification failed: ${errorMsg}`);
   }
 }
 

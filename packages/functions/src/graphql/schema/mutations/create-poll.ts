@@ -2,6 +2,7 @@ import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
 import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/poll.types';
 import { generatePollScope } from '@simpoll-sst/core/services/utils';
+import { ValidationError } from '@simpoll-sst/core/errors';
 import { builder } from '../builder';
 import { pollType, votePrivacy } from '../common/enums';
 import { poll } from '../types/poll';
@@ -13,7 +14,11 @@ function getSingleNonNullItem<T>(items: (T | null | undefined)[]): T | null {
   if (nonNullItems.length === 1) {
     return nonNullItems[0];
   }
-  throw new Error(`Expected exactly one non-null item, but got ${nonNullItems.length}`);
+  throw new ValidationError(
+    nonNullItems.length === 0
+      ? 'Poll details are required - provide exactly one detail type'
+      : `Expected exactly one detail type, but got ${nonNullItems.length}`
+  );
 }
 
 export const createPoll = builder.mutationField('createPoll', (t) =>

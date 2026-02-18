@@ -3,6 +3,7 @@ import { MediaAsset, MediaType, PollType, PollScope } from '../common/poll.types
 import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
 import { PollTypeHandler } from './poll.registry';
 import { UpdateRequest } from '../data/db.client';
+import { ValidationError } from '../errors';
 
 export interface Choice {
   text: string
@@ -76,7 +77,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
   }),
   buildAggregateVoteUpdateRequest: (pollId: string, userId: string, scope: PollScope, vote: MultipleChoiceParticipant): UpdateRequest => {
     if (!vote?.selectedIndex || vote.selectedIndex.length === 0) {
-      throw new Error('No choices selected for vote aggregation');
+      throw new ValidationError('No choices selected for vote aggregation');
     }
 
     const addExpressions: string[] = [];

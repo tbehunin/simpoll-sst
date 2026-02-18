@@ -1,4 +1,5 @@
 import { MultipleChoiceDetail, MultipleChoiceResult, MultipleChoiceParticipant } from '../handlers/multiple-choice.handler';
+import { ValidationError } from '../errors';
 
 export enum PollType {
   MultipleChoice = 'MultipleChoice',
@@ -54,7 +55,7 @@ export interface PollParticipantMap {
 
 export const parsePollType = (typeStr?: string) => {
   const pollType = Object.values(PollType).find(type => type === typeStr);
-  if (!pollType) throw new Error(`Unknown poll type: ${typeStr}`);
+  if (!pollType) throw new ValidationError(`Unknown poll type: ${typeStr}`);
 
   return pollType;
 };
