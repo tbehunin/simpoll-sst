@@ -5,14 +5,14 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "sst dev",
-    "dev:team": "sst dev --stage dev",
-    "deploy:dev": "sst deploy --stage dev",
-    "deploy:staging": "sst deploy --stage staging",
-    "deploy:prod": "sst deploy --stage production",
-    "remove": "sst remove",
-    "remove:dev": "sst remove --stage dev",
-    "remove:staging": "sst remove --stage staging"
+    "dev": "AWS_PROFILE=simpoll-sst sst dev",
+    "dev:team": "AWS_PROFILE=simpoll-sst sst dev --stage dev",
+    "deploy:dev": "AWS_PROFILE=simpoll-sst sst deploy --stage dev",
+    "deploy:staging": "AWS_PROFILE=simpoll-sst sst deploy --stage staging",
+    "deploy:prod": "AWS_PROFILE=simpoll-sst sst deploy --stage production",
+    "remove": "AWS_PROFILE=simpoll-sst sst remove",
+    "remove:dev": "AWS_PROFILE=simpoll-sst sst remove --stage dev",
+    "remove:staging": "AWS_PROFILE=simpoll-sst sst remove --stage staging"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",
