@@ -1,8 +1,7 @@
-import { PollType, PollScope } from '../../../../common/poll.types';
-import { PollDetailEntity } from '../../../../data/poll/detail/poll-detail.entity';
-import { PollParticipantEntity } from '../../../../common/poll-participant.entity';
-import { PollDetailRepository } from '../../../../data/poll/detail/poll-detail.repository';
-import { PollParticipantRepository } from '../../../../data/poll/participant/poll-participant.repository';
+import { PollType, PollScope } from '@simpoll-sst/core/common';
+import { PollDetailEntity } from '@simpoll-sst/core/data';
+import { PollParticipantEntity } from '@simpoll-sst/core/common';
+import { PollDetailRepository, PollParticipantRepository } from '@simpoll-sst/core/data';
 import { VoteRequest } from './vote.types';
 import { generatePollUserId } from '../../../utils';
 

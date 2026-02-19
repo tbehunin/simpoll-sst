@@ -2,11 +2,11 @@ import { createContextCommand } from '../command-builder';
 import { createCreatePollContext, CreatePollValidationContext } from './create-poll.context';
 import { validateCreatePoll } from './create-poll.validation';
 import { CreatePollRequest } from './create-poll.types';
-import { PollType } from '../../../../common/poll.types';
+import { PollType } from '@simpoll-sst/core/common';
 import { PollDetailMapper } from '../../details';
 import { PollResultMapper } from '../../results';
 import { PollParticipantMapper } from '../../participants';
-import { dbClient } from '../../../../data/db.client';
+import { dbClient } from '@simpoll-sst/core/data';
 import { v4 as uuidv4 } from 'uuid';
 
 // Pure executor function

@@ -1,5 +1,5 @@
 import { createBatchQuery } from '../queries/query-builder';
-import { PollParticipantRepository } from '../../../data/poll/participant/poll-participant.repository';
+import { PollParticipantRepository } from '@simpoll-sst/core/data';
 import { PollParticipantMapper } from './poll-participant.mapper';
 
 export const getPollParticipantsByIds = createBatchQuery(

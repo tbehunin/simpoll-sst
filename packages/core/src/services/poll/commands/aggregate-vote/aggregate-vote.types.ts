@@ -1,4 +1,4 @@
-import { PollType } from '../../../../common/poll.types';
+import { PollType } from '@simpoll-sst/core/common';
 import { PollParticipant } from '../../participants';
 
 export interface AggregateVoteRequest {

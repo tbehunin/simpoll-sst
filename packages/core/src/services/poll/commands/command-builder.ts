@@ -1,4 +1,4 @@
-import { ValidationError } from '../../../errors';
+import { ValidationError } from '@simpoll-sst/core/errors';
 
 type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
 type ContextCreator<T, TContext> = (request: T) => Promise<TContext>;

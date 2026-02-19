@@ -5,6 +5,16 @@
     "test": "sst shell vitest"
   },
   "exports": {
+    "./common": "./src/common/index.ts",
+    "./common/*": "./src/common/*.ts",
+    "./data": "./src/data/index.ts",
+    "./data/*": "./src/data/*",
+    "./errors": "./src/errors/index.ts",
+    "./errors/*": "./src/errors/*.ts",
+    "./poll-types": "./src/poll-types/index.ts",
+    "./poll-types/*": "./src/poll-types/*.ts",
+    "./services": "./src/services/index.ts",
+    "./services/*": "./src/services/*",
     "./*": [
       "./src/*/index.ts",
       "./src/*.ts"

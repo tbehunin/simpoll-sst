@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { PollType, PollScope } from '../../../../common/poll.types';
+import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { VoteRequest } from './vote.types';
 import { VoteValidationContext } from './vote.context';
-import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { 
   ValidationResult, 
   zodToValidationResult,

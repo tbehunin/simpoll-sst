@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { AggregateVoteRequest } from './aggregate-vote.types';
 import { AggregateVoteValidationContext } from './aggregate-vote.context';
-import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { 
   ValidationResult, 
   zodToValidationResult,

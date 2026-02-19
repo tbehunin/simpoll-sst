@@ -1,6 +1,6 @@
-import { PollType } from '../../../common/poll.types';
-import { getPollTypeHandler } from '../../../poll-types/poll-type.registry';
-import { PollParticipantEntity, PollParticipantEntityBase } from '../../../common/poll-participant.entity';
+import { PollType } from '@simpoll-sst/core/common';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
+import { PollParticipantEntity, PollParticipantEntityBase } from '@simpoll-sst/core/common';
 
 export const PollParticipantMapper = {
   toPollParticipantEntity: (rawData: Record<string, any>[] | undefined): PollParticipantEntity<PollType>[] => {

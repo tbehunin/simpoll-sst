@@ -1,5 +1,5 @@
-import { MAX_DATE } from '../common/constants';
-import { PollScope } from '../common/poll.types';
+import { MAX_DATE } from '@simpoll-sst/core/common';
+import { PollScope } from '@simpoll-sst/core/common';
 
 export const generatePollScope = (sharedWith: string[]): PollScope =>
   sharedWith.length > 0 ? PollScope.Private : PollScope.Public;

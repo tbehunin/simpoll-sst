@@ -1,4 +1,4 @@
-import { DbId, dbClient } from '../db.client';
+import { DbId, dbClient } from '@simpoll-sst/core/data';
 import { UserEntity } from './user.entity';
 
 export const UserRepository = {
