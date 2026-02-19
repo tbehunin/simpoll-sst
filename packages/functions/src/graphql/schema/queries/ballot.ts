@@ -2,17 +2,7 @@ import { RoleType, PollScope, PollStatus } from '@simpoll-sst/core/common/poll.t
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
 import { poll } from '../types/poll';
-import { ContextType } from '../../context';
-
-export const ballot = builder.queryField('ballot', (t) =>
-  t.field({
-    type: [poll],
-    args: {
-      input: t.arg({ type: ballotInput, required: false }),
-    },
-    resolve: ballotResolver,
-  })
-);
+import { toConnection } from '../common/connection';
 
 export const ballotInput = builder.inputType('BallotInput', {
   fields: (t) => ({
@@ -20,12 +10,23 @@ export const ballotInput = builder.inputType('BallotInput', {
   }),
 });
 
-export const ballotResolver = (_root: any, args: { input?: { pollScope?: PollScope | null } | null }, context: ContextType) => {
-  return PollService.queryPollDetails({
-    userId: context.currentUserId,
-    roleType: RoleType.Participant,
-    scope: args.input?.pollScope || undefined,
-    voted: false,
-    pollStatus: PollStatus.Open,
-  });
-};
+export const ballot = builder.queryField('ballot', (t) =>
+  t.connection({
+    type: poll,
+    args: {
+      input: t.arg({ type: ballotInput, required: false }),
+    },
+    resolve: async (_root, args, context) => {
+      const result = await PollService.queryPollDetails({
+        userId: context.currentUserId,
+        roleType: RoleType.Participant,
+        scope: args.input?.pollScope || undefined,
+        voted: false,
+        pollStatus: PollStatus.Open,
+        limit: args.first ?? undefined,
+        cursor: args.after ?? undefined,
+      });
+      return toConnection(result);
+    },
+  })
+);

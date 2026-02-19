@@ -7,6 +7,13 @@ export type QueryParams = {
   ExpressionAttributeValues: any
   KeyConditionExpression: string
   ScanIndexForward?: boolean
+  Limit?: number
+  ExclusiveStartKey?: Record<string, any>
+};
+
+export type QueryResult = {
+  items: Record<string, any>[]
+  lastEvaluatedKey?: Record<string, any>
 };
 export type DbId = {
   pk: string
@@ -51,15 +58,17 @@ export const dbClient = {
     // console.log('*** DATA ACCESS: BatchWriteCommand ***', params);
     await dynamoDb.send(new BatchWriteCommand(params));
   },
-  query: async (params: QueryParams) => {
+  query: async (params: QueryParams): Promise<QueryResult> => {
     const pollParams = {
       ...params,
       TableName,
     };
     // console.log('*** DATA ACCESS: QueryCommand ***', pollParams);
     const result = await dynamoDb.send(new QueryCommand(pollParams));
-    //console.log('query result', result);
-    return (result || {}).Items;
+    return {
+      items: result.Items ?? [],
+      lastEvaluatedKey: result.LastEvaluatedKey,
+    };
   },
   batchGet: async (keys: DbId[], logMsg: string = '') => {
     const params = {

@@ -1,13 +1,28 @@
-import { MAX_DATE, MIN_DATE } from '../../../common/constants';
+import { MAX_DATE, MIN_DATE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '../../../common/constants';
 import { RoleType, PollScope, PollStatus } from '../../../common/poll.types';
-import { QueryPollsRequest } from '../../../services/poll/poll.types';
-import { dbClient } from '../../db.client';
+import { dbClient, QueryParams } from '../../db.client';
 
-type QueryParams = {
-  IndexName: string
-  ExpressionAttributeValues: Record<string, string>
-  KeyConditionExpression: string
-  ScanIndexForward?: boolean
+/**
+ * Repository-level request type for querying polls.
+ * Uses raw DynamoDB types (exclusiveStartKey) instead of opaque cursors.
+ */
+type QueryPollsRepositoryRequest = {
+  userId: string;
+  roleType: RoleType;
+  scope?: PollScope;
+  voted?: boolean;
+  pollStatus?: PollStatus;
+  limit?: number;
+  exclusiveStartKey?: Record<string, any>;
+};
+
+/**
+ * Repository-level result type.
+ * Returns raw DynamoDB lastEvaluatedKey instead of encoded cursor.
+ */
+type QueryPollsRepositoryResult = {
+  pollIds: string[];
+  lastEvaluatedKey?: Record<string, any>;
 };
 
 const generateInitialQueryParams = (skToken: string, userId: string, roleType: RoleType, scope?: PollScope): QueryParams => {
@@ -31,7 +46,7 @@ const generateInitialQueryParams = (skToken: string, userId: string, roleType: R
 };
 
 export const QueryRepository = {
-  query: async ({ userId, roleType, scope, voted, pollStatus }: QueryPollsRequest): Promise<string[]> => {
+  query: async ({ userId, roleType, scope, voted, pollStatus, limit, exclusiveStartKey }: QueryPollsRepositoryRequest): Promise<QueryPollsRepositoryResult> => {
     const skToken = '[SKTOKEN]';
     const now = new Date().toISOString();
     const params = generateInitialQueryParams(skToken, userId, roleType, scope);
@@ -70,7 +85,20 @@ export const QueryRepository = {
         params.KeyConditionExpression += ' and gsisk2 between :min and :now';
       }
     }
-    const rawData = await dbClient.query(params);
-    return rawData?.map(({ pk }) => (pk.split('#')[1])) || [];
+
+    // Apply pagination
+    const pageSize = Math.min(limit ?? DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE);
+    params.Limit = pageSize;
+    if (exclusiveStartKey) {
+      params.ExclusiveStartKey = exclusiveStartKey;
+    }
+
+    const { items, lastEvaluatedKey } = await dbClient.query(params);
+    const pollIds = items.map(({ pk }) => pk.split('#')[1]);
+
+    return {
+      pollIds,
+      lastEvaluatedKey,
+    };
   },
 };

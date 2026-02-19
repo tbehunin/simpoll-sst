@@ -2,17 +2,7 @@ import { RoleType, PollScope, PollStatus } from '@simpoll-sst/core/common/poll.t
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
 import { poll } from '../types/poll';
-import { ContextType } from '../../context';
-
-export const directPolls = builder.queryField('directPolls', (t) =>
-  t.field({
-    type: [poll],
-    args: {
-      input: t.arg({ type: directPollsInput, required: false }),
-    },
-    resolve: directPollsResolver,
-  })
-);
+import { toConnection } from '../common/connection';
 
 export const directPollsInput = builder.inputType('DirectPollsInput', {
   fields: (t) => ({
@@ -21,12 +11,23 @@ export const directPollsInput = builder.inputType('DirectPollsInput', {
   }),
 });
 
-export const directPollsResolver = (_root: any, args: { input?: { voted?: boolean | null, pollStatus?: PollStatus | null } | null }, context: ContextType) => {
-  return PollService.queryPollDetails({
-    userId: context.currentUserId,
-    roleType: RoleType.Participant,
-    scope: PollScope.Private,
-    voted: args.input?.voted ?? undefined,
-    pollStatus: args.input?.pollStatus ?? undefined,
-  });
-}
+export const directPolls = builder.queryField('directPolls', (t) =>
+  t.connection({
+    type: poll,
+    args: {
+      input: t.arg({ type: directPollsInput, required: false }),
+    },
+    resolve: async (_root, args, context) => {
+      const result = await PollService.queryPollDetails({
+        userId: context.currentUserId,
+        roleType: RoleType.Participant,
+        scope: PollScope.Private,
+        voted: args.input?.voted ?? undefined,
+        pollStatus: args.input?.pollStatus ?? undefined,
+        limit: args.first ?? undefined,
+        cursor: args.after ?? undefined,
+      });
+      return toConnection(result);
+    },
+  })
+);
