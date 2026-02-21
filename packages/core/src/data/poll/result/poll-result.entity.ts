@@ -1,4 +1,4 @@
-import { PollResultMap, PollType } from '../../../common/poll.types';
+import { PollResultMap, PollType } from '@simpoll-sst/core/common';
 
 export interface PollResultEntityBase {
   pk: string

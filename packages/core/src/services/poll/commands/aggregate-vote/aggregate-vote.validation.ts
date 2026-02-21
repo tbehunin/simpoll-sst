@@ -1,19 +1,20 @@
 import { z } from 'zod';
 import { AggregateVoteRequest } from './aggregate-vote.types';
 import { AggregateVoteValidationContext } from './aggregate-vote.context';
-import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { 
   ValidationResult, 
   zodToValidationResult,
   PollTypeSchema,
   PollScopeSchema,
   UuidSchema,
+  NonEmptyStringSchema,
 } from '../validation.utils';
 
 // Base participant schema (vote data validated via registry)
 const PollParticipantBaseSchema = z.object({
   pollId: UuidSchema,
-  userId: UuidSchema,
+  userId: NonEmptyStringSchema,
   type: PollTypeSchema,
   scope: PollScopeSchema,
   voted: z.boolean(),

@@ -1,9 +1,8 @@
 import { createBatchQuery } from '../queries/query-builder';
-import { PollDetailRepository } from '../../../data/poll/detail/poll-detail.repository';
-import { QueryRepository } from '../../../data/poll/query/poll-query.repository';
+import { PollDetailRepository, QueryRepository } from '@simpoll-sst/core/data';
 import { PollDetailMapper } from './poll-detail.mapper';
 import { QueryPollsRequest } from '../poll.types';
-import { PaginatedResult } from '../../../common/pagination.types';
+import { PaginatedResult } from '@simpoll-sst/core/common';
 import { encodeCursor, decodeCursor } from '../queries/cursor';
 
 export const getPollDetailsByIds = createBatchQuery(

@@ -1,4 +1,4 @@
-import { UserRepository } from '../../data/user/user.repository';
+import { UserRepository } from '@simpoll-sst/core/data';
 import { User } from './user.domain';
 import { UserMapper } from './user.mapper';
 

@@ -3,5 +3,18 @@
   "compilerOptions": {
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@simpoll-sst/core/common": ["./src/common/index.ts"],
+      "@simpoll-sst/core/common/*": ["./src/common/*"],
+      "@simpoll-sst/core/data": ["./src/data/index.ts"],
+      "@simpoll-sst/core/data/*": ["./src/data/*"],
+      "@simpoll-sst/core/errors": ["./src/errors/index.ts"],
+      "@simpoll-sst/core/errors/*": ["./src/errors/*"],
+      "@simpoll-sst/core/poll-types": ["./src/poll-types/index.ts"],
+      "@simpoll-sst/core/poll-types/*": ["./src/poll-types/*"],
+      "@simpoll-sst/core/services": ["./src/services/index.ts"],
+      "@simpoll-sst/core/services/*": ["./src/services/*"]
+    }
   },
 }

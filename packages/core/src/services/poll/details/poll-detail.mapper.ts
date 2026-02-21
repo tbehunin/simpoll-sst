@@ -1,6 +1,6 @@
-import { PollType, PollScope } from '../../../common/poll.types';
+import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollDetail } from './poll-detail.domain';
-import { PollDetailEntity } from '../../../data/poll/detail/poll-detail.entity';
+import { PollDetailEntity } from '@simpoll-sst/core/data';
 import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
 import { generateExpireTimestamp, generatePollScope } from '../../utils';
 import { Mapper } from '../mappers/mapper.interface';

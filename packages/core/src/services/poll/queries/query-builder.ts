@@ -1,4 +1,4 @@
-import { Repository } from '../../../data/repository.interface';
+import { Repository } from '@simpoll-sst/core/data';
 import { Mapper } from '../mappers/mapper.interface';
 
 // Higher-order function that creates query functions

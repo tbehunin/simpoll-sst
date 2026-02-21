@@ -1,4 +1,4 @@
-import { PollType, PollParticipantMap } from '../../../../common/poll.types';
+import { PollType, PollParticipantMap } from '@simpoll-sst/core/common';
 
 export type VoteRequest<T extends PollType> = {
   pollId: string

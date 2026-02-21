@@ -1,4 +1,4 @@
-import { PollDetailMap, PollScope, PollType, VotePrivacy } from '../../../common/poll.types';
+import { PollDetailMap, PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common';
 
 export interface PollDetailBase {
   pollId: string

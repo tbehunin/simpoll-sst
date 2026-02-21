@@ -1,4 +1,4 @@
-import { UserEntity } from '../../data/user/user.entity';
+import { UserEntity } from '@simpoll-sst/core/data';
 import { User } from './user.domain';
 
 export const UserMapper = {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PollType, PollScope, VotePrivacy } from '../../../common/poll.types';
+import { PollType, PollScope, VotePrivacy } from '@simpoll-sst/core/common';
 
 // Validation result type to maintain compatibility with existing command builder
 export type ValidationResult = { isValid: true } | { isValid: false; errors: string[] };
@@ -39,7 +39,7 @@ export const VotePrivacySchema = z.nativeEnum(VotePrivacy, {
 });
 
 // Common field schemas
-export const UuidSchema = z.string().uuid('Invalid UUID format');
+export const UuidSchema = z.uuid('Invalid UUID format');
 
 export const NonEmptyStringSchema = z.string().min(1).trim();
 

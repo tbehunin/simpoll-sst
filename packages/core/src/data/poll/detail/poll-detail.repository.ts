@@ -1,6 +1,6 @@
-import { PollType } from '../../../common/poll.types';
-import { dbClient, DbId } from '../../db.client';
-import { Repository } from '../../repository.interface';
+import { PollType } from '@simpoll-sst/core/common';
+import { dbClient, DbId } from '@simpoll-sst/core/data';
+import { Repository } from '@simpoll-sst/core/data';
 import { PollDetailEntity } from './poll-detail.entity';
 import { PollDetailMapper } from './poll-detail.mapper';
 

@@ -1,19 +1,20 @@
 import { z } from 'zod';
-import { PollType, PollScope } from '../../../../common/poll.types';
+import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { VoteRequest } from './vote.types';
 import { VoteValidationContext } from './vote.context';
-import { getPollTypeHandler } from '../../../../poll-types/poll-type.registry';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { 
   ValidationResult, 
   zodToValidationResult,
   PollTypeSchema,
   UuidSchema,
+  NonEmptyStringSchema,
 } from '../validation.utils';
 
 // Base schema for common vote request fields (vote data validated via registry)
 const VoteRequestBaseSchema = z.object({
   pollId: UuidSchema,
-  userId: UuidSchema,
+  userId: NonEmptyStringSchema,
   type: PollTypeSchema,
 });
 

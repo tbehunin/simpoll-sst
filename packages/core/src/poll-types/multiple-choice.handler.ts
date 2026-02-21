@@ -1,9 +1,9 @@
 import { z } from 'zod';
-import { MediaAsset, MediaType, PollType, PollScope } from '../common/poll.types';
-import { CreatePollRequest } from '../services/poll/commands/create-poll/create-poll.types';
+import { MediaAsset, MediaType, PollType, PollScope } from '@simpoll-sst/core/common';
+import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
 import { PollTypeHandler } from './poll-type.registry';
-import { UpdateRequest } from '../data/db.client';
-import { ValidationError } from '../errors';
+import { UpdateRequest } from '@simpoll-sst/core/data';
+import { ValidationError } from '@simpoll-sst/core/errors';
 
 export interface Choice {
   text: string

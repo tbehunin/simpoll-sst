@@ -1,7 +1,7 @@
-import { PollType, PollScope } from '../../../common/poll.types';
+import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollParticipant } from './poll-participant.domain';
-import { PollParticipantEntity } from '../../../common/poll-participant.entity';
-import { PollDetailEntity } from '../../../data/poll/detail/poll-detail.entity';
+import { PollParticipantEntity } from '@simpoll-sst/core/common';
+import { PollDetailEntity } from '@simpoll-sst/core/data';
 import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
 import { VoteRequest } from '../commands/vote/vote.types';
 import { generateExpireTimestamp } from '../../utils';
