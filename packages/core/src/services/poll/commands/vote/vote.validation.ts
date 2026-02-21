@@ -8,12 +8,13 @@ import {
   zodToValidationResult,
   PollTypeSchema,
   UuidSchema,
+  NonEmptyStringSchema,
 } from '../validation.utils';
 
 // Base schema for common vote request fields (vote data validated via registry)
 const VoteRequestBaseSchema = z.object({
   pollId: UuidSchema,
-  userId: UuidSchema,
+  userId: NonEmptyStringSchema,
   type: PollTypeSchema,
 });
 

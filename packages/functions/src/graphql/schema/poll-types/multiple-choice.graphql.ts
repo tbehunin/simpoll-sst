@@ -1,10 +1,12 @@
 import { Choice, ChoiceResult } from '@simpoll-sst/core/poll-types/multiple-choice.handler';
-import { builder } from '../builder';
-import { mediaType } from '../common/enums';
-import { MediaAsset, PollType } from '@simpoll-sst/core/common/poll.types';
+import { MediaAsset, PollType } from '@simpoll-sst/core/common';
 import { PollResult } from '@simpoll-sst/core/services/poll/results/poll-result.domain';
 import { PollParticipant } from '@simpoll-sst/core/services/poll/participants/poll-participant.domain';
-import { PollDetailWithType } from '../unions/poll-detail';
+import { builder } from '../builder';
+import { mediaType } from '../common/enums';
+import { PollDetailWithType, registerGraphQLPollType } from './registry';
+
+// ─── Output types ───────────────────────────────────────────────────────────
 
 export const multipleChoiceDetail = builder.objectRef<PollDetailWithType<PollType.MultipleChoice>>('MultipleChoiceDetail').implement({
   fields: (t) => ({
@@ -49,21 +51,33 @@ export const choiceResult = builder.objectRef<ChoiceResult>('ChoiceResult').impl
   }),
 });
 
+export const multipleChoiceParticipant = builder.objectRef<PollParticipant<PollType.MultipleChoice>>('MultipleChoiceParticipant').implement({
+  fields: (t) => ({
+    selectedIndex: t.field({
+      type: ['Int'],
+      nullable: true,
+      resolve: (source) => source.vote?.selectedIndex,
+    }),
+    voteTimestamp: t.exposeString('voteTimestamp', { nullable: true }),
+  }),
+});
+
+// ─── Input types ────────────────────────────────────────────────────────────
+
 export const multipleChoiceInput = builder.inputType('MultipleChoiceInput', {
   fields: (t) => ({
     multiSelect: t.boolean(),
-    choices: t.field({
-      type: [choiceInput],
-      required: true,
-    }),
+    choices: t.field({ type: [choiceInput], required: true }),
   }),
 });
+
 export const choiceInput = builder.inputType('ChoiceInput', {
   fields: (t) => ({
     text: t.string(),
     media: t.field({ type: mediaAssetInput, required: false }),
   }),
 });
+
 export const mediaAssetInput = builder.inputType('MediaAssetInput', {
   fields: (t) => ({
     type: t.field({ type: mediaType }),
@@ -77,13 +91,13 @@ export const multipleChoiceVoteInput = builder.inputType('MultipleChoiceVoteInpu
   }),
 });
 
-export const multipleChoiceParticipant = builder.objectRef<PollParticipant<PollType.MultipleChoice>>('MultipleChoiceParticipant').implement({
-  fields: (t) => ({
-    selectedIndex: t.field({
-      type: ['Int'],
-      nullable: true,
-      resolve: (source) => source.vote?.selectedIndex,
-    }),
-    voteTimestamp: t.exposeString('voteTimestamp', { nullable: true }),
-  }),
+// ─── Registration ────────────────────────────────────────────────────────────
+
+registerGraphQLPollType(PollType.MultipleChoice, {
+  fieldName: 'multipleChoice',
+  detailRef: multipleChoiceDetail,
+  resultRef: multipleChoiceResult,
+  participantRef: multipleChoiceParticipant,
+  detailInput: multipleChoiceInput,
+  voteInput: multipleChoiceVoteInput,
 });

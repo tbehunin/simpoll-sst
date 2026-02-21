@@ -42,7 +42,10 @@ export const poll = builder.loadableObject('Poll', {
     sharedWith: t.exposeStringList('sharedWith'),
     details: t.field({
       type: pollDetail,
-      resolve: (parent: PollDetail<PollType>) => parent,
+      // Cast to `any`: the dynamic union registry uses [any, ...any[]] for the types array,
+      // which loses Pothos's static inference for the union member shape here.
+      // Runtime behavior is unchanged — resolveType dispatches correctly via `${type}Detail`.
+      resolve: (parent) => parent as any,
     }),
     results: t.field({
       type: pollResult,

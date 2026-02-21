@@ -1,13 +1,13 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
-import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common/poll.types';
+import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common';
 import { generatePollScope } from '@simpoll-sst/core/services/utils';
 import { ValidationError } from '@simpoll-sst/core/errors';
+import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { builder } from '../builder';
 import { pollType, votePrivacy } from '../common/enums';
 import { poll } from '../types/poll';
-import { multipleChoiceInput } from '../types/multiple-choice-poll';
-import { getPollTypeHandler } from '@simpoll-sst/core/poll-types/poll-type.registry';
+import { getRegisteredGraphQLPollTypes } from '../poll-types/registry';
 
 function getSingleNonNullItem<T>(items: (T | null | undefined)[]): T | null {
   const nonNullItems = items.filter(item => item !== null && item !== undefined);
@@ -27,8 +27,15 @@ export const createPoll = builder.mutationField('createPoll', (t) =>
     args: {
       input: t.arg({ type: createPollInput }),
     },
-    resolve: async (_parent, { input: { type, title, sharedWith, votePrivacy, expireTimestamp, multipleChoice } }, context) => {
-      const handler = getPollTypeHandler(type);
+    resolve: async (_parent, args, context) => {
+      // Use `any` cast since poll-type-specific fields are dynamic and not in the static TS type.
+      const input = args.input as any;
+      const { type, title, sharedWith, votePrivacy: inputVotePrivacy, expireTimestamp } = input;
+
+      const coreHandler = getPollTypeHandler(type);
+
+      // Collect all registered detail fields and pass exactly the one that was provided.
+      const allDetailInputs = getRegisteredGraphQLPollTypes().map((h) => input[h.fieldName]);
 
       const request: CreatePollRequest<PollType> = {
         userId: context.currentUserId,
@@ -36,21 +43,30 @@ export const createPoll = builder.mutationField('createPoll', (t) =>
         title,
         expireTimestamp: expireTimestamp || undefined,
         sharedWith,
-        votePrivacy: generatePollScope(sharedWith) === PollScope.Public ? VotePrivacy.Anonymous : votePrivacy,
-        details: handler.parseDetails(getSingleNonNullItem([multipleChoice])),
+        votePrivacy: generatePollScope(sharedWith) === PollScope.Public ? VotePrivacy.Anonymous : inputVotePrivacy,
+        details: coreHandler.parseDetails(getSingleNonNullItem(allDetailInputs)),
       };
+
       return PollService.createPoll(request);
     },
   })
 );
 
 export const createPollInput = builder.inputType('CreatePollInput', {
-  fields: (t) => ({
+  // Dynamic poll-type fields are spread in at schema-build time from the registry.
+  // TypeScript sees the return as `any` so that the static fields above remain typed normally.
+  fields: (t): any => ({
     type: t.field({ type: pollType }),
     title: t.string(),
     sharedWith: t.stringList(),
     votePrivacy: t.field({ type: votePrivacy }),
     expireTimestamp: t.string({ required: false }),
-    multipleChoice: t.field({ type: multipleChoiceInput, required: false }),
+    // One optional field per registered poll type (e.g. multipleChoice, rating, …):
+    ...Object.fromEntries(
+      getRegisteredGraphQLPollTypes().map((h) => [
+        h.fieldName,
+        t.field({ type: h.detailInput, required: false }),
+      ])
+    ),
   }),
 });

@@ -1,10 +1,10 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
-import { multipleChoiceResult } from '../types/multiple-choice-poll';
+import { getRegisteredGraphQLPollTypes } from '../poll-types/registry';
 
 export const pollResult = builder.loadableUnion('PollResult', {
-  types: [multipleChoiceResult],
-  resolveType: (obj) => `${obj.type}Result`,
+  types: getRegisteredGraphQLPollTypes().map((h) => h.resultRef) as [any, ...any[]],
+  resolveType: (obj: any) => `${obj.type}Result`,
   load: async (pollIds: string[]) => {
     const polls = await PollService.getPollResultsByIds(pollIds);
 

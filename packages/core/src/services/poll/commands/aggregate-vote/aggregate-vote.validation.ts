@@ -8,12 +8,13 @@ import {
   PollTypeSchema,
   PollScopeSchema,
   UuidSchema,
+  NonEmptyStringSchema,
 } from '../validation.utils';
 
 // Base participant schema (vote data validated via registry)
 const PollParticipantBaseSchema = z.object({
   pollId: UuidSchema,
-  userId: UuidSchema,
+  userId: NonEmptyStringSchema,
   type: PollTypeSchema,
   scope: PollScopeSchema,
   voted: z.boolean(),

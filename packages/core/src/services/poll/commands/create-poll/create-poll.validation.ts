@@ -15,7 +15,7 @@ import {
 
 // Base schema for common fields (details validated via registry)
 const CreatePollRequestBaseSchema = z.object({
-  userId: UuidSchema,
+  userId: NonEmptyStringSchema,
   type: PollTypeSchema,
   title: NonEmptyStringSchema,
   expireTimestamp: TimestampSchema.optional(),
