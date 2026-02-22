@@ -28,7 +28,7 @@ function getExtensionFromContentType(contentType: string): string {
 export class MediaService {
   /**
    * Generate a presigned PUT URL for uploading media to S3
-   * @returns uploadUrl - Presigned URL for PUT request, assetId - Unique identifier for the asset, expiresIn - Seconds until URL expires
+   * @returns uploadUrl - Presigned URL for PUT request, assetId - Asset identifier to store in media.value, expiresIn - Seconds until URL expires
    */
   static async requestUploadUrl(params: {
     userId: string;
@@ -58,12 +58,20 @@ export class MediaService {
   /**
    * Generate a presigned GET URL for downloading media from S3
    * @param userId - Owner of the media asset
-   * @param assetId - Asset identifier (filename with extension)
+   * @param assetId - Asset identifier (filename)
    * @returns Presigned URL for GET request
    */
   static async generateDownloadUrl(userId: string, assetId: string): Promise<string> {
     const s3Key = `private/${userId}/media/${assetId}`;
+    return this.generateDownloadUrlFromS3Key(s3Key);
+  }
 
+  /**
+   * Generate a presigned GET URL from a full S3 key
+   * @param s3Key - Full S3 key path (e.g., "private/user-id/media/file.jpg")
+   * @returns Presigned URL for GET request
+   */
+  static async generateDownloadUrlFromS3Key(s3Key: string): Promise<string> {
     const command = new GetObjectCommand({
       Bucket: Resource.Uploads.name,
       Key: s3Key,

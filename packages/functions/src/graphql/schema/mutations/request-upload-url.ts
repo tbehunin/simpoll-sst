@@ -9,7 +9,7 @@ const uploadUrlResponse = builder
         description: 'Presigned URL for uploading the file directly to S3',
       }),
       assetId: t.exposeString('assetId', {
-        description: 'Unique asset identifier to reference in poll media fields',
+        description: 'Asset identifier to store in media.value field',
       }),
       expiresIn: t.exposeInt('expiresIn', {
         description: 'Seconds until the upload URL expires',
