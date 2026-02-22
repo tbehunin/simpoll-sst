@@ -20,6 +20,7 @@ export enum PollScope {
 };
 
 export enum PollStatus {
+  Draft = 'Draft',
   Open = 'Open',
   Closed = 'Closed',
 };

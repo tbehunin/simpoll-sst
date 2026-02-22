@@ -1,4 +1,4 @@
-import { table } from './storage';
+import { bucket, table } from './storage';
 import { userPool, userPoolClient } from './auth';
 
 const region = aws.getRegionOutput().name;
@@ -28,7 +28,7 @@ export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
   transform: {
     route: {
       handler: {
-        link: [table, userPool, userPoolClient],
+        link: [table, userPool, userPoolClient, bucket],
         environment: {
           SST_STAGE: stage,
           IS_LOCAL: isPersonalSandbox ? 'true' : 'false',
