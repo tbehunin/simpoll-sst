@@ -1,9 +1,11 @@
 import { z } from 'zod';
-import { MediaAsset, MediaType, PollType, PollScope } from '@simpoll-sst/core/common';
+import { MediaAsset, PollType, PollScope } from '@simpoll-sst/core/common';
+import { MediaAssetSchema } from '@simpoll-sst/core/common/media-validation';
 import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
 import { PollTypeHandler } from './poll-type.registry';
 import { UpdateRequest } from '@simpoll-sst/core/data';
 import { ValidationError } from '@simpoll-sst/core/errors';
+import { MediaService } from '@simpoll-sst/core/services/media/media.service';
 
 export interface Choice {
   text: string
@@ -26,15 +28,6 @@ export interface MultipleChoiceParticipant {
 
 // --- Zod schemas for MultipleChoice ---
 
-const MediaTypeSchema = z.nativeEnum(MediaType, {
-  message: 'Invalid media type'
-});
-
-const MediaAssetSchema = z.object({
-  type: MediaTypeSchema,
-  value: z.string().min(1, 'Media value is required')
-});
-
 const ChoiceSchema = z.object({
   text: z.string().min(1, 'Choice text is required'),
   media: MediaAssetSchema.optional()
@@ -50,11 +43,13 @@ const MultipleChoiceVoteSchema = z.object({
 });
 
 export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
-  parseDetails: (details: any): MultipleChoiceDetail => ({
+  parseDetails: (details: any, userId: string): MultipleChoiceDetail => ({
     multiSelect: details.multiSelect,
     choices: details.choices.map((choice: any) => ({
       text: choice.text,
-      ...(choice.media && { media: choice.media }) // Handle optional property
+      ...(choice.media && { 
+        media: MediaService.transformMediaAssetForStorage(choice.media, userId)
+      })
     }))
   }),
   parseResults: (results: any): MultipleChoiceResult => ({

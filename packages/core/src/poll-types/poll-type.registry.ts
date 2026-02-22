@@ -7,7 +7,7 @@ import { NotFoundError } from '@simpoll-sst/core/errors';
 
 export interface PollTypeHandler<T extends PollType> {
   // Parsing
-  parseDetails(details: any): PollDetailMap[T];
+  parseDetails(details: any, userId: string): PollDetailMap[T];
   parseResults(results: any): PollResultMap[T];
   parseParticipant(participant: any): PollParticipantMap[T];
   parseVoteStream(voteStream: any): PollParticipantMap[T];

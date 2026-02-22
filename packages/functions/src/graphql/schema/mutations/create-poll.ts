@@ -36,6 +36,13 @@ export const createPoll = builder.mutationField('createPoll', (t) =>
 
       // Collect all registered detail fields and pass exactly the one that was provided.
       const allDetailInputs = getRegisteredGraphQLPollTypes().map((h) => input[h.fieldName]);
+      const rawDetails = getSingleNonNullItem(allDetailInputs);
+
+      // Validate raw input with assetIds
+      const validationResult = coreHandler.getDetailSchema().safeParse(rawDetails);
+      if (!validationResult.success) {
+        throw new ValidationError(validationResult.error.errors.map(e => e.message).join(', '));
+      }
 
       const request: CreatePollRequest<PollType> = {
         userId: context.currentUserId,
@@ -44,7 +51,7 @@ export const createPoll = builder.mutationField('createPoll', (t) =>
         expireTimestamp: expireTimestamp || undefined,
         sharedWith,
         votePrivacy: generatePollScope(sharedWith) === PollScope.Public ? VotePrivacy.Anonymous : inputVotePrivacy,
-        details: coreHandler.parseDetails(getSingleNonNullItem(allDetailInputs)),
+        details: coreHandler.parseDetails(rawDetails, context.currentUserId),
       };
 
       return PollService.createPoll(request);

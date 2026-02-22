@@ -3,6 +3,8 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Resource } from 'sst';
 import { v4 as uuidv4 } from 'uuid';
 import { ValidationError } from '../../errors';
+import { buildS3MediaPath } from './media.constants';
+import { MediaType } from '../../common/poll.types';
 
 const s3Client = new S3Client({});
 
@@ -37,7 +39,7 @@ export class MediaService {
   }): Promise<{ uploadUrl: string; assetId: string; expiresIn: number }> {
     const extension = getExtensionFromContentType(params.contentType);
     const assetId = `${uuidv4()}.${extension}`;
-    const s3Key = `private/${params.userId}/media/${assetId}`;
+    const s3Key = buildS3MediaPath(params.userId, assetId);
 
     const command = new PutObjectCommand({
       Bucket: Resource.Uploads.name,
@@ -62,7 +64,7 @@ export class MediaService {
    * @returns Presigned URL for GET request
    */
   static async generateDownloadUrl(userId: string, assetId: string): Promise<string> {
-    const s3Key = `private/${userId}/media/${assetId}`;
+    const s3Key = buildS3MediaPath(userId, assetId);
     return this.generateDownloadUrlFromS3Key(s3Key);
   }
 
@@ -78,5 +80,31 @@ export class MediaService {
     });
 
     return getSignedUrl(s3Client, command, { expiresIn: 604800 }); // 7 days
+  }
+
+  /**
+   * Transform a media asset from client assetId to storage S3 path
+   * Giphy URLs are passed through unchanged
+   * If value is already an S3 path, it's passed through unchanged
+   * @param media - Media asset with assetId (for Image/Video) or Giphy URL or S3 path
+   * @param userId - Owner of the media asset
+   * @returns Media asset with S3 path (for Image/Video) or original Giphy URL
+   */
+  static transformMediaAssetForStorage(media: { type: MediaType; value: string }, userId: string): { type: MediaType; value: string } {
+    // Giphy URLs are stored as-is
+    if (media.type === MediaType.Giphy) {
+      return media;
+    }
+
+    // If value is already an S3 path (starts with "private/"), don't transform
+    if (media.value.startsWith('private/')) {
+      return media;
+    }
+
+    // Transform assetId to full S3 path
+    return {
+      ...media,
+      value: buildS3MediaPath(userId, media.value),
+    };
   }
 }
