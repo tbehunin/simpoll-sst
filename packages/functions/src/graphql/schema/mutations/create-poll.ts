@@ -1,7 +1,7 @@
 import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
 import { PollScope, PollType, VotePrivacy } from '@simpoll-sst/core/common';
-import { generatePollScope } from '@simpoll-sst/core/services/utils';
+import { calculatePollScope } from '@simpoll-sst/core/services/utils';
 import { ValidationError } from '@simpoll-sst/core/errors';
 import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { builder } from '../builder';
@@ -50,7 +50,7 @@ export const createPoll = builder.mutationField('createPoll', (t) =>
         title,
         expireTimestamp: expireTimestamp || undefined,
         sharedWith,
-        votePrivacy: generatePollScope(sharedWith) === PollScope.Public ? VotePrivacy.Anonymous : inputVotePrivacy,
+        votePrivacy: calculatePollScope(sharedWith) === PollScope.Public ? VotePrivacy.Anonymous : inputVotePrivacy,
         details: coreHandler.parseDetails(rawDetails, context.currentUserId),
       };
 

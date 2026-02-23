@@ -2,7 +2,7 @@ import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollDetail } from './poll-detail.domain';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
 import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
-import { generateExpireTimestamp, generatePollScope } from '../../utils';
+import { generateExpireTimestamp, calculatePollScope } from '../../utils';
 import { Mapper } from '../mappers/mapper.interface';
 
 export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<PollType>> = {
@@ -29,7 +29,7 @@ export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<Pol
     createdTimestamp: string, 
     request: CreatePollRequest<PollType>
   ): PollDetailEntity<PollType> => {
-    const scope = generatePollScope(request.sharedWith);
+    const scope = calculatePollScope(request.sharedWith);
     const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
     
     return {
