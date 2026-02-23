@@ -15,12 +15,12 @@ export enum RoleType {
 };
 
 export enum PollScope {
-  Public = 'Public',
+  Draft = 'Draft',
   Private = 'Private',
+  Public = 'Public',
 };
 
 export enum PollStatus {
-  Draft = 'Draft',
   Open = 'Open',
   Closed = 'Closed',
 };
