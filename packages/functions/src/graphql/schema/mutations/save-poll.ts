@@ -41,7 +41,7 @@ export const savePoll = builder.mutationField('savePoll', (t) =>
       
       // If publishing with sharedWith, override vote privacy for public polls
       if (publish && sharedWith !== undefined) {
-        const scope = calculatePollScope(sharedWith);
+        const scope = calculatePollScope(sharedWith, true);
         if (scope === PollScope.Public) {
           finalVotePrivacy = VotePrivacy.Anonymous;
         }

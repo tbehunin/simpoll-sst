@@ -27,7 +27,7 @@ const executeSavePoll = async (
       sharedWith: request.sharedWith!,
       votePrivacy: request.votePrivacy!,
       details: request.details!,
-    }, false);
+    }, true);
 
     const pollResultDoc = PollResultMapper.fromCreateRequest(pollId, {
       userId: request.userId,
@@ -66,7 +66,7 @@ const executeSavePoll = async (
       details: request.details || {} as any,
     };
 
-    const pollDetailDoc = PollDetailMapper.fromCreateRequest(pollId, ct, normalizedRequest, true);
+    const pollDetailDoc = PollDetailMapper.fromCreateRequest(pollId, ct, normalizedRequest, false);
     await dbClient.put(pollDetailDoc);
   }
 

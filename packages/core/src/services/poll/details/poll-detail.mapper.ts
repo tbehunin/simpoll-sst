@@ -28,9 +28,9 @@ export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<Pol
     pollId: string, 
     createdTimestamp: string, 
     request: CreatePollRequest<PollType>,
-    isDraft: boolean = false
+    isPublished: boolean
   ): PollDetailEntity<PollType> => {
-    const scope = calculatePollScope(request.sharedWith, isDraft);
+    const scope = calculatePollScope(request.sharedWith, isPublished);
     const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
     
     return {
