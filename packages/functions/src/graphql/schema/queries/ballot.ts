@@ -3,11 +3,11 @@ import { PollService } from '@simpoll-sst/core/services/poll/poll.service';
 import { builder } from '../builder';
 import { poll } from '../types/poll';
 import { toConnection } from '../common/connection';
-import { participantPollScope } from '../common/restricted-enums';
+import { publishedPollScope } from '../common/restricted-enums';
 
 export const ballotInput = builder.inputType('BallotInput', {
   fields: (t) => ({
-    pollScope: t.field({ type: participantPollScope, required: false }),
+    pollScope: t.field({ type: publishedPollScope, required: false }),
   }),
 });
 
