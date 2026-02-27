@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from '@simpoll-sst/core/common';
 import { UpdateRequest } from '@simpoll-sst/core/data';
-import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
+import { CreatePollRequest } from '@simpoll-sst/core/services/poll/poll-request.types';
 import { multipleChoiceHandler } from './multiple-choice.handler';
 import { NotFoundError } from '@simpoll-sst/core/errors';
 

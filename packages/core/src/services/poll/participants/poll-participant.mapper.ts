@@ -2,7 +2,7 @@ import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollParticipant } from './poll-participant.domain';
 import { PollParticipantEntity } from '@simpoll-sst/core/common';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
-import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
+import { CreatePollRequest } from '../poll-request.types';
 import { VoteRequest } from '../commands/vote/vote.types';
 import { generateExpireTimestamp } from '../../utils';
 import { Mapper } from '../mappers/mapper.interface';

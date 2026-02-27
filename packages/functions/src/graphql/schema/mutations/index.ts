@@ -1,5 +1,3 @@
-import './create-poll';
-import './save-draft';
-import './publish-poll';
+import './save-poll';
 import './request-upload-url';
 import './vote';

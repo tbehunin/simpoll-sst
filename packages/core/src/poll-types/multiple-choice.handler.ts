@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { MediaAsset, PollType, PollScope } from '@simpoll-sst/core/common';
 import { MediaAssetSchema } from '@simpoll-sst/core/common/media-validation';
-import { CreatePollRequest } from '@simpoll-sst/core/services/poll/commands/create-poll/create-poll.types';
+import { CreatePollRequest } from '@simpoll-sst/core/services/poll/poll-request.types';
 import { PollTypeHandler } from './poll-type.registry';
 import { UpdateRequest } from '@simpoll-sst/core/data';
 import { ValidationError } from '@simpoll-sst/core/errors';

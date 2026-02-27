@@ -1,7 +1,7 @@
 import { PollType } from '@simpoll-sst/core/common';
 import { PollResult } from './poll-result.domain';
 import { PollResultEntity } from '@simpoll-sst/core/data';
-import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
+import { CreatePollRequest } from '../poll-request.types';
 import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { Mapper } from '../mappers/mapper.interface';
 
