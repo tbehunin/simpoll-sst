@@ -55,6 +55,16 @@ if (isPersonalSandbox || stage === 'dev') {
       AWS_REGION: region,
     },
   });
+
+  graphql.route('GET /poll-test', {
+    handler: 'packages/functions/src/poll-test/handler.main',
+    link: [],
+    environment: {
+      USER_POOL_ID: userPool.id,
+      USER_POOL_CLIENT_ID: userPoolClient.id,
+      AWS_REGION: region,
+    },
+  });
 }
 
 // Seed API - only available in personal sandboxes

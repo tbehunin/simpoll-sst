@@ -2,7 +2,7 @@ import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Resource } from 'sst';
 
-const BucketName = Resource.Uploads.name;
+// s3Client is safe to initialize at module level (no SST resource access)
 const s3Client = new S3Client({});
 
 const UPLOAD_URL_TTL = 900;    // 15 minutes
@@ -21,8 +21,10 @@ export const storageClient = {
     contentType: string,
     fileSize: number,
   ): Promise<{ url: string; expiresIn: number }> => {
+    // Resource.Uploads.name accessed lazily so bundling this module into functions
+    // that don't use S3 (e.g. post-auth) doesn't require linking the bucket.
     const command = new PutObjectCommand({
-      Bucket: BucketName,
+      Bucket: Resource.Uploads.name,
       Key: key,
       ContentType: contentType,
       ContentLength: fileSize,
@@ -40,7 +42,7 @@ export const storageClient = {
    */
   getPresignedDownloadUrl: async (key: string): Promise<string> => {
     const command = new GetObjectCommand({
-      Bucket: BucketName,
+      Bucket: Resource.Uploads.name,
       Key: key,
     });
 

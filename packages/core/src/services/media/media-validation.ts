@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MediaType } from './poll.types';
+import { MediaType } from '../../common/poll.types';
 
 /**
  * Shared media validation schemas
@@ -20,29 +20,23 @@ const MediaTypeSchema = z.nativeEnum(MediaType, {
  */
 export const MediaAssetSchema = z.object({
   type: MediaTypeSchema,
-  value: z.string().min(1, 'Media value is required').refine((value, ctx) => {
-    const mediaType = (ctx.parent as any).type;
-    
-    if (mediaType === MediaType.Giphy) {
-      // Validate Giphy URL - must be from giphy.com or any subdomain
-      try {
-        const url = new URL(value);
-        const isGiphyDomain = url.hostname === 'giphy.com' || url.hostname.endsWith('.giphy.com');
-        if (!isGiphyDomain) {
-          return false;
-        }
-      } catch {
-        return false;
+  value: z.string().min(1, 'Media value is required'),
+}).superRefine((data, ctx) => {
+  if (data.type === MediaType.Giphy) {
+    // Validate Giphy URL - must be from giphy.com or any subdomain
+    try {
+      const url = new URL(data.value);
+      const isGiphyDomain = url.hostname === 'giphy.com' || url.hostname.endsWith('.giphy.com');
+      if (!isGiphyDomain) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['value'], message: 'Invalid media value: Giphy URLs must be from giphy.com domain' });
       }
-    } else {
-      // Validate assetId format for Image/Video
-      if (!ASSET_ID_REGEX.test(value)) {
-        return false;
-      }
+    } catch {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['value'], message: 'Invalid media value: Giphy URLs must be from giphy.com domain' });
     }
-    
-    return true;
-  }, {
-    message: 'Invalid media value: Giphy URLs must be from giphy.com domain, Image/Video must be valid assetId (UUID.extension)'
-  })
+  } else {
+    // Validate assetId format for Image/Video
+    if (!ASSET_ID_REGEX.test(data.value)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['value'], message: 'Invalid media value: Image/Video must be valid assetId (UUID.extension)' });
+    }
+  }
 });
