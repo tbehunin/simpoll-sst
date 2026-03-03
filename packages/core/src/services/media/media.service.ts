@@ -1,12 +1,8 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Resource } from 'sst';
 import { v4 as uuidv4 } from 'uuid';
 import { ValidationError } from '../../errors';
 import { buildS3MediaPath } from './media.constants';
 import { MediaType } from '../../common/poll.types';
-
-const s3Client = new S3Client({});
+import { storageClient } from '../../data/storage.client';
 
 const CONTENT_TYPE_TO_EXTENSION: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -41,19 +37,16 @@ export class MediaService {
     const assetId = `${uuidv4()}.${extension}`;
     const s3Key = buildS3MediaPath(params.userId, assetId);
 
-    const command = new PutObjectCommand({
-      Bucket: Resource.Uploads.name,
-      Key: s3Key,
-      ContentType: params.contentType,
-      ContentLength: params.fileSize,
-    });
-
-    const uploadUrl = await getSignedUrl(s3Client, command, { expiresIn: 900 }); // 15 minutes
+    const { url: uploadUrl, expiresIn } = await storageClient.getPresignedUploadUrl(
+      s3Key,
+      params.contentType,
+      params.fileSize,
+    );
 
     return {
       uploadUrl,
       assetId,
-      expiresIn: 900,
+      expiresIn,
     };
   }
 
@@ -74,12 +67,7 @@ export class MediaService {
    * @returns Presigned URL for GET request
    */
   static async generateDownloadUrlFromS3Key(s3Key: string): Promise<string> {
-    const command = new GetObjectCommand({
-      Bucket: Resource.Uploads.name,
-      Key: s3Key,
-    });
-
-    return getSignedUrl(s3Client, command, { expiresIn: 604800 }); // 7 days
+    return storageClient.getPresignedDownloadUrl(s3Key);
   }
 
   /**
