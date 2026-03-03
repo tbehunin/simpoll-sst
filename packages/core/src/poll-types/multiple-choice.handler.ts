@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { MediaAsset, PollType, PollScope } from '@simpoll-sst/core/common';
-import { MediaAssetSchema } from '@simpoll-sst/core/common/media-validation';
+import { MediaAssetSchema } from '@simpoll-sst/core/services/media/media-validation';
 import { CreatePollRequest } from '@simpoll-sst/core/services/poll/poll-request.types';
 import { PollTypeHandler } from './poll-type.registry';
 import { UpdateRequest } from '@simpoll-sst/core/data';
