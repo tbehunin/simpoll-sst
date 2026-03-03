@@ -1,4 +1,4 @@
-import { table } from './storage';
+import { bucket, table } from './storage';
 import { userPool, userPoolClient } from './auth';
 
 const region = aws.getRegionOutput().name;
@@ -28,7 +28,7 @@ export const graphql = new sst.aws.ApiGatewayV2('GraphQL', {
   transform: {
     route: {
       handler: {
-        link: [table, userPool, userPoolClient],
+        link: [table, userPool, userPoolClient, bucket],
         environment: {
           SST_STAGE: stage,
           IS_LOCAL: isPersonalSandbox ? 'true' : 'false',
@@ -48,6 +48,16 @@ graphql.route('GET /graphql', 'packages/functions/src/graphql/handler.main');
 if (isPersonalSandbox || stage === 'dev') {
   graphql.route('GET /auth-test', {
     handler: 'packages/functions/src/auth-test/handler.main',
+    link: [],
+    environment: {
+      USER_POOL_ID: userPool.id,
+      USER_POOL_CLIENT_ID: userPoolClient.id,
+      AWS_REGION: region,
+    },
+  });
+
+  graphql.route('GET /poll-test', {
+    handler: 'packages/functions/src/poll-test/handler.main',
     link: [],
     environment: {
       USER_POOL_ID: userPool.id,

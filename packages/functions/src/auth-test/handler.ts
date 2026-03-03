@@ -7,7 +7,6 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simpoll Auth Test</title>
-  <script src="https://unpkg.com/@aws-amplify/auth@6.0.0/dist/aws-amplify-auth.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -278,24 +277,28 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
   </div>
 
   <script>
-    const { Amplify } = window['@aws-amplify/auth'];
+    const COGNITO_URL = 'https://cognito-idp.${region}.amazonaws.com/';
+    const CLIENT_ID = '${userPoolClientId}';
 
-    // Configure Amplify
-    Amplify.configure({
-      Auth: {
-        Cognito: {
-          userPoolId: '${userPoolId}',
-          userPoolClientId: '${userPoolClientId}',
-          region: '${region}',
-        }
-      }
-    });
+    async function cognitoRequest(target, body) {
+      const res = await fetch(COGNITO_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-amz-json-1.1',
+          'X-Amz-Target': 'AWSCognitoIdentityProviderService.' + target,
+        },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || json.__type || 'Unknown error');
+      return json;
+    }
 
-    let currentUsername = '';
+    let storedAccessToken = '';
 
     function showMessage(elementId, message, type) {
       const el = document.getElementById(elementId);
-      el.innerHTML = \`<div class="message \${type}">\${message}</div>\`;
+      el.innerHTML = '<div class="message ' + type + '">' + message + '</div>';
       setTimeout(() => { el.innerHTML = ''; }, 10000);
     }
 
@@ -306,26 +309,22 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
         const username = document.getElementById('signupUsername').value;
         const password = document.getElementById('signupPassword').value;
 
-        currentUsername = username;
-
-        const { isSignUpComplete, userId, nextStep } = await Amplify.signUp({
-          username: email,
-          password: password,
-          options: {
-            userAttributes: {
-              email: email,
-              phone_number: phone,
-              preferred_username: username,
-            }
-          }
+        const result = await cognitoRequest('SignUp', {
+          ClientId: CLIENT_ID,
+          Username: email,
+          Password: password,
+          UserAttributes: [
+            { Name: 'email', Value: email },
+            { Name: 'phone_number', Value: phone },
+            { Name: 'preferred_username', Value: username },
+          ],
         });
 
-        showMessage('signupMessage', \`✅ Sign up successful! User ID: \${userId}\`, 'success');
-        
+        showMessage('signupMessage', '\u2705 Sign up successful! User ID: ' + result.UserSub, 'success');
         document.getElementById('signupForm').classList.add('hidden');
         document.getElementById('verifyForm').classList.remove('hidden');
       } catch (error) {
-        showMessage('signupMessage', \`❌ Error: \${error.message}\`, 'error');
+        showMessage('signupMessage', '\u274c Error: ' + error.message, 'error');
         console.error('Sign up error:', error);
       }
     }
@@ -335,22 +334,23 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
         const email = document.getElementById('signupEmail').value;
         const code = document.getElementById('emailVerificationCode').value;
 
-        await Amplify.confirmSignUp({
-          username: email,
-          confirmationCode: code
+        await cognitoRequest('ConfirmSignUp', {
+          ClientId: CLIENT_ID,
+          Username: email,
+          ConfirmationCode: code,
         });
 
-        showMessage('signupMessage', '✅ Email verified! Now verify your phone number.', 'success');
+        showMessage('signupMessage', '\u2705 Email verified! You can now sign in.', 'success');
         document.getElementById('verifyForm').classList.add('hidden');
-        document.getElementById('verifyPhoneForm').classList.remove('hidden');
+        document.getElementById('signupForm').classList.remove('hidden');
       } catch (error) {
-        showMessage('signupMessage', \`❌ Error: \${error.message}\`, 'error');
+        showMessage('signupMessage', '\u274c Error: ' + error.message, 'error');
         console.error('Verify email error:', error);
       }
     }
 
     async function handleVerifyPhone() {
-      showMessage('signupMessage', '✅ Phone verification complete! You can now sign in.', 'success');
+      showMessage('signupMessage', '\u2705 Phone verification complete! You can now sign in.', 'success');
       document.getElementById('verifyPhoneForm').classList.add('hidden');
       document.getElementById('signupForm').classList.remove('hidden');
     }
@@ -358,10 +358,10 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
     async function resendEmailCode() {
       try {
         const email = document.getElementById('signupEmail').value;
-        await Amplify.resendSignUpCode({ username: email });
-        showMessage('signupMessage', '✅ Email verification code resent!', 'success');
+        await cognitoRequest('ResendConfirmationCode', { ClientId: CLIENT_ID, Username: email });
+        showMessage('signupMessage', '\u2705 Email verification code resent!', 'success');
       } catch (error) {
-        showMessage('signupMessage', \`❌ Error: \${error.message}\`, 'error');
+        showMessage('signupMessage', '\u274c Error: ' + error.message, 'error');
       }
     }
 
@@ -374,38 +374,37 @@ const getHtmlPage = (userPoolId: string, userPoolClientId: string, region: strin
         const username = document.getElementById('signinUsername').value;
         const password = document.getElementById('signinPassword').value;
 
-        const { isSignedIn, nextStep } = await Amplify.signIn({
-          username: username,
-          password: password
+        const result = await cognitoRequest('InitiateAuth', {
+          AuthFlow: 'USER_PASSWORD_AUTH',
+          ClientId: CLIENT_ID,
+          AuthParameters: { USERNAME: username, PASSWORD: password },
         });
 
-        if (isSignedIn) {
-          const session = await Amplify.fetchAuthSession();
-          const idToken = session.tokens.idToken.toString();
-          const accessToken = session.tokens.accessToken.toString();
+        const idToken = result.AuthenticationResult.IdToken;
+        const accessToken = result.AuthenticationResult.AccessToken;
+        storedAccessToken = accessToken;
 
-          document.getElementById('idToken').textContent = idToken;
-          document.getElementById('accessToken').textContent = accessToken;
-          document.getElementById('tokenCard').classList.remove('hidden');
-          
-          showMessage('signinMessage', '✅ Sign in successful!', 'success');
-        }
+        document.getElementById('idToken').textContent = idToken;
+        document.getElementById('accessToken').textContent = accessToken;
+        document.getElementById('tokenCard').classList.remove('hidden');
+        showMessage('signinMessage', '\u2705 Sign in successful!', 'success');
       } catch (error) {
-        showMessage('signinMessage', \`❌ Error: \${error.message}\`, 'error');
+        showMessage('signinMessage', '\u274c Error: ' + error.message, 'error');
         console.error('Sign in error:', error);
       }
     }
 
     async function handleSignOut() {
       try {
-        await Amplify.signOut();
-        document.getElementById('tokenCard').classList.add('hidden');
-        document.getElementById('idToken').textContent = '';
-        document.getElementById('accessToken').textContent = '';
-        showMessage('signinMessage', '✅ Signed out successfully', 'success');
-      } catch (error) {
-        showMessage('signinMessage', \`❌ Error: \${error.message}\`, 'error');
-      }
+        if (storedAccessToken) {
+          await cognitoRequest('GlobalSignOut', { AccessToken: storedAccessToken });
+        }
+      } catch (_) {}
+      storedAccessToken = '';
+      document.getElementById('tokenCard').classList.add('hidden');
+      document.getElementById('idToken').textContent = '';
+      document.getElementById('accessToken').textContent = '';
+      showMessage('signinMessage', '\u2705 Signed out successfully', 'success');
     }
 
     function copyToken(tokenId) {

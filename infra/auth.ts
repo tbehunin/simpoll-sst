@@ -63,7 +63,19 @@ export const userPool = new sst.aws.CognitoUserPool('UserPool', {
   },
 });
 
-export const userPoolClient = userPool.addClient('UserPoolClient'); // Web client. Add another for mobile later.
+export const userPoolClient = userPool.addClient('UserPoolClient', {
+  transform: {
+    client: (args) => {
+      // Enable USER_PASSWORD_AUTH so the test pages can call InitiateAuth directly
+      // without implementing the SRP (Secure Remote Password) protocol.
+      args.explicitAuthFlows = [
+        'ALLOW_USER_PASSWORD_AUTH',
+        'ALLOW_USER_SRP_AUTH',
+        'ALLOW_REFRESH_TOKEN_AUTH',
+      ];
+    },
+  },
+}); // Web client. Add another for mobile later.
 
 export const identityPool = new sst.aws.CognitoIdentityPool('IdentityPool', {
   userPools: [
@@ -75,7 +87,7 @@ export const identityPool = new sst.aws.CognitoIdentityPool('IdentityPool', {
   permissions: {
     authenticated: [
       {
-        actions: ['s3:*'],
+        actions: ['s3:PutObject', 's3:GetObject'],
         resources: [
           $concat(bucket.arn, '/private/${cognito-identity.amazonaws.com:sub}/*'),
         ],

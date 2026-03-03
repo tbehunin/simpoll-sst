@@ -1,5 +1,6 @@
 // Data layer - repositories and database client
 export * from './db.client';
+export * from './storage.client';
 export * from './repository.interface';
 
 // Poll repositories

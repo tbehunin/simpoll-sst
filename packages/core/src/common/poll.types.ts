@@ -15,8 +15,9 @@ export enum RoleType {
 };
 
 export enum PollScope {
-  Public = 'Public',
+  Draft = 'Draft',
   Private = 'Private',
+  Public = 'Public',
 };
 
 export enum PollStatus {

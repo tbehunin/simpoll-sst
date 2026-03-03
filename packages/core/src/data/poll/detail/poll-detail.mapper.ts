@@ -10,7 +10,7 @@ export const PollDetailMapper = {
       return {
         ...PollDetailMapper.toPollDetailEntityBase(poll),
         type: poll.type,
-        details: handler.parseDetails(poll.details),
+        details: handler.parseDetails(poll.details, poll.userId),
       };
     });
   },

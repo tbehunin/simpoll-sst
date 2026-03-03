@@ -1,5 +1,5 @@
 import { getPollDetailsByIds, queryPollDetails, getPollResultsByIds, getPollParticipantsByIds } from './queries';
-import { createPollCommand, voteCommand, aggregateVoteCommand } from './commands';
+import { savePollCommand, voteCommand, aggregateVoteCommand } from './commands';
 
 export const PollService = {
   // Queries
@@ -9,7 +9,7 @@ export const PollService = {
   getPollParticipantsByIds,
 
   // Commands
-  createPoll: createPollCommand,
+  savePoll: savePollCommand,
   vote: voteCommand,
   aggregateVote: aggregateVoteCommand,
 };

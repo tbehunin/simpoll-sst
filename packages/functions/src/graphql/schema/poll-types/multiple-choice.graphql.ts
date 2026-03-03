@@ -1,7 +1,9 @@
 import { Choice, ChoiceResult } from '@simpoll-sst/core/poll-types/multiple-choice.handler';
-import { MediaAsset, PollType } from '@simpoll-sst/core/common';
+import { MediaAsset, MediaType, PollType } from '@simpoll-sst/core/common';
 import { PollResult } from '@simpoll-sst/core/services/poll/results/poll-result.domain';
 import { PollParticipant } from '@simpoll-sst/core/services/poll/participants/poll-participant.domain';
+import { PollDetail } from '@simpoll-sst/core/services/poll/details/poll-detail.domain';
+import { MediaService } from '@simpoll-sst/core/services/media/media.service';
 import { builder } from '../builder';
 import { mediaType } from '../common/enums';
 import { PollDetailWithType, registerGraphQLPollType } from './registry';
@@ -31,7 +33,18 @@ export const choice = builder.objectRef<Choice>('Choice').implement({
 export const mediaAsset = builder.objectRef<MediaAsset>('MediaAsset').implement({
   fields: (t) => ({
     type: t.expose('type', { type: mediaType }),
-    value: t.exposeString('value'),
+    value: t.field({
+      type: 'String',
+      description: 'Accessible URL - presigned GET URL for Image/Video, or Giphy URL',
+      resolve: async (parent) => {
+        if (parent.type === MediaType.Giphy) {
+          return parent.value; // Giphy URLs are returned as-is
+        }
+        // value contains full S3 path from DDB (e.g., "private/userId/media/file.jpg")
+        // Generate presigned GET URL
+        return MediaService.generateDownloadUrlFromS3Key(parent.value);
+      },
+    }),
   }),
 });
 

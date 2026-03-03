@@ -1,7 +1,7 @@
 import { PollType } from '@simpoll-sst/core/common';
 import { PollResult } from './poll-result.domain';
 import { PollResultEntity } from '@simpoll-sst/core/data';
-import { CreatePollRequest } from '../commands/create-poll/create-poll.types';
+import { SavePollData } from '../commands/save-poll/save-poll.types';
 import { getPollTypeHandler } from '@simpoll-sst/core/poll-types';
 import { Mapper } from '../mappers/mapper.interface';
 
@@ -20,7 +20,7 @@ export const PollResultMapper: Mapper<PollResultEntity<PollType>, PollResult<Pol
   // Request + Context → Entity (Builder)
   fromCreateRequest: (
     pollId: string, 
-    request: CreatePollRequest<PollType>
+    request: SavePollData<PollType>
   ): PollResultEntity<PollType> => {
     const handler = getPollTypeHandler(request.type);
     return {
