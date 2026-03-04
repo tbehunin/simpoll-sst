@@ -1,7 +1,7 @@
 import { PollType } from '@simpoll-sst/core/common';
 import { PollDetail } from './poll-detail.domain';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
-import { SavePollData } from '../commands/save-poll/save-poll.types';
+import { SavePollPayload } from '../commands/save-poll/save-poll.types';
 import { generateExpireTimestamp, calculatePollScope } from '../../utils';
 
 /** Entity → Domain */
@@ -27,12 +27,12 @@ export const PollDetailMapper = {
   },
 };
 
-/** SavePollData → Entity */
+/** SavePollPayload → Entity */
 export const PollDetailEntityBuilder = {
-  fromSaveData: (
+  fromSavePollPayload: (
     pollId: string,
     createdTimestamp: string,
-    request: SavePollData<PollType>,
+    request: SavePollPayload<PollType>,
     isPublished: boolean
   ): PollDetailEntity<PollType> => {
     const scope = calculatePollScope(request.sharedWith, isPublished);

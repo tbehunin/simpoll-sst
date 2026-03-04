@@ -2,7 +2,7 @@ import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollParticipant } from './poll-participant.domain';
 import { PollParticipantEntity } from '@simpoll-sst/core/common';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
-import { SavePollData } from '../commands/save-poll/save-poll.types';
+import { SavePollPayload } from '../commands/save-poll/save-poll.types';
 import { VoteRequest } from '../commands/vote/vote.types';
 import { generateExpireTimestamp } from '../../utils';
 
@@ -27,11 +27,11 @@ export const PollParticipantMapper = {
   },
 };
 
-/** SavePollData / VoteRequest → Entity */
+/** SavePollPayload / VoteRequest → Entity */
 export const PollParticipantEntityBuilder = {
-  fromSaveData: (
+  fromSavePollPayload: (
     pollId: string,
-    request: SavePollData<PollType>
+    request: SavePollPayload<PollType>
   ): PollParticipantEntity<PollType>[] => {
     if (request.sharedWith.length === 0) return [];
 

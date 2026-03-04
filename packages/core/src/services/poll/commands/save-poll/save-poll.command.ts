@@ -19,7 +19,7 @@ const executeSavePoll = async (
   if (request.publish) {
     // Publishing: create/update Detail + create Results + create Participants
     // All fields are guaranteed to be present by validation
-    const pollDetailDoc = PollDetailEntityBuilder.fromSaveData(pollId, ct, {
+    const pollDetailDoc = PollDetailEntityBuilder.fromSavePollPayload(pollId, ct, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -29,7 +29,7 @@ const executeSavePoll = async (
       details: request.details!,
     }, true);
 
-    const pollResultDoc = PollResultEntityBuilder.fromSaveData(pollId, {
+    const pollResultDoc = PollResultEntityBuilder.fromSavePollPayload(pollId, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -39,7 +39,7 @@ const executeSavePoll = async (
       details: request.details!,
     });
 
-    const pollParticipantDocs = PollParticipantEntityBuilder.fromSaveData(pollId, {
+    const pollParticipantDocs = PollParticipantEntityBuilder.fromSavePollPayload(pollId, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -66,7 +66,7 @@ const executeSavePoll = async (
       details: request.details || {} as any,
     };
 
-    const pollDetailDoc = PollDetailEntityBuilder.fromSaveData(pollId, ct, normalizedRequest, false);
+    const pollDetailDoc = PollDetailEntityBuilder.fromSavePollPayload(pollId, ct, normalizedRequest, false);
     await dbClient.put(pollDetailDoc);
   }
 

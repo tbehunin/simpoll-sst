@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { PollDetailMap, PollResultMap, PollType, PollParticipantMap, PollScope } from '@simpoll-sst/core/common';
 import { UpdateRequest } from '@simpoll-sst/core/data';
-import { SavePollData } from '@simpoll-sst/core/services/poll/commands/save-poll/save-poll.types';
+import { SavePollPayload } from '@simpoll-sst/core/services/poll/commands/save-poll/save-poll.types';
 import { multipleChoiceHandler } from './multiple-choice.handler';
 import { NotFoundError } from '@simpoll-sst/core/errors';
 
@@ -13,7 +13,7 @@ export interface PollTypeHandler<T extends PollType> {
   parseVoteStream(voteStream: any): PollParticipantMap[T];
 
   // Building
-  buildResults(request: SavePollData<PollType>): PollResultMap[T];
+  buildResults(request: SavePollPayload<PollType>): PollResultMap[T];
   buildAggregateVoteUpdateRequest(pollId: string, userId: string, scope: PollScope, vote: PollParticipantMap[T]): UpdateRequest;
 
   // Validation schemas (Zod)

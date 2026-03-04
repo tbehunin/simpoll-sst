@@ -16,10 +16,10 @@ export type SavePollRequest<T extends PollType> = {
 };
 
 /**
- * Validated, normalized payload passed to mappers after save-poll validation.
+ * Validated, normalized payload passed to entity builders after save-poll validation.
  * All fields are guaranteed to be present (publish path) — no optionals except expireTimestamp.
  */
-export type SavePollData<T extends PollType> = {
+export type SavePollPayload<T extends PollType> = {
   userId: string
   type: T
   title: string
