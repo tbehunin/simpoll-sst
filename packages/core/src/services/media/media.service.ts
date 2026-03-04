@@ -84,8 +84,15 @@ export class MediaService {
       return media;
     }
 
-    // If value is already an S3 path (starts with "private/"), don't transform
+    // If value is already an S3 path (starts with "private/"), verify it belongs to
+    // the requesting user before passing it through. A path under another user's prefix
+    // would indicate a cross-user path injection attempt.
     if (media.value.startsWith('private/')) {
+      if (!media.value.startsWith(`private/${userId}/`)) {
+        throw new ValidationError(
+          `Invalid media value: S3 path does not belong to the current user`
+        );
+      }
       return media;
     }
 

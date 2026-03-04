@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { MediaType } from '../../common/poll.types';
+import { MediaType, PollType } from '../../common/poll.types';
+import { storageClient } from '../../data/storage.client';
+import { buildS3MediaPath } from './media.constants';
+import { getPollTypeHandler } from '../../poll-types/poll-type.registry';
 
 /**
  * Shared media validation schemas
@@ -40,3 +43,33 @@ export const MediaAssetSchema = z.object({
     }
   }
 });
+/**
+ * Verify that every uploaded (non-Giphy) media asset referenced in poll details
+ * actually exists as an S3 object. Intended to run at publish time only — not on
+ * every draft autosave — to avoid paying the HeadObject cost unnecessarily.
+ *
+ * @param details - Raw poll details from the client request (assetId values, not S3 keys)
+ * @param type    - Poll type, used to extract media assets via the registered handler
+ * @param userId  - Requesting user; used to construct the expected S3 key path
+ * @returns Array of validation error messages (empty if all assets exist)
+ */
+export async function validateMediaAssetsExist(
+  details: any,
+  type: PollType,
+  userId: string,
+): Promise<string[]> {
+  const handler = getPollTypeHandler(type);
+  const assetIds = handler.getUploadedMediaAssets(details);
+
+  if (assetIds.length === 0) return [];
+
+  const results = await Promise.all(
+    assetIds.map(async (assetId) => {
+      const key = buildS3MediaPath(userId, assetId);
+      const exists = await storageClient.checkObjectExists(key);
+      return exists ? null : `Media asset '${assetId}' has not been uploaded`;
+    }),
+  );
+
+  return results.filter((err): err is string => err !== null);
+}

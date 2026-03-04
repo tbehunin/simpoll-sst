@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand, HeadObjectCommand, S3ServiceException } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Resource } from 'sst';
 
@@ -47,5 +47,26 @@ export const storageClient = {
     });
 
     return getSignedUrl(s3Client, command, { expiresIn: DOWNLOAD_URL_TTL });
+  },
+
+  /**
+   * Check whether an object exists in S3 without downloading it.
+   * @param key - Full S3 key (e.g., "private/user-id/media/file.jpg")
+   * @returns true if the object exists, false if it does not
+   * @throws if the request fails for any reason other than the object not existing
+   */
+  checkObjectExists: async (key: string): Promise<boolean> => {
+    try {
+      await s3Client.send(new HeadObjectCommand({
+        Bucket: Resource.Uploads.name,
+        Key: key,
+      }));
+      return true;
+    } catch (err) {
+      if (err instanceof S3ServiceException && (err.name === 'NotFound' || err.$metadata?.httpStatusCode === 404)) {
+        return false;
+      }
+      throw err;
+    }
   },
 };

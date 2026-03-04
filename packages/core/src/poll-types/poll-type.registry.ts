@@ -20,6 +20,13 @@ export interface PollTypeHandler<T extends PollType> {
   getDetailSchema(): z.ZodSchema<PollDetailMap[T]>;
   getVoteSchema(): z.ZodSchema<PollParticipantMap[T]>;
   validateVoteAgainstPoll(vote: PollParticipantMap[T], pollDetails: PollDetailMap[T]): string | null;
+
+  /**
+   * Extract all non-Giphy media asset values from raw poll details input.
+   * Values are assetIds (UUID.ext) as supplied by the client before any S3 key transformation.
+   * Used to validate that uploaded assets actually exist in S3 before publishing.
+   */
+  getUploadedMediaAssets(details: any): string[];
 };
 
 const pollRegistry: Partial<Record<PollType, PollTypeHandler<PollType>>> = {};

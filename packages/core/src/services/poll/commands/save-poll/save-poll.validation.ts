@@ -156,6 +156,11 @@ export const validateSavePoll = (
     
     const detailsError = validateDetails(request);
     if (detailsError) errors.push(detailsError);
+
+    // Verify all uploaded media assets actually exist in S3 (checked async in context)
+    if (context.mediaValidationErrors.length > 0) {
+      errors.push(...context.mediaValidationErrors);
+    }
   } else {
     // Draft: lenient validation (only validate fields that are present)
     const fieldsValidation = validateDraftFields(request);

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { MediaAsset, PollType, PollScope } from '@simpoll-sst/core/common';
+import { MediaAsset, PollType, PollScope, MediaType } from '@simpoll-sst/core/common';
 import { MediaAssetSchema } from '@simpoll-sst/core/services/media/media-validation';
 import { PublishPollPayload } from '@simpoll-sst/core/services/poll/commands/save-poll/save-poll.types';
 import { PollTypeHandler } from './poll-type.registry';
@@ -127,6 +127,16 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
   // --- Validation schema methods ---
 
   getDetailSchema: () => MultipleChoiceDetailSchema,
+  getUploadedMediaAssets: (details: any): string[] => {
+    if (!details?.choices) return [];
+    return (details.choices as any[])
+      .flatMap((choice) => {
+        const media = choice.media;
+        if (!media || media.type === MediaType.Giphy) return [];
+        return [media.value as string];
+      })
+      .filter(Boolean);
+  },
 
   getVoteSchema: () => MultipleChoiceVoteSchema,
 
