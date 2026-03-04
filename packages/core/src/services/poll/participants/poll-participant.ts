@@ -2,7 +2,7 @@ import { PollType, PollScope } from '@simpoll-sst/core/common';
 import { PollParticipant } from './poll-participant.domain';
 import { PollParticipantEntity } from '@simpoll-sst/core/common';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
-import { SavePollPayload } from '../commands/save-poll/save-poll.types';
+import { PublishPollPayload } from '../commands/save-poll/save-poll.types';
 import { VoteRequest } from '../commands/vote/vote.types';
 import { generateExpireTimestamp } from '../../utils';
 
@@ -27,19 +27,19 @@ export const PollParticipantMapper = {
   },
 };
 
-/** SavePollPayload / VoteRequest → Entity */
+/** PublishPollPayload / VoteRequest → Entity */
 export const PollParticipantEntityBuilder = {
-  fromSavePollPayload: (
+  fromPublishPayload: (
     pollId: string,
-    request: SavePollPayload<PollType>
+    payload: PublishPollPayload<PollType>
   ): PollParticipantEntity<PollType>[] => {
-    if (request.sharedWith.length === 0) return [];
+    if (payload.sharedWith.length === 0) return [];
 
-    const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
-    return request.sharedWith.map((userId) => ({
+    const expireTimestamp = generateExpireTimestamp(payload.expireTimestamp);
+    return payload.sharedWith.map((userId) => ({
       pk: `Poll#${pollId}`,
       sk: `Participant#${userId}`,
-      type: request.type,
+      type: payload.type,
       gsipk1: `User#${userId}#Participant#Private`,
       gsipk2: `User#${userId}#Participant`,
       gsisk1: `Voted#N#${expireTimestamp}`,

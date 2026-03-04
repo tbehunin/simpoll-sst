@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { MediaAsset, PollType, PollScope } from '@simpoll-sst/core/common';
 import { MediaAssetSchema } from '@simpoll-sst/core/services/media/media-validation';
-import { SavePollPayload } from '@simpoll-sst/core/services/poll/commands/save-poll/save-poll.types';
+import { PublishPollPayload } from '@simpoll-sst/core/services/poll/commands/save-poll/save-poll.types';
 import { PollTypeHandler } from './poll-type.registry';
 import { UpdateRequest } from '@simpoll-sst/core/data';
 import { ValidationError } from '@simpoll-sst/core/errors';
@@ -61,7 +61,7 @@ export const multipleChoiceHandler: PollTypeHandler<PollType.MultipleChoice> = {
   parseParticipant: (participant: any): MultipleChoiceParticipant => ({
     selectedIndex: participant.selectedIndex,
   }),
-  buildResults: (request: SavePollPayload<PollType>): MultipleChoiceResult => ({
+  buildResults: (request: PublishPollPayload<PollType>): MultipleChoiceResult => ({
     choices: request.details.choices.map(() => ({
       votes: 0,
       users: []

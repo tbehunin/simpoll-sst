@@ -2,7 +2,8 @@ import { createContextCommand } from '../command-builder';
 import { createSavePollContext, SavePollValidationContext } from './save-poll.context';
 import { validateSavePoll } from './save-poll.validation';
 import { SavePollRequest } from './save-poll.types';
-import { PollType, VotePrivacy } from '@simpoll-sst/core/common';
+import { SavePollMapper } from './save-poll.mapper';
+import { PollType } from '@simpoll-sst/core/common';
 import { PollDetailEntityBuilder } from '../../details';
 import { PollResultEntityBuilder } from '../../results';
 import { PollParticipantEntityBuilder } from '../../participants';
@@ -18,56 +19,16 @@ const executeSavePoll = async (
 
   if (request.publish) {
     // Publishing: create/update Detail + create Results + create Participants
-    // All fields are guaranteed to be present by validation
-    const pollDetailDoc = PollDetailEntityBuilder.fromSavePollPayload(pollId, ct, {
-      userId: request.userId,
-      type: request.type,
-      title: request.title!,
-      expireTimestamp: request.expireTimestamp,
-      sharedWith: request.sharedWith!,
-      votePrivacy: request.votePrivacy!,
-      details: request.details!,
-    }, true);
+    const payload = SavePollMapper.toPublishPayload(request);
+    const pollDetailDoc = PollDetailEntityBuilder.fromPublishPayload(pollId, ct, payload);
+    const pollResultDoc = PollResultEntityBuilder.fromPublishPayload(pollId, payload);
+    const pollParticipantDocs = PollParticipantEntityBuilder.fromPublishPayload(pollId, payload);
 
-    const pollResultDoc = PollResultEntityBuilder.fromSavePollPayload(pollId, {
-      userId: request.userId,
-      type: request.type,
-      title: request.title!,
-      expireTimestamp: request.expireTimestamp,
-      sharedWith: request.sharedWith!,
-      votePrivacy: request.votePrivacy!,
-      details: request.details!,
-    });
-
-    const pollParticipantDocs = PollParticipantEntityBuilder.fromSavePollPayload(pollId, {
-      userId: request.userId,
-      type: request.type,
-      title: request.title!,
-      expireTimestamp: request.expireTimestamp,
-      sharedWith: request.sharedWith!,
-      votePrivacy: request.votePrivacy!,
-      details: request.details!,
-    });
-
-    const pollParticipantDocsArray = Array.isArray(pollParticipantDocs) 
-      ? pollParticipantDocs 
-      : [pollParticipantDocs];
-
-    await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollParticipantDocsArray]);
+    await dbClient.batchWrite([pollDetailDoc, pollResultDoc, ...pollParticipantDocs]);
   } else {
-    // Draft: save only Detail doc with defaults for missing fields
-    const normalizedRequest = {
-      userId: request.userId,
-      type: request.type,
-      title: request.title || '',
-      expireTimestamp: request.expireTimestamp,
-      sharedWith: request.sharedWith || [],
-      votePrivacy: request.votePrivacy || VotePrivacy.Anonymous,
-      details: request.details || {} as any,
-    };
-
-    const pollDetailDoc = PollDetailEntityBuilder.fromSavePollPayload(pollId, ct, normalizedRequest, false);
-    await dbClient.put(pollDetailDoc);
+    // Draft: save only the Detail doc
+    const payload = SavePollMapper.toDraftPayload(request);
+    await dbClient.put(PollDetailEntityBuilder.fromDraftPayload(pollId, ct, payload));
   }
 
   return pollId;

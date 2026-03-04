@@ -16,10 +16,22 @@ export type SavePollRequest<T extends PollType> = {
 };
 
 /**
- * Validated, normalized payload passed to entity builders after save-poll validation.
- * All fields are guaranteed to be present (publish path) — no optionals except expireTimestamp.
+ * Draft payload — all content fields optional; no validation required.
  */
-export type SavePollPayload<T extends PollType> = {
+export type DraftPollPayload<T extends PollType> = {
+  userId: string
+  type: T
+  title?: string
+  expireTimestamp?: string
+  sharedWith?: string[]
+  votePrivacy?: VotePrivacy
+  details?: PollDetailMap[T]
+};
+
+/**
+ * Publish payload — all required fields guaranteed present by validation.
+ */
+export type PublishPollPayload<T extends PollType> = {
   userId: string
   type: T
   title: string
