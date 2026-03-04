@@ -1,6 +1,6 @@
 import { createBatchQuery } from '../queries/query-builder';
 import { PollDetailRepository, QueryRepository } from '@simpoll-sst/core/data';
-import { PollDetailMapper } from './poll-detail.mapper';
+import { PollDetailMapper } from './poll-detail';
 import { QueryPollsRequest } from '../poll.types';
 import { PaginatedResult } from '@simpoll-sst/core/common';
 import { encodeCursor, decodeCursor } from '../queries/cursor';

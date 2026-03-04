@@ -1,5 +1,9 @@
 import { Repository } from '@simpoll-sst/core/data';
-import { Mapper } from '../mappers/mapper.interface';
+
+interface Mapper<TEntity, TDomain> {
+  fromEntity: (entity: TEntity) => TDomain;
+  fromEntityList: (entities: TEntity[]) => TDomain[];
+}
 
 // Higher-order function that creates query functions
 export const createBatchQuery = <TEntity, TDomain>(
@@ -7,9 +11,5 @@ export const createBatchQuery = <TEntity, TDomain>(
   mapper: Mapper<TEntity, TDomain>
 ) => async (ids: string[]): Promise<TDomain[]> => {
   const entities = await repository.batchGet(ids);
-  return mapper.toDomainList(entities);
+  return mapper.fromEntityList(entities);
 };
-
-// Pipe utility for function composition
-export const pipe = <T>(...fns: Array<(arg: T) => T>) => (value: T): T =>
-  fns.reduce((acc, fn) => fn(acc), value);

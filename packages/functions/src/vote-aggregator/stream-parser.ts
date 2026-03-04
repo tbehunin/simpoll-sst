@@ -7,7 +7,7 @@ import { PollParticipantEntity } from '@simpoll-sst/core/common/poll-participant
 export const parsePollParticipant = (record: DynamoDBRecord): PollParticipant<PollType> | null => {
   const image = record?.dynamodb?.NewImage || {};
   const entity = parsePollParticipantImage(image);
-  return PollParticipantMapper.toDomain(entity);
+  return PollParticipantMapper.fromEntity(entity);
 };
 
 const parsePollParticipantImage = (image: Record<string, any>): PollParticipantEntity<PollType> => {

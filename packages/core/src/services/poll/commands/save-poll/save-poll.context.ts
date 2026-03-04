@@ -2,7 +2,7 @@ import { SavePollRequest } from './save-poll.types';
 import { PollDetail } from '../../details/poll-detail.domain';
 import { PollType } from '@simpoll-sst/core/common';
 import { PollDetailRepository } from '@simpoll-sst/core/data';
-import { PollDetailMapper } from '../../details/poll-detail.mapper';
+import { PollDetailMapper } from '../../details/poll-detail';
 
 export interface SavePollValidationContext {
   currentTime: string;
@@ -16,7 +16,7 @@ export const createSavePollContext = async (
 
   if (request.pollId) {
     const pollEntity = await PollDetailRepository.get(request.pollId);
-    existingPoll = pollEntity ? PollDetailMapper.toDomain(pollEntity) : null;
+    existingPoll = pollEntity ? PollDetailMapper.fromEntity(pollEntity) : null;
   }
 
   return {

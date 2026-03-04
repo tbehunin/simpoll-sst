@@ -1,3 +1,3 @@
-export { PollDetailMapper } from '../details';
-export { PollParticipantMapper } from '../participants';
-export { PollResultMapper } from '../results';
+export { PollDetailMapper, PollDetailEntityBuilder } from '../details';
+export { PollParticipantMapper, PollParticipantEntityBuilder } from '../participants';
+export { PollResultMapper, PollResultEntityBuilder } from '../results';

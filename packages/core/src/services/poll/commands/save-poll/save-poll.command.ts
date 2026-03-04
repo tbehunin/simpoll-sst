@@ -3,9 +3,9 @@ import { createSavePollContext, SavePollValidationContext } from './save-poll.co
 import { validateSavePoll } from './save-poll.validation';
 import { SavePollRequest } from './save-poll.types';
 import { PollType, VotePrivacy } from '@simpoll-sst/core/common';
-import { PollDetailMapper } from '../../details';
-import { PollResultMapper } from '../../results';
-import { PollParticipantMapper } from '../../participants';
+import { PollDetailEntityBuilder } from '../../details';
+import { PollResultEntityBuilder } from '../../results';
+import { PollParticipantEntityBuilder } from '../../participants';
 import { dbClient } from '@simpoll-sst/core/data';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,7 +19,7 @@ const executeSavePoll = async (
   if (request.publish) {
     // Publishing: create/update Detail + create Results + create Participants
     // All fields are guaranteed to be present by validation
-    const pollDetailDoc = PollDetailMapper.fromCreateRequest(pollId, ct, {
+    const pollDetailDoc = PollDetailEntityBuilder.fromSaveData(pollId, ct, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -29,7 +29,7 @@ const executeSavePoll = async (
       details: request.details!,
     }, true);
 
-    const pollResultDoc = PollResultMapper.fromCreateRequest(pollId, {
+    const pollResultDoc = PollResultEntityBuilder.fromSaveData(pollId, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -39,7 +39,7 @@ const executeSavePoll = async (
       details: request.details!,
     });
 
-    const pollParticipantDocs = PollParticipantMapper.fromCreateRequest(pollId, {
+    const pollParticipantDocs = PollParticipantEntityBuilder.fromSaveData(pollId, {
       userId: request.userId,
       type: request.type,
       title: request.title!,
@@ -66,7 +66,7 @@ const executeSavePoll = async (
       details: request.details || {} as any,
     };
 
-    const pollDetailDoc = PollDetailMapper.fromCreateRequest(pollId, ct, normalizedRequest, false);
+    const pollDetailDoc = PollDetailEntityBuilder.fromSaveData(pollId, ct, normalizedRequest, false);
     await dbClient.put(pollDetailDoc);
   }
 

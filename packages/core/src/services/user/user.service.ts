@@ -14,7 +14,7 @@ export interface SyncUserProfileRequest {
 export const UserService = {
   getUsersByIds: async (userIds: string[]): Promise<User[]> => {
     const result = await UserRepository.batchGet(userIds);
-    return result.map(UserMapper.toDomain);
+    return result.map(UserMapper.fromEntity);
   },
 
   /**
@@ -42,6 +42,6 @@ export const UserService = {
   getUserProfile: async (userId: string): Promise<User | null> => {
     const entity = await UserRepository.getUserProfile(userId);
     if (!entity) return null;
-    return UserMapper.toDomain(entity);
+    return UserMapper.fromEntity(entity);
   },
 };

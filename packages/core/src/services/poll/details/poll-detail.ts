@@ -1,13 +1,12 @@
-import { PollType, PollScope } from '@simpoll-sst/core/common';
+import { PollType } from '@simpoll-sst/core/common';
 import { PollDetail } from './poll-detail.domain';
 import { PollDetailEntity } from '@simpoll-sst/core/data';
 import { SavePollData } from '../commands/save-poll/save-poll.types';
 import { generateExpireTimestamp, calculatePollScope } from '../../utils';
-import { Mapper } from '../mappers/mapper.interface';
 
-export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<PollType>> = {
-  // Entity → Domain Model
-  toDomain: (entity: PollDetailEntity<PollType>): PollDetail<PollType> => {
+/** Entity → Domain */
+export const PollDetailMapper = {
+  fromEntity: (entity: PollDetailEntity<PollType>): PollDetail<PollType> => {
     const { pk, userId, ct, scope, type, title, expireTimestamp, sharedWith, votePrivacy, details } = entity;
     return {
       pollId: pk.split('#')[1],
@@ -23,16 +22,22 @@ export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<Pol
     };
   },
 
-  // Request + Context → Entity (Builder)
-  fromCreateRequest: (
-    pollId: string, 
-    createdTimestamp: string, 
+  fromEntityList: (entities: PollDetailEntity<PollType>[]): PollDetail<PollType>[] => {
+    return entities.map(PollDetailMapper.fromEntity);
+  },
+};
+
+/** SavePollData → Entity */
+export const PollDetailEntityBuilder = {
+  fromSaveData: (
+    pollId: string,
+    createdTimestamp: string,
     request: SavePollData<PollType>,
     isPublished: boolean
   ): PollDetailEntity<PollType> => {
     const scope = calculatePollScope(request.sharedWith, isPublished);
     const expireTimestamp = generateExpireTimestamp(request.expireTimestamp);
-    
+
     return {
       pk: `Poll#${pollId}`,
       sk: 'Details',
@@ -49,10 +54,5 @@ export const PollDetailMapper: Mapper<PollDetailEntity<PollType>, PollDetail<Pol
       votePrivacy: request.votePrivacy,
       details: request.details,
     };
-  },
-
-  // Batch transformations
-  toDomainList: (entities: PollDetailEntity<PollType>[]): PollDetail<PollType>[] => {
-    return entities.map(PollDetailMapper.toDomain);
   },
 };
